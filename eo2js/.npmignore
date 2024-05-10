@@ -1,0 +1,12 @@
+.eslintrc.json
+Gruntfile.js
+test/
+node_modules/
+src/resources/xsl/
+src/compile-stylesheets.js
+temp/
+mochawesome-report/
+coverage.html
+*.tgz
+itest/
+CITATION.cff

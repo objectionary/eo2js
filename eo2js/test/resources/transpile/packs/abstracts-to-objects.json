@@ -1,0 +1,13 @@
+{
+  "xsls": [
+    "objects"
+  ],
+  "tests": [
+    ".program.objects.object.xmir",
+    ".program.objects.object{.\"@_name\" == 'simple'}"
+  ],
+  "eo": [
+    "# This is the default 64+ symbols comment in front of named abstract object.",
+    "[] > simple"
+  ]
+}

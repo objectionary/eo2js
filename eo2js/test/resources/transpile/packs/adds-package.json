@@ -1,0 +1,14 @@
+{
+  "xsls": [
+    "objects",
+    "package"
+  ],
+  "tests": [
+    ".program.objects.object{.\"@_name\" == 'simple'}{.\"@_package\" == 'com.eo2js'}"
+  ],
+  "eo": [
+    "+package com.eo2js\n",
+    "# This is the default 64+ symbols comment in front of named abstract object.",
+    "[] > simple"
+  ]
+}

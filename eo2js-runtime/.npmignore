@@ -1,0 +1,12 @@
+.eslintrc.json
+Gruntfile.js
+test/
+node_modules/
+temp/
+mochawesome-report/
+coverage.html
+*.tgz
+itest/
+CITATION.cff
+atom.js
+atoms.js
