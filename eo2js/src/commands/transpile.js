@@ -11,7 +11,7 @@ const {XMLParser} = require('fast-xml-parser');
  * @return {String} - path from object name
  */
 const pathFromName = function(name) {
-  return name.replace(/\./g, '/')
+  return name.replace(/\./g, path.sep)
 }
 
 /**
@@ -29,14 +29,7 @@ const exporting = function(name) {
  */
 const makeDirIfNotExist = function(dir) {
   if (!fs.existsSync(dir)) {
-    try {
-      fs.mkdirSync(dir, {recursive: true})
-    } catch (err) {
-      console.log(err.code, err.message, 'DIR IS', dir)
-      if (err.code !== 'EEXIST') {
-        throw err
-      }
-    }
+    fs.mkdirSync(dir, {recursive: true})
   }
 }
 
@@ -51,7 +44,7 @@ const transpile = function(options) {
     throw new Error(`File ${foreign} is not found`)
   }
   if (!foreign.endsWith('.json')) {
-    throw new Error(`Only .json foreign tojos file is supported, given ${foreign.substring(foreign.lastIndexOf('/'))}`)
+    throw new Error(`Only .json foreign tojos file is supported, given ${foreign.substring(foreign.lastIndexOf(path.sep))}`)
   }
   const transformations = [
     'objects', 'package', 'attrs', 'data', 'to-js'
@@ -67,8 +60,7 @@ const transpile = function(options) {
       const text = fs.readFileSync(tojo[verified]).toString()
       let xml = parser.parse(text)
       const transpiled = path.resolve(options['target'], dir, `${pathFromName(xml['program']['@_name'])}.xmir`)
-      console.log('TRANSPILED:', transpiled)
-      makeDirIfNotExist(transpiled.substring(0, transpiled.lastIndexOf('/')))
+      makeDirIfNotExist(transpiled.substring(0, transpiled.lastIndexOf(path.sep)))
       fs.writeFileSync(transpiled, text)
       xml = text
       transformations.forEach((transformation) => {
@@ -88,7 +80,7 @@ const transpile = function(options) {
       if (filtered.length > 0) {
         const first = filtered[0]
         const dest = path.resolve(project, `${pathFromName(first['@_js-name'])}.js`)
-        makeDirIfNotExist(dest.substring(0, dest.lastIndexOf('/')))
+        makeDirIfNotExist(dest.substring(0, dest.lastIndexOf(path.sep)))
         fs.writeFileSync(dest, first['javascript'])
         filtered.slice(1).forEach((obj) => fs.appendFileSync(dest, `\n${obj['javascript']}`))
         fs.appendFileSync(dest, exporting(first['@_name']))
