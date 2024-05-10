@@ -25,9 +25,6 @@ on:
   pull_request:
     branches:
       - master
-concurrency:
-  group: grunt-${{ github.ref }}
-  cancel-in-progress: true
 jobs:
   build:
     strategy:
