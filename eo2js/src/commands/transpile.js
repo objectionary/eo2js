@@ -29,7 +29,13 @@ const exporting = function(name) {
  */
 const makeDirIfNotExist = function(dir) {
   if (!fs.existsSync(dir)) {
-    fs.mkdirSync(dir, {recursive: true})
+    try {
+      fs.mkdirSync(dir, {recursive: true})
+    } catch (err) {
+      if (err.code !== 'EEXIST') {
+        throw err
+      }
+    }
   }
 }
 
