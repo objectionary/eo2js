@@ -22,8 +22,9 @@
 ---
 name: test
 on:
-  push:
   pull_request:
+    branches:
+      - master
 concurrency:
   group: grunt-${{ github.ref }}
   cancel-in-progress: true
