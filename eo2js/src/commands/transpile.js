@@ -32,7 +32,7 @@ const makeDirIfNotExist = function(dir) {
     try {
       fs.mkdirSync(dir, {recursive: true})
     } catch (err) {
-      console.log(err.code, err.message, dir)
+      console.log(err.code, err.message, 'DIR IS', dir)
       if (err.code !== 'EEXIST') {
         throw err
       }
@@ -67,6 +67,7 @@ const transpile = function(options) {
       const text = fs.readFileSync(tojo[verified]).toString()
       let xml = parser.parse(text)
       const transpiled = path.resolve(options['target'], dir, `${pathFromName(xml['program']['@_name'])}.xmir`)
+      console.log('TRANSPILED:', transpiled)
       makeDirIfNotExist(transpiled.substring(0, transpiled.lastIndexOf('/')))
       fs.writeFileSync(transpiled, text)
       xml = text
