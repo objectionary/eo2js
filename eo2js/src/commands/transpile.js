@@ -32,9 +32,7 @@ const makeDirIfNotExist = function(dir) {
     try {
       fs.mkdirSync(dir, {recursive: true})
     } catch (err) {
-      console.log(err)
-      console.log(err.code)
-      console.log(err.message)
+      console.log(err.code, err.message, dir)
       if (err.code !== 'EEXIST') {
         throw err
       }
