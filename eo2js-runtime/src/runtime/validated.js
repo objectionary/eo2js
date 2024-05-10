@@ -12,7 +12,6 @@ const validated = function(callback) {
   try {
     return callback()
   } catch (error) {
-    console.log(error.message)
     if (error instanceof ErFailure) {
       throw new ErError(
         data.toObject(error.message)
