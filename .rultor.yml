@@ -16,7 +16,6 @@ release:
     sed -i "s/0\.0\.0/${tag}/" eo2js/package.json
     sed -i "s/0\.0\.0/${tag}/" eo2js/src/version.js
     sed -i "s/0000-00-00/$(date +%Y-%m-%d)/" eo2js/src/version.js
-    node -e "require('./eo2js/src/compile-stylesheets.js')()"
     sed -i "s/0\.0\.0/${tag}/" eo2js-runtime/package.json
     npm test
     git commit -am "set version to ${tag}"
