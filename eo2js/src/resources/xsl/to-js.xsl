@@ -48,7 +48,7 @@ SOFTWARE.
       <xsl:value-of select="$TAB"/>
     </xsl:for-each>
   </xsl:function>
-  <!-- Clean name todo -->
+  <!-- Clean name -->
   <xsl:function name="eo:clean" as="xs:string">
     <xsl:param name="n" as="xs:string"/>
     <xsl:value-of select="replace(replace(replace(replace($n, '_', '__'), '-', '_'), '@', 'φ'), 'α', '_')"/>
@@ -59,7 +59,7 @@ SOFTWARE.
     <xsl:param name="s2"/>
     <xsl:value-of select="concat(concat($s1, '_'), $s2)"/>
   </xsl:function>
-  <!-- Construct valid object name todo -->
+  <!-- Construct valid object name -->
   <xsl:function name="eo:object-name" as="xs:string">
     <xsl:param name="name" as="xs:string"/>
     <xsl:param name="alt" as="xs:string"/>

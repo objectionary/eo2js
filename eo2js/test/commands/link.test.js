@@ -15,13 +15,19 @@ describe('link', function() {
    * @return {String} - Stdout.
    */
   const link = function() {
-    return runSync(['link', '-t', target, '-p project --alone'])
+    return runSync([
+      'link',
+      '-t', target,
+      '-p project',
+      '--alone',
+      '-d', path.resolve('../eo2js-runtime')
+    ])
   }
   it('should create all necessary files and install npm project', function(done) {
     assertFilesExist(link(), project, [
       'package.json',
       'package-lock.json',
-      // 'node_modules/eo2js-runtime', todo
+      'node_modules/eo2js-runtime',
       '__main__.js'
     ])
     done()

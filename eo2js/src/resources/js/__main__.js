@@ -1,5 +1,6 @@
 const phi = require('eo2js-runtime/src/runtime/phi')
 const dataized = require('eo2js-runtime/src/runtime/dataized')
+const bytesOf = require('eo2js-runtime/src/runtime/bytes-of')
 const data = require('eo2js-runtime/src/runtime/data')
 const ErAbstract = require('eo2js-runtime/src/runtime/error/ErAbstract')
 
@@ -20,7 +21,7 @@ const main = function() {
       })
       app = app.with({0: args})
     }
-    console.log(dataized(app))
+    console.log(bytesOf(dataized(app)).verbose())
   } catch (error) {
     if (error instanceof ErAbstract) {
       console.error(error.message)
