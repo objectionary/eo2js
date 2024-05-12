@@ -21,9 +21,9 @@ release:
     git commit -am "set version to ${tag}"
     chmod 600 ../npmrc
     echo "Dry run:"
-    cd eo2js && npm publish --no-color --dry-run --userconfig=../npmrc && cd ../eo2js && npm publish --no-color --dry-run --userconfig=../npmrc
+    cd eo2js && npm publish --no-color --dry-run --userconfig=../npmrc && cd ../eo2js-runtime && npm publish --no-color --dry-run --userconfig=../npmrc && cd ..
     echo "Publishing:"
-    cd eo2js && npm publish --no-color --userconfig=../npmrc && cd ../eo2js && npm publish --no-color --userconfig=../npmrc || echo "Unpublishing:" && cd ../eo2js && npm unpublish && cd ../eo2js-runtime && npm unpublish
+    cd eo2js && npm publish --no-color --userconfig=../npmrc && cd ../eo2js-runtime && npm publish --no-color --userconfig=../npmrc || echo "Unpublishing:" && cd ../eo2js && npm unpublish && cd ../eo2js-runtime && npm unpublish
 merge:
   script: |-
     npm test
