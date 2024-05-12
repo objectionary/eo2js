@@ -27,7 +27,7 @@ const hexToInt = function(bytes) {
 /**
  * Bytes of.
  * @param {string|number|boolean|array.<string>|array.<number>} data - Data to cast to bytes
- * @return {{asInt: (function(): number), asBool: (function(): boolean), asString: (function(): string), asFloat: (function(): number), asBytes: (function(): array.<number>)}}
+ * @return {{asInt: (function(): number), asBool: (function(): boolean), asString: (function(): string), asFloat: (function(): number), asBytes: (function(): array.<number>), verbose: (function(): string)}}
  */
 const bytesOf = function(data) {
   let bytes
@@ -73,6 +73,19 @@ const bytesOf = function(data) {
         throw new Error(`Byte array must be 1 byte long to convert to bool (${bytes})`)
       }
       return bytes[0] !== 0
+    },
+    verbose: function() {
+      let str
+      if (bytes.length === 0) {
+        str = '[]'
+      } else if (bytes.length === 1) {
+        str = bytes[0] ? '[1]' : '[0]'
+      } else if (bytes.length === 8) {
+        str = `[${this.asBytes()}] = ${this.asInt()}, or ${this.asFloat()}, or "${this.asString()}"`
+      } else {
+        str = `[${this.asBytes()}] = "${this.asString()}"`
+      }
+      return str
     }
   }
 }

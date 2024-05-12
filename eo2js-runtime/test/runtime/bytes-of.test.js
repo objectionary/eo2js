@@ -1,5 +1,5 @@
-const assert = require('assert');
-const bytesOf = require('../../temp/runtime/bytes-of');
+const assert = require('assert')
+const bytesOf = require('../../temp/runtime/bytes-of')
 
 describe('bytesOf', function() {
   describe('int', function() {
@@ -14,10 +14,10 @@ describe('bytesOf', function() {
       const value = 1234
       const bytes = bytesOf(value).asBytes()
       assert.equal(bytesOf(bytes).asInt(), value)
-    });
+    })
     it('should fail if not 8 bytes given', function() {
       assert.throws(() => bytesOf([0, 0, 0, 48, 57]).asInt())
-    });
+    })
   })
   describe('float', function() {
     it('should return the same float', function() {
@@ -26,15 +26,15 @@ describe('bytesOf', function() {
     })
     it('should return valid float bytes', function() {
       assert.deepEqual(bytesOf(374.9).asBytes(), [64, 119, 110, 102, 102, 102, 102, 102])
-    });
+    })
     it('should convert to bytes and back', function() {
       const value = 9412.21
       const bytes = bytesOf(value).asBytes()
       assert.equal(bytesOf(bytes).asFloat(), value)
-    });
+    })
     it('should fail if not 8 bytes given', function() {
       assert.throws(() => bytesOf([64, 119, 110, 102]).asFloat())
-    });
+    })
   })
   describe('string', function() {
     it('should return the same string', function() {
@@ -65,7 +65,7 @@ describe('bytesOf', function() {
     it('should return valid bool from bytes', function() {
       assert.equal(bytesOf([1]).asBool(), true)
       assert.equal(bytesOf([0]).asBool(), false)
-    });
+    })
     it('should fail if not 1 byte given', function() {
       assert.throws(() => bytesOf([1, 1]).asBool())
     })
@@ -87,6 +87,26 @@ describe('bytesOf', function() {
     it('should fail while converting wrong format bytes', function() {
       const wrong = [1, 2, 'hello']
       assert.throws(() => bytesOf(wrong))
-    });
+    })
+  })
+  describe('#verbose()', function() {
+    describe('returns valid array as string if', function() {
+      it('length is 0', function() {
+        assert.equal(bytesOf([]).verbose(), '[]')
+      })
+      it('length is 1', function() {
+        assert.equal(bytesOf([1]).verbose(), '[1]')
+        assert.equal(bytesOf([0]).verbose(), '[0]')
+      })
+      it('length is 8', function() {
+        assert.ok(bytesOf(5).verbose().startsWith('[0,0,0,0,0,0,0,5] = 5, or '))
+        assert.ok(bytesOf(7.3).verbose().includes(', or 7.3, or'))
+        assert.ok(bytesOf('abcdefgh').verbose().includes('abcdefgh'))
+      })
+      it('length is not 8', function() {
+        assert.ok(bytesOf('Hello, world!').verbose().includes('Hello, world!'))
+        assert.ok(bytesOf('some').verbose().includes('some'))
+      })
+    })
   })
 })

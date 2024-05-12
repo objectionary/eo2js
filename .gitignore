@@ -7,6 +7,8 @@ eo2js-runtime/node_modules/
 eo2js-runtime/coverage/
 eo2js-runtime/coverage.html
 eo2js-runtime/temp
+eo2js-runtime/atom.js
+eo2js-runtime/atoms.js
 .nyc_output
 .idea
 mochawesome-report/

@@ -48,7 +48,7 @@ const found = function(name, full) {
     obj = tryFind.call(this, '../../../..', name, split)
   }
   if (obj == null) {
-    throw new Error(`Couldn't find object ${name} from ${full}`)
+    throw new Error(`Couldn't find object '${name}' from '${full}'`)
   }
   return obj
 }

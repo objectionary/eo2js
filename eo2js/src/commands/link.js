@@ -11,31 +11,45 @@ const main = '__main__.js'
 
 /**
  * Data to insert to package.json file.
- * @type {{author: string, name: string, version: string, dependencies: {}}}
+ * If path to local dependency is present - eo2js-runtime dependency won't be added to
+ * package.json file.
+ * @param {String} [runtime] - path to local eo-runtime dependency
+ * @return {{author: string, name: string, version: string}}
  */
-const pckg = {
-  name: 'project',
-  version: '1.0.0',
-  author: 'eoc',
-  // dependencies: { todo
-  //   'eo2js-runtime': 'latest'
-  // },
+const pckg = function(runtime) {
+  const def = {
+    name: 'project',
+    version: '1.0.0',
+    author: 'eoc'
+  }
+  if (!runtime) {
+    def.dependencies = {
+      'eo2js-runtime': 'latest'
+    }
+  }
+  return def
 }
 
 /**
  * Build npm project.
- * @param {{target: String, project: String, resources: String}} options - Program options
+ * @param {{target: String, project: String, resources: String, dependency: ?String}} options - Program options
  */
 const link = function(options) {
   options = {...program.opts(), ...options}
   const project = path.resolve(options.target, options.project)
-  fs.writeFileSync(path.resolve(project, 'package.json'), JSON.stringify(pckg))
-  console.log(project)
+  fs.writeFileSync(path.resolve(project, 'package.json'), JSON.stringify(pckg(options.dependency)))
   execSync('npm install', {cwd: project})
   fs.copyFileSync(
     path.resolve(options.resources, `js/${main}`),
     path.resolve(project, main)
   )
+  if (options.dependency) {
+    fs.cpSync(
+      options.dependency,
+      path.resolve(project, 'node_modules/eo2js-runtime'),
+      {recursive: true}
+    )
+  }
 }
 
 module.exports = link

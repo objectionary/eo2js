@@ -15,7 +15,7 @@ const int$div = function() {
   obj.assets[LAMBDA] = function(self) {
     const arg = dataized(self.take('x'), INT)
     if (arg === 0) {
-      // todo: error
+      // fix: error
     }
     return data.toObject(
       dataized(self.take(RHO), INT) / arg

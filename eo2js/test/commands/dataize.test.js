@@ -1,16 +1,26 @@
 const path = require('path');
 const fs = require('fs');
-const {ok} = require('assert');
+const {runSync} = require('../helpers');
+const assert = require('assert');
 
 describe('dataize', function() {
   const home = path.resolve('temp/test-dataize')
   const target = path.resolve(home, 'target')
   const project = path.resolve(target, 'project')
+  const runtime = path.resolve('../eo2js-runtime')
   beforeEach('clear home', function() {
     fs.rmSync(home, {recursive: true, force: true})
     fs.mkdirSync(project, {recursive: true})
   })
-  it('should execute node run', function() {
-    ok(true) // todo
+  it('should dataize app object', function() {
+    runSync(['link', '-t', target, '-p project', '--alone', '-d', runtime])
+    fs.copyFileSync(
+      path.resolve('test/resources/dataize/app.js'),
+      path.resolve(project, 'app.js')
+    )
+    const log = runSync([
+      'dataize', 'app', '--alone', '-t', target, '-p project', '-d', runtime
+    ])
+    assert.ok(log.includes('= "Hello, world!"'))
   })
 })
