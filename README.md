@@ -7,11 +7,11 @@
 
 EOLANG to JavaScript transpiler and runtime
 
-[//]: # ([![grunt]&#40;https://github.com/objectionary/eoc/actions/workflows/grunt.yml/badge.svg&#41;]&#40;https://github.com/objectionary/eoc/actions/workflows/grunt.yml&#41;)
+[![grunt](https://github.com/maxonfjvipon/eo2js/actions/workflows/test.yml/badge.svg)](https://github.com/maxonfjvipon/eo2js/actions/workflows/test.yml)
 [//]: # ([![node-current]&#40;https://img.shields.io/node/v/eolang&#41;]&#40;https://www.npmjs.com/package/eolang&#41;)
-[//]: # ([![PDD status]&#40;http://www.0pdd.com/svg?name=objectionary/eoc&#41;]&#40;http://www.0pdd.com/p?name=objectionary/eoc&#41;)
-[//]: # ([![Hits-of-Code]&#40;https://hitsofcode.com/github/objectionary/eoc&#41;]&#40;https://hitsofcode.com/view/github/objectionary/eoc&#41;)
-[//]: # ([![License]&#40;https://img.shields.io/badge/license-MIT-green.svg&#41;]&#40;https://github.com/objectionary/eoc/blob/master/LICENSE.txt&#41;)
+[![PDD status](http://www.0pdd.com/svg?name=maxonfjvipon/eo2js)](http://www.0pdd.com/p?name=maxonfjvipon/eo2js)
+[![Hits-of-Code](https://hitsofcode.com/github/maxonfjvipon/eo2js)](https://hitsofcode.com/view/github/maxonfjvipon/eo2js)
+[![License](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/maxonfjvipon/eo2js/blob/master/LICENSE.txt)
 
 [//]: # (First, you install [npm]&#40;https://docs.npmjs.com/downloading-and-installing-node-js-and-npm&#41;)
 
