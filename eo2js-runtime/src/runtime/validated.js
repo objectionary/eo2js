@@ -5,7 +5,7 @@ const data = require('./data');
 /**
  * Validate given callback.
  * If catches {@link ErFailure} - throws {@link ErError}.
- * @param {function(): any} callback - Callback to validate
+ * @param {function(): Object} callback - Callback to validate
  * @return {Object} - Callback result
  */
 const validated = function(callback) {

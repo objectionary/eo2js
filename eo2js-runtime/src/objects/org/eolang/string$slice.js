@@ -5,6 +5,9 @@ const ErFailure = require('../../../runtime/error/ErFailure');
 /**
  * String.slice.
  * @return {Object} - String.slice object
+ * @todo #3:30min Implement string$slice atom. We need to implement the atom and make sure it
+ *  works. For the details of implementation check the Java analogue on
+ *  https://github.com/objectionary/eo/tree/master/eo-runtime/src/main/java/EOorg/EOeolang
  */
 const string$slice = function() {
   const obj = object('string$slice')

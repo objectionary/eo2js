@@ -105,7 +105,9 @@ const object = function(name = 'object') {
           () => safe(with_rho(this.assets[LAMBDA](this), this, attr))
         )
       } else if (this.attrs.hasOwnProperty(attr)) {
-        object = validated(() => with_rho(this.attrs[attr].get(), this, attr))
+        object = validated(
+          () => safe(with_rho(this.attrs[attr].get(), this, attr))
+        )
       } else if (this.attrs.hasOwnProperty(PHI)) {
         object = this.take(PHI).take(attr)
       } else if (this.assets.hasOwnProperty(LAMBDA)) {

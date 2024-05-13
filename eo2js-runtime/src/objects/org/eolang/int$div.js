@@ -8,6 +8,10 @@ const at_void = require('../../../runtime/attribute/at-void')
 /**
  * Int.div.
  * @return {any} - Int.div object
+ * @todo #3:30min Resolve division by 0 in int$div atom. The implementation of the atom is not
+ *  complete because of the case with division by 0. We need to implement it and make sure it works.
+ *  For the details of implementation check the Java analogue on
+ *  https://github.com/objectionary/eo/tree/master/eo-runtime/src/main/java/EOorg/EOeolang
  */
 const int$div = function() {
   const obj = object('int$div')

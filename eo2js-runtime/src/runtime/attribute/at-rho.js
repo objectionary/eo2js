@@ -1,7 +1,7 @@
 const ErFailure = require('../error/ErFailure');
 const {RHO} = require('./specials');
 /**
- * Attribute that keeps \rho attribute.
+ * Attribute that keeps \rho.
  * @param {Object} [object] - Rho object
  * @return {Object} - Rho attribute
  */

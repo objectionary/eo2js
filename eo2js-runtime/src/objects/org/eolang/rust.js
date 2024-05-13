@@ -3,20 +3,20 @@ const {LAMBDA} = require('../../../runtime/attribute/specials');
 const ErFailure = require('../../../runtime/error/ErFailure');
 
 /**
- * Bytes.not.
- * @return {Object} - Bytes.not object
- * @todo #3:30min Implement bytes$not atom. We need to implement the atom and make sure it
+ * Rust.
+ * @return {Object} - Rust object
+ * @todo #3:30min Implement rust atom. We need to implement the atom and make sure it
  *  works. For the details of implementation check the Java analogue on
  *  https://github.com/objectionary/eo/tree/master/eo-runtime/src/main/java/EOorg/EOeolang
  */
-const bytes$not = function() {
-  const obj = object('bytes$not')
+const rust = function() {
+  const obj = object('rust')
   obj.assets[LAMBDA] = function(_) {
     throw new ErFailure(
-      `Atom bytes$not is not implemented yet`
+      `Atom rust is not implemented yet`
     )
   }
   return obj
 }
 
-module.exports = bytes$not
+module.exports = rust

@@ -3,8 +3,8 @@ const ErFailure = require('../error/ErFailure');
 /**
  * Void attribute.
  * @param {string} name - Name of the attribute
- * @param {Object} [object] - Object
- * @return {any} - Free attribute
+ * @param {Object} object - Object
+ * @return {Object} - Free attribute
  */
 const at_void = function(name, object = null) {
   let obj = object
