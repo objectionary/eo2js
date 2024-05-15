@@ -84,7 +84,7 @@ const object = function(name = 'object') {
       return copy
     },
     /**
-     * Retrieve object by attribute name or position.
+     * Retrieve object by attribute name or position
      * @param {String} attr - Attribute name or position
      * @return {Object} - Retrieved attribute by name or position
      * @throws ErFailure - If something wrong with attribute retrieving
