@@ -25,9 +25,9 @@ release:
     echo "eo2js-runtime dry run:"
     (cd eo2js-runtime && npm publish --dry-run --userconfig=../../npmrc && cd ..) || exit 1
     echo "Check if eo2js exists:"
-    npm view eo2js@${tag} || exit 1
+    npm view eo2js@${tag} && exit 1
     echo "Check if eo2js-runtime exists:"
-    npm view eo2js-runtime@${tag} || exit 1
+    npm view eo2js-runtime@${tag} && exit 1
     echo "Publishing eo2js:"
     cd eo2js && npm publish --userconfig=../../npmrc && cd ..
     echo "Publishing eo2js-runtime:"
