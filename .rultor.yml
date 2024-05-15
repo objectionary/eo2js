@@ -20,12 +20,18 @@ release:
     npm test
     git commit -am "set version to ${tag}"
     chmod 600 ../npmrc
-    echo "Dry run:"
-    cd eo2js && npm publish --no-color --dry-run --userconfig=../../npmrc
-    cd ../eo2js-runtime && npm publish --no-color --dry-run --userconfig=../../npmrc && cd ..
-    echo "Publishing:"
-    cd eo2js && npm publish --no-color --userconfig=../../npmrc
-    (cd ../eo2js-runtime && npm publish --no-color --userconfig=../../npmrc) || (echo "Unpublishing:" && cd ../eo2js && npm unpublish eo2js@${tag} -f --userconfig=../../npmrc)
+    echo "eo2js dry run:"
+    (cd eo2js && npm publish --dry-run --userconfig=../../npmrc && cd ..) || exit 1
+    echo "eo2js-runtime dry run:"
+    (cd eo2js-runtime && npm publish --dry-run --userconfig=../../npmrc && cd ..) || exit 1
+    echo "Check if eo2js exists:"
+    npm view eo2js@${tag} || exit 1
+    echo "Check if eo2js-runtime exists:"
+    npm view eo2js-runtime@${tag} || exit 1
+    echo "Publishing eo2js:"
+    cd eo2js && npm publish --userconfig=../../npmrc && cd ..
+    echo "Publishing eo2js-runtime:"
+    cd eo2js-runtime && npm publish --userconfig=../../npmrc
 merge:
   script: |-
     npm test
