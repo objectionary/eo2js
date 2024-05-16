@@ -7,21 +7,12 @@ const with_rho = require('./with-rho');
 const {DELTA} = require('./attribute/specials');
 
 /**
- * Filter object attributes function.
- * @param {string} key - Object key
- * @return {boolean} - If key isn't in default attributes set
- */
-const noDefault = function(key) {
-  return ![RHO].includes(key)
-}
-
-/**
  * Object.
  * @param {String} name - Name of the object
  * @return {object} Object
  */
 const object = function(name = 'object') {
-  const obj = {
+  return {
     /**
      * Attributes.
      */
@@ -49,7 +40,7 @@ const object = function(name = 'object') {
     /**
      * Set attributes or {@see DELTA} asset to the object.
      * @param {Object} bindings - Attribute bindings
-     * @return {obj} - Self with attached attributes
+     * @return {Object} - Self with attached attributes
      * @throws ErFailure - If something wrong with bindings
      */
     with: function(bindings) {
@@ -65,7 +56,7 @@ const object = function(name = 'object') {
           if (!Number.isInteger(pos)) {
             throw new ErFailure(`Can't put attribute by float position (${pos})`)
           }
-          const filtered = attrs.filter(noDefault)
+          const filtered = attrs.filter((at) => at !== RHO)
           const index = filtered.findIndex((_, index) => index === pos)
           if (index === -1) {
             throw new ErFailure(`There's no attribute with position ${pos}`)
@@ -125,7 +116,6 @@ const object = function(name = 'object') {
       return `${name}`
     }
   }
-  return obj
 }
 
 module.exports = object
