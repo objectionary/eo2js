@@ -47,7 +47,7 @@ const transpile = function(options) {
     throw new Error(`Only .json foreign tojos file is supported, given ${foreign.substring(foreign.lastIndexOf(path.sep))}`)
   }
   const transformations = [
-    'objects', 'package', 'attrs', 'data', 'to-js'
+    'objects', 'package', 'tests', 'attrs', 'data', 'to-js'
   ].map((name) => path.resolve(options['resources'], `json/${name}.sef.json`))
   const parser = new XMLParser({ignoreAttributes: false})
   const verified = 'verified'

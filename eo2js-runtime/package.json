@@ -6,6 +6,9 @@
   "author": "Max Trunnikov <mtrunnikov@gmail.com>",
   "license": "MIT",
   "type": "commonjs",
+  "scripts": {
+    "test": "grunt"
+  },
   "devDependencies": {
     "eslint": "8.45.0",
     "eslint-config-google": "0.14.0",

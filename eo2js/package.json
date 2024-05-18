@@ -6,6 +6,9 @@
   "bin": {
     "eo2js": "src/eo2js.js"
   },
+  "scripts": {
+    "test": "grunt"
+  },
   "keywords": [
     "eolang",
     "javascript",

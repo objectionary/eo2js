@@ -4,7 +4,7 @@ const {execSync} = require('child_process');
 
 const xsls = path.resolve('src/resources/xsl')
 const jsons = path.resolve('src/resources/json')
-const all = ['attrs', 'data', 'objects', 'package', 'to-js']
+const all = ['attrs', 'data', 'objects', 'package', 'to-js', 'tests']
 const ext = '.sef.json'
 
 /**

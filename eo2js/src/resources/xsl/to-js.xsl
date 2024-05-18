@@ -116,6 +116,7 @@ SOFTWARE.
     </xsl:choose>
   </xsl:function>
   <!-- Fetch object -->
+  <!-- org.eolang.int -> phi.take('org').take('eolang').take('int') -->
   <xsl:function name="eo:fetch">
     <xsl:param name="object"/>
     <xsl:variable name="parts" select="tokenize($object, '\.')"/>
@@ -137,9 +138,9 @@ SOFTWARE.
             <xsl:if test="position()=1">
               <xsl:apply-templates select="/program" mode="license"/>
               <xsl:apply-templates select="/program" mode="imports"/>
+              <xsl:apply-templates select="/program" mode="test-imports"/>
               <xsl:apply-templates select="//object[@atom]" mode="atom-imports"/>
             </xsl:if>
-            <!-- <xsl:apply-templates select="//meta[head='junit' or head='tests']" mode="head"/>-->
             <xsl:apply-templates select="." mode="body"/>
           </xsl:element>
         </xsl:copy>
@@ -158,6 +159,10 @@ SOFTWARE.
         <xsl:text>.</xsl:text>
       </xsl:if>
       <xsl:value-of select="eo:object-name(., eo:suffix(../@line, ../@pos))"/>
+      <!-- Add .test for test object -->
+      <xsl:if test="//meta[head='tests'] and not(@parent)">
+        <xsl:text>.test</xsl:text>
+      </xsl:if>
     </xsl:attribute>
   </xsl:template>
   <!-- Object body -->
@@ -169,11 +174,11 @@ SOFTWARE.
     <xsl:text> = function() {</xsl:text>
     <xsl:value-of select="eo:eol(0)"/>
     <xsl:apply-templates select="." mode="ctor"/>
-    <!--    <xsl:if test="//meta[head='junit' or head='tests'] and not(@parent)">-->
-    <!--      <xsl:apply-templates select="." mode="tests"/>-->
-    <!--    </xsl:if>-->
-    <xsl:apply-templates select="object" mode="body"/>
     <xsl:text>}</xsl:text>
+    <xsl:apply-templates select="object" mode="body"/>
+    <xsl:if test="//meta[head='tests'] and not(@parent)">
+      <xsl:apply-templates select="." mode="tests"/>
+    </xsl:if>
     <xsl:value-of select="eo:eol(0)"/>
   </xsl:template>
   <!-- XMIR as comment -->
@@ -191,28 +196,6 @@ SOFTWARE.
     <xsl:text>const obj = object('</xsl:text>
     <xsl:value-of select="@name"/>
     <xsl:text>')</xsl:text>
-    <!--    <xsl:value-of select="eo:eol(1)"/>-->
-    <!--    <xsl:choose>-->
-    <!--      <xsl:when test="//meta[head='junit' or head='tests'] and not(@parent)">-->
-    <!--        <xsl:text>public </xsl:text>-->
-    <!--        <xsl:value-of select="eo:object-name(@name, eo:suffix(@line, @pos))"/>-->
-    <!--        <xsl:text>() {</xsl:text>-->
-    <!--      </xsl:when>-->
-    <!--      <xsl:when test="@ancestors">-->
-    <!--        <xsl:text>public </xsl:text>-->
-    <!--        <xsl:value-of select="eo:object-name(@name, eo:suffix(@line, @pos))"/>-->
-    <!--        <xsl:text>(final Phi sigma) {</xsl:text>-->
-    <!--        <xsl:value-of select="eo:eol(2)"/>-->
-    <!--        <xsl:text>super(sigma);</xsl:text>-->
-    <!--      </xsl:when>-->
-    <!--      <xsl:otherwise>-->
-    <!--        <xsl:text>public </xsl:text>-->
-    <!--        <xsl:value-of select="eo:object-name(@name, eo:suffix(@line, @pos))"/>-->
-    <!--        <xsl:text>(final Phi sigma) {</xsl:text>-->
-    <!--        <xsl:value-of select="eo:eol(2)"/>-->
-    <!--        <xsl:text>super(sigma);</xsl:text>-->
-    <!--      </xsl:otherwise>-->
-    <!--    </xsl:choose>-->
     <xsl:apply-templates select="attr">
       <xsl:with-param name="object" select="."/>
       <xsl:with-param name="indent">
@@ -260,10 +243,6 @@ SOFTWARE.
     <xsl:value-of select="eo:eol(1)"/>
     <xsl:text>)</xsl:text>
   </xsl:template>
-  <!--  <xsl:template match="o[not(@base) and @name]">-->
-  <!--    <xsl:text>/</xsl:text>-->
-  <!--    <xsl:text>* default */</xsl:text>-->
-  <!--  </xsl:template>-->
   <!--  <xsl:template match="o[not(@base) and not(@name)]">-->
   <!--    <xsl:param name="indent"/>-->
   <!--    <xsl:param name="name" select="'o'"/>-->
@@ -499,72 +478,44 @@ SOFTWARE.
     <xsl:text>.assets['Δ'] = </xsl:text>
     <xsl:value-of select="text()"/>
   </xsl:template>
-  <!--  <xsl:template match="class" mode="tests">-->
-  <!--    <xsl:value-of select="eo:eol(1)"/>-->
-  <!--    <xsl:text>@Test</xsl:text>-->
-  <!--    <xsl:value-of select="eo:eol(1)"/>-->
-  <!--    <xsl:text>public void works() throws java.lang.Exception {</xsl:text>-->
-  <!--    <xsl:value-of select="eo:eol(2)"/>-->
-  <!--    <xsl:choose>-->
-  <!--      <xsl:when test="starts-with(@name, 'throws')">-->
-  <!--        <xsl:text>Assertions.assertThrows(Exception.class, () -&gt; {</xsl:text>-->
-  <!--        <xsl:value-of select="eo:eol(2)"/>-->
-  <!--        <xsl:apply-templates select="." mode="assert">-->
-  <!--          <xsl:with-param name="indent" select="1"/>-->
-  <!--        </xsl:apply-templates>-->
-  <!--        <xsl:value-of select="eo:eol(2)"/>-->
-  <!--        <xsl:text>});</xsl:text>-->
-  <!--      </xsl:when>-->
-  <!--      <xsl:otherwise>-->
-  <!--        <xsl:apply-templates select="." mode="assert">-->
-  <!--          <xsl:with-param name="indent" select="0"/>-->
-  <!--        </xsl:apply-templates>-->
-  <!--      </xsl:otherwise>-->
-  <!--    </xsl:choose>-->
-  <!--    <xsl:value-of select="eo:eol(1)"/>-->
-  <!--    <xsl:text>}</xsl:text>-->
-  <!--    <xsl:value-of select="eo:eol(0)"/>-->
-  <!--  </xsl:template>-->
-  <!--  <xsl:template match="class" mode="assert">-->
-  <!--    <xsl:param name="indent"/>-->
-  <!--    <xsl:value-of select="eo:tabs($indent)"/>-->
-  <!--    <xsl:text>Object obj = new Dataized(new </xsl:text>-->
-  <!--    <xsl:value-of select="eo:object-name(@name, eo:suffix(@line, @pos))"/>-->
-  <!--    <xsl:text>()).take(Boolean.class);</xsl:text>-->
-  <!--    <xsl:value-of select="eo:eol(2 + $indent)"/>-->
-  <!--    <xsl:text>if (obj instanceof String) {</xsl:text>-->
-  <!--    <xsl:value-of select="eo:eol(2 + $indent)"/>-->
-  <!--    <xsl:text>  Assertions.fail(obj.toString());</xsl:text>-->
-  <!--    <xsl:value-of select="eo:eol(2 + $indent)"/>-->
-  <!--    <xsl:text>} else {</xsl:text>-->
-  <!--    <xsl:value-of select="eo:eol(2 + $indent)"/>-->
-  <!--    <xsl:text>  Assertions.assertTrue((Boolean) obj);</xsl:text>-->
-  <!--    <xsl:value-of select="eo:eol(2 + $indent)"/>-->
-  <!--    <xsl:text>}</xsl:text>-->
-  <!--  </xsl:template>-->
-  <!--  <xsl:template match="meta[head='package']" mode="head">-->
-  <!--    <xsl:text>package </xsl:text>-->
-  <!--    <xsl:value-of select="eo:object-name(tail, '')"/>-->
-  <!--    <xsl:text>;</xsl:text>-->
-  <!--    <xsl:value-of select="eo:eol(0)"/>-->
-  <!--    <xsl:value-of select="eo:eol(0)"/>-->
-  <!--  </xsl:template>-->
-  <!--  <xsl:template match="meta[head='junit' or head='tests']" mode="head">-->
-  <!--    <xsl:text>import org.junit.jupiter.api.Assertions;</xsl:text>-->
-  <!--    <xsl:value-of select="eo:eol(0)"/>-->
-  <!--    <xsl:text>import org.junit.jupiter.api.Test;</xsl:text>-->
-  <!--    <xsl:value-of select="eo:eol(0)"/>-->
-  <!--  </xsl:template>-->
+  <!-- Object for tests -->
+  <xsl:template match="object" mode="tests">
+    <xsl:value-of select="eo:eol(0)"/>
+    <xsl:value-of select="eo:eol(0)"/>
+    <xsl:text>it('test "</xsl:text>
+    <xsl:value-of select="eo:object-name(@name, eo:suffix(@line, @pos))"/>
+    <xsl:text>" should work', function() {</xsl:text>
+    <xsl:value-of select="eo:eol(1)"/>
+    <xsl:choose>
+      <xsl:when test="starts-with(@name, 'throws')">
+        <xsl:text>assert.throws(() => </xsl:text>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:text>assert.ok(</xsl:text>
+      </xsl:otherwise>
+    </xsl:choose>
+    <xsl:apply-templates select="." mode="dataized"/>
+    <xsl:text>)</xsl:text>
+    <xsl:value-of select="eo:eol(0)"/>
+    <xsl:text>})</xsl:text>
+  </xsl:template>
+  <!-- Dataized object for tests -->
+  <xsl:template match="object" mode="dataized">
+    <xsl:param name="indent"/>
+    <xsl:text>dataized(</xsl:text>
+    <xsl:value-of select="eo:object-name(@name, eo:suffix(@line, @pos))"/>
+    <xsl:text>(), BOOL)</xsl:text>
+  </xsl:template>
   <!-- Disclaimer -->
   <xsl:template match="/program" mode="license">
     <xsl:value-of select="eo:eol(0)"/>
     <xsl:text>/* </xsl:text>
     <xsl:value-of select="$disclaimer"/>
     <xsl:text> */</xsl:text>
-    <xsl:value-of select="eo:eol(0)"/>
   </xsl:template>
   <!-- Imports -->
   <xsl:template match="/program" mode="imports">
+    <xsl:value-of select="eo:eol(0)"/>
     <xsl:text>const attr = require('eo2js-runtime/src/runtime/attribute/attr')</xsl:text>
     <xsl:value-of select="eo:eol(0)"/>
     <xsl:text>const object = require('eo2js-runtime/src/runtime/object')</xsl:text>
@@ -574,6 +525,15 @@ SOFTWARE.
     <xsl:text>const taken = require('eo2js-runtime/src/runtime/taken')</xsl:text>
     <xsl:value-of select="eo:eol(0)"/>
     <xsl:text>const applied = require('eo2js-runtime/src/runtime/applied')</xsl:text>
+  </xsl:template>
+  <!-- Imports for tests -->
+  <xsl:template match="/program" mode="test-imports">
+    <xsl:value-of select="eo:eol(0)"/>
+    <xsl:text>const dataized = require('eo2js-runtime/src/runtime/dataized')</xsl:text>
+    <xsl:value-of select="eo:eol(0)"/>
+    <xsl:text>const assert = require('assert')</xsl:text>
+    <xsl:value-of select="eo:eol(0)"/>
+    <xsl:text>const {BOOL} = require('eo2js-runtime/src/runtime/data')</xsl:text>
   </xsl:template>
   <!-- Atom imports -->
   <xsl:template match="object" mode="atom-imports">

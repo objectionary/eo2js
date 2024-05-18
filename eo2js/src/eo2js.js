@@ -3,6 +3,7 @@ const transpile = require('./commands/transpile');
 const link = require('./commands/link');
 const version = require('./version');
 const dataize = require('./commands/dataize');
+const test = require('./commands/test');
 
 program
   .name('eo2js')
@@ -58,6 +59,19 @@ program.command('dataize')
       link(opts)
     }
     dataize(program.args[1], program.args.slice(2), opts)
+  })
+
+/**
+ * Test.
+ */
+program.command('test')
+  .description('Run all visible unit tests')
+  .action((opts) => {
+    if (program.opts().alone === undefined) {
+      transpile(opts)
+      link(opts)
+    }
+    test(opts)
   })
 
 try {

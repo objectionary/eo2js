@@ -90,13 +90,14 @@ describe('bytesOf', function() {
     })
   })
   describe('#verbose()', function() {
-    describe('returns valid array as string if', function() {
+    describe('returns valid verbose string representation if', function() {
       it('length is 0', function() {
-        assert.equal(bytesOf([]).verbose(), '[]')
+        assert.equal(bytesOf([]).verbose(), '--')
       })
       it('length is 1', function() {
-        assert.equal(bytesOf([1]).verbose(), '[1]')
-        assert.equal(bytesOf([0]).verbose(), '[0]')
+        assert.equal(bytesOf([1]).verbose(), 'true')
+        assert.equal(bytesOf([0]).verbose(), 'false')
+        assert.equal(bytesOf([2]).verbose(), '[2]')
       })
       it('length is 8', function() {
         assert.ok(bytesOf(5).verbose().startsWith('[0,0,0,0,0,0,0,5] = 5, or '))

@@ -1,0 +1,46 @@
+{
+  "xsls": [
+    "objects",
+    "package",
+    "tests",
+    "attrs",
+    "data",
+    "to-js"
+  ],
+  "tests": [
+    ".program.objects.object{.\"@_js-name\" == 'test_with_inner.test'}",
+    {
+      "node": ".program.objects.object{.\"@_name\" == 'test-with-inner'}.javascript",
+      "method": "includes",
+      "args": [
+        "const dataized = require('eo2js-runtime/src/runtime/dataized')",
+        "const assert = require('assert')",
+        "const {BOOL} = require('eo2js-runtime/src/runtime/data')",
+        "const test_with_inner = function() {",
+        "const test_with_inner$inner = function() {",
+        [
+          "  obj.attrs['inner'] = attr.once(",
+          "    attr.lambda(",
+          "      obj, function(rho) {",
+          "        let ret = test_with_inner$inner(rho)",
+          "        return ret",
+          "      }",
+          "    )"
+        ],
+        [
+          "it('test \"test_with_inner\" should work', function() {",
+          "  assert.ok(dataized(test_with_inner(), BOOL))",
+          "})"
+        ]
+      ]
+    }
+  ],
+  "eo": [
+    "+tests\n",
+    "# This is the default 64+ symbols comment in front of named abstract object.",
+    "[] > test-with-inner",
+    "  [] > inner",
+    "    true > @",
+    "  inner > @"
+  ]
+}

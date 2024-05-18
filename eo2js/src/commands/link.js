@@ -20,7 +20,8 @@ const pckg = function(runtime) {
   const def = {
     name: 'project',
     version: '1.0.0',
-    author: 'eoc'
+    author: 'eo2js',
+    type: 'commonjs'
   }
   if (!runtime) {
     def.dependencies = {

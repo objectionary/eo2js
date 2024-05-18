@@ -3,7 +3,7 @@ const dataized = require('../dataized');
 const data = require('../data');
 
 /**
- * This Error is thrown by the {@link error} object only.
+ * This Error is thrown by the {@see error} object only.
  */
 class ErError extends ErAbstract {
   /**

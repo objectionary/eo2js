@@ -7,14 +7,13 @@ const lazy = require('./lazy');
  */
 const once = function(callback) {
   let cached = null
-  return new Proxy(
+  return lazy(
     function() {
       if (cached == null) {
         cached = callback()
       }
       return cached
-    },
-    lazy
+    }
   )
 }
 

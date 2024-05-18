@@ -77,9 +77,15 @@ const bytesOf = function(data) {
     verbose: function() {
       let str
       if (bytes.length === 0) {
-        str = '[]'
+        str = '--'
       } else if (bytes.length === 1) {
-        str = bytes[0] ? '[1]' : '[0]'
+        if (bytes[0] === 1) {
+          str = 'true'
+        } else if (bytes[0] === 0) {
+          str = 'false'
+        } else {
+          str = `[${bytes[0]}]`
+        }
       } else if (bytes.length === 8) {
         str = `[${this.asBytes()}] = ${this.asInt()}, or ${this.asFloat()}, or "${this.asString()}"`
       } else {

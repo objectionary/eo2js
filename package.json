@@ -2,8 +2,8 @@
   "name": "eo2js",
   "version": "0.0.0",
   "description": "EOLANG to JavaScript transpiler and runtime",
-  "main": "eo2js",
   "keywords": [
+    "eo",
     "eolang",
     "javascript",
     "transpiler",
@@ -13,8 +13,8 @@
     "install-eo2js": "cd eo2js && npm i",
     "install-eo2js-runtime": "cd eo2js-runtime && npm i",
     "postinstall": "npm run install-eo2js && npm run install-eo2js-runtime",
-    "test-eo2js": "cd eo2js && grunt --no-color",
-    "test-eo2js-runtime": "cd eo2js-runtime && grunt --no-color",
+    "test-eo2js": "cd eo2js && grunt",
+    "test-eo2js-runtime": "cd eo2js-runtime && grunt",
     "test": "npm run test-eo2js && npm run test-eo2js-runtime"
   },
   "author": "maxonfjvipon",
