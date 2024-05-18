@@ -488,7 +488,7 @@ SOFTWARE.
     <xsl:value-of select="eo:eol(1)"/>
     <xsl:choose>
       <xsl:when test="starts-with(@name, 'throws')">
-        <xsl:text>assert.throws(() => </xsl:text>
+        <xsl:text>assert.throws(() =&gt; </xsl:text>
       </xsl:when>
       <xsl:otherwise>
         <xsl:text>assert.ok(</xsl:text>
