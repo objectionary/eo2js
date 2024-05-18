@@ -34,6 +34,14 @@ SOFTWARE.
   <xsl:variable name="TAB">
     <xsl:text>  </xsl:text>
   </xsl:variable>
+  <!-- RHO -->
+  <xsl:variable name="RHO">
+    <xsl:text>ρ</xsl:text>
+  </xsl:variable>
+  <!-- PHI -->
+  <xsl:variable name="PHI">
+    <xsl:text>φ</xsl:text>
+  </xsl:variable>
   <!-- FUNCTIONS  -->
   <!-- EOL with tabs -->
   <xsl:function name="eo:eol">
@@ -97,10 +105,10 @@ SOFTWARE.
     <xsl:param name="attr" as="xs:string"/>
     <xsl:choose>
       <xsl:when test="$attr='@'">
-        <xsl:text>φ</xsl:text>
+        <xsl:value-of select="$PHI"/>
       </xsl:when>
       <xsl:when test="$attr='^'">
-        <xsl:text>ρ</xsl:text>
+        <xsl:value-of select="$RHO"/>
       </xsl:when>
       <xsl:otherwise>
         <xsl:value-of select="concat('', $attr)"/>
@@ -158,7 +166,7 @@ SOFTWARE.
     <xsl:value-of select="eo:eol(0)"/>
     <xsl:text>const </xsl:text>
     <xsl:value-of select="eo:object-name(@name, eo:suffix(@line, @pos))"/>
-    <xsl:text> = function(sigma) {</xsl:text>
+    <xsl:text> = function() {</xsl:text>
     <xsl:value-of select="eo:eol(0)"/>
     <xsl:apply-templates select="." mode="ctor"/>
     <!--    <xsl:if test="//meta[head='junit' or head='tests'] and not(@parent)">-->
@@ -180,7 +188,7 @@ SOFTWARE.
   <!-- OBJECT CONSTRUCTING -->
   <xsl:template match="object" mode="ctor">
     <xsl:value-of select="eo:tabs(1)"/>
-    <xsl:text>const obj = object(sigma, '</xsl:text>
+    <xsl:text>const obj = object('</xsl:text>
     <xsl:value-of select="@name"/>
     <xsl:text>')</xsl:text>
     <!--    <xsl:value-of select="eo:eol(1)"/>-->
@@ -205,11 +213,6 @@ SOFTWARE.
     <!--        <xsl:text>super(sigma);</xsl:text>-->
     <!--      </xsl:otherwise>-->
     <!--    </xsl:choose>-->
-    <!--    <xsl:variable name="type" select="concat(//meta[head='package']/tail, '.', @name)"/>-->
-    <!--    <xsl:if test="$type='org.eolang.bytes'">-->
-    <!--      <xsl:value-of select="eo:eol(2)"/>-->
-    <!--      <xsl:text>this.add("Δ", new AtFree(new AtSimple()));</xsl:text>-->
-    <!--    </xsl:if>-->
     <xsl:apply-templates select="attr">
       <xsl:with-param name="object" select="."/>
       <xsl:with-param name="indent">
@@ -231,7 +234,7 @@ SOFTWARE.
     </xsl:apply-templates>
   </xsl:template>
   <!-- Void attribute -->
-  <xsl:template match="free">
+  <xsl:template match="void">
     <xsl:param name="name"/>
     <xsl:text>attr.void('</xsl:text>
     <xsl:value-of select="$name"/>
@@ -249,14 +252,7 @@ SOFTWARE.
       <xsl:with-param name="indent" select="4"/>
     </xsl:apply-templates>
     <xsl:value-of select="eo:eol(4)"/>
-    <xsl:choose>
-      <xsl:when test="o[@const]">
-        <xsl:text>return cached(ret)</xsl:text>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:text>return ret</xsl:text>
-      </xsl:otherwise>
-    </xsl:choose>
+    <xsl:text>return ret</xsl:text>
     <xsl:value-of select="eo:eol(3)"/>
     <xsl:text>}</xsl:text>
     <xsl:value-of select="eo:eol(2)"/>
@@ -314,8 +310,6 @@ SOFTWARE.
     <xsl:choose>
       <xsl:when test="@primitive and @base">
         <xsl:value-of select="eo:fetch(@base)"/>
-        <!--        <xsl:value-of select="eo:object-name(@base, eo:suffix(@line, @pos))"/>-->
-        <xsl:text>.copy()</xsl:text>
       </xsl:when>
       <xsl:when test="@base='$'">
         <xsl:text>rho</xsl:text>
@@ -324,10 +318,9 @@ SOFTWARE.
         <xsl:text>phi</xsl:text>
       </xsl:when>
       <xsl:when test="@base='^'">
-        <xsl:text>rho.take('ρ')</xsl:text>
-      </xsl:when>
-      <xsl:when test="@base='&amp;'">
-        <xsl:text>rho.take('σ')</xsl:text>
+        <xsl:text>taken(rho, '</xsl:text>
+        <xsl:value-of select="$RHO"/>
+        <xsl:text>')</xsl:text>
       </xsl:when>
       <xsl:when test="$source/@ancestors">
         <xsl:value-of select="eo:object-name($source/@name, eo:suffix(@line, @pos))"/>
@@ -337,13 +330,21 @@ SOFTWARE.
         <xsl:value-of select="eo:fetch(concat($source/@package, '.', $source/@name))"/>
       </xsl:when>
       <xsl:when test="$source/@level">
+        <xsl:for-each select="0 to $source/@level">
+          <xsl:text>taken(</xsl:text>
+        </xsl:for-each>
         <xsl:text>rho</xsl:text>
         <xsl:for-each select="1 to $source/@level">
-          <xsl:text>.take('σ')</xsl:text>
+          <xsl:text>, '</xsl:text>
+          <xsl:value-of select="$RHO"/>
+          <xsl:text>')</xsl:text>
         </xsl:for-each>
+        <xsl:text>, '</xsl:text>
+        <xsl:value-of select="$source/@name"/>
+        <xsl:text>')</xsl:text>
       </xsl:when>
       <xsl:when test="$source">
-        <xsl:text>rho.take('</xsl:text>
+        <xsl:text>taken(rho, '</xsl:text>
         <xsl:value-of select="eo:attr-name(@base)"/>
         <xsl:text>')</xsl:text>
       </xsl:when>
@@ -378,19 +379,13 @@ SOFTWARE.
     <xsl:value-of select="eo:eol($indent)"/>
     <xsl:text>let </xsl:text>
     <xsl:value-of select="$name"/>
-    <xsl:text> = </xsl:text>
+    <xsl:text> = taken(</xsl:text>
     <xsl:value-of select="$name"/>
-    <xsl:text>_base.take('</xsl:text>
+    <xsl:text>_base, '</xsl:text>
     <xsl:variable name="method" select="substring-after(@base, '.')"/>
     <xsl:choose>
       <xsl:when test="$method='^'">
-        <xsl:text>ρ</xsl:text>
-      </xsl:when>
-      <xsl:when test="$method='&amp;'">
-        <xsl:text>σ</xsl:text>
-      </xsl:when>
-      <xsl:when test="$method='&lt;'">
-        <xsl:text>ν</xsl:text>
+        <xsl:value-of select="$RHO"/>
       </xsl:when>
       <xsl:otherwise>
         <xsl:value-of select="eo:attr-name($method)"/>
@@ -406,20 +401,6 @@ SOFTWARE.
       <xsl:with-param name="indent" select="$indent"/>
       <xsl:with-param name="skip" select="1"/>
     </xsl:apply-templates>
-    <xsl:apply-templates select=".[@copy]" mode="copy">
-      <xsl:with-param name="name" select="$name"/>
-      <xsl:with-param name="indent" select="$indent"/>
-    </xsl:apply-templates>
-  </xsl:template>
-  <!-- COPY -->
-  <xsl:template match="o[@copy]" mode="copy">
-    <xsl:param name="indent"/>
-    <xsl:param name="name"/>
-    <xsl:value-of select="eo:eol($indent)"/>
-    <xsl:value-of select="$name"/>
-    <xsl:text> = </xsl:text>
-    <xsl:value-of select="$name"/>
-    <xsl:text>.copy()</xsl:text>
   </xsl:template>
   <!--  <xsl:template match="*" mode="located">-->
   <!--    <xsl:param name="indent"/>-->
@@ -449,10 +430,6 @@ SOFTWARE.
     <xsl:param name="skip" select="0"/>
     <!-- CREATE OBJECTS TO PUT -->
     <xsl:for-each select="./*[name()!='value' and position()&gt;$skip][not(@level)]">
-      <!-- COPY TAKEN OBJECT -->
-      <xsl:if test="position()=1">
-        <xsl:text>.copy()</xsl:text>
-      </xsl:if>
       <!-- VARIABLE TO PUT -->
       <xsl:variable name="put">
         <xsl:value-of select="$name"/>
@@ -470,9 +447,9 @@ SOFTWARE.
     <xsl:if test="count($to_put)&gt;0">
       <xsl:value-of select="eo:eol($indent)"/>
       <xsl:value-of select="$name"/>
-      <xsl:text> = </xsl:text>
+      <xsl:text> = applied(</xsl:text>
       <xsl:value-of select="$name"/>
-      <xsl:text>.with({</xsl:text>
+      <xsl:text>, {</xsl:text>
       <xsl:value-of select="eo:eol($indent+1)"/>
       <xsl:for-each select="$to_put">
         <xsl:choose>
@@ -487,9 +464,6 @@ SOFTWARE.
                 <xsl:text>'</xsl:text>
               </xsl:otherwise>
             </xsl:choose>
-          </xsl:when>
-          <xsl:when test="../@base = 'org.eolang.error'">
-            <xsl:text>'α'</xsl:text>
           </xsl:when>
           <xsl:otherwise>
             <xsl:value-of select="position()-1"/>
@@ -596,10 +570,10 @@ SOFTWARE.
     <xsl:text>const object = require('eo2js-runtime/src/runtime/object')</xsl:text>
     <xsl:value-of select="eo:eol(0)"/>
     <xsl:text>const phi = require('eo2js-runtime/src/runtime/phi')</xsl:text>
-    <xsl:if test="//o[@const]">
-      <xsl:value-of select="eo:eol(0)"/>
-      <xsl:text>const cached = require('eo2js-runtime/src/runtime/cached')</xsl:text>
-    </xsl:if>
+    <xsl:value-of select="eo:eol(0)"/>
+    <xsl:text>const taken = require('eo2js-runtime/src/runtime/taken')</xsl:text>
+    <xsl:value-of select="eo:eol(0)"/>
+    <xsl:text>const applied = require('eo2js-runtime/src/runtime/applied')</xsl:text>
   </xsl:template>
   <!-- Atom imports -->
   <xsl:template match="object" mode="atom-imports">

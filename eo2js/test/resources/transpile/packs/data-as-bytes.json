@@ -22,10 +22,10 @@
       "method": "includes",
       "args": [
         [
-          "        let ret = phi.take('org').take('eolang').take('int').copy()",
-          "          let ret_1 = phi.take('org').take('eolang').take('bytes').copy()",
+          "        let ret = phi.take('org').take('eolang').take('int')",
+          "          let ret_1 = phi.take('org').take('eolang').take('bytes')",
           "          ret_1.assets['Δ'] = ['0x00', '0x00', '0x00', '0x00', '0x00', '0x00', '0x00', '0x2A']",
-          "        ret = ret.with({",
+          "        ret = applied(ret, {",
           "          0: ret_1",
           "        })",
           "        return ret"
@@ -37,10 +37,10 @@
       "method": "includes",
       "args": [
         [
-          "        let ret = phi.take('org').take('eolang').take('float').copy()",
-          "          let ret_1 = phi.take('org').take('eolang').take('bytes').copy()",
+          "        let ret = phi.take('org').take('eolang').take('float')",
+          "          let ret_1 = phi.take('org').take('eolang').take('bytes')",
           "          ret_1.assets['Δ'] = ['0x40', '0x0C', '0x00', '0x00', '0x00', '0x00', '0x00', '0x00']",
-          "        ret = ret.with({",
+          "        ret = applied(ret, {",
           "          0: ret_1",
           "        })",
           "        return ret"
@@ -52,7 +52,7 @@
       "method": "includes",
       "args": [
         [
-          "        let ret = phi.take('org').take('eolang').take('bytes').copy()",
+          "        let ret = phi.take('org').take('eolang').take('bytes')",
           "        ret.assets['Δ'] = ['0x01', '0xAF']",
           "        return ret"
         ]

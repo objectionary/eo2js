@@ -36,7 +36,7 @@ SOFTWARE.
             <xsl:text>bound</xsl:text>
           </xsl:when>
           <xsl:otherwise>
-            <xsl:text>free</xsl:text>
+            <xsl:text>void</xsl:text>
           </xsl:otherwise>
         </xsl:choose>
       </xsl:variable>

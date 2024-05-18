@@ -12,12 +12,12 @@
       "method": "includes",
       "args": [
         [
-          "        ret = ret.with({",
+          "        ret = applied(ret, {",
           "          0: ret_1",
           "        })"
         ],
         [
-          "        ret = ret.with({",
+          "        ret = applied(ret, {",
           "          'text': ret_1",
           "        })"
         ]
