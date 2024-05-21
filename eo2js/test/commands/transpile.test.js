@@ -36,17 +36,18 @@ describe('transpile', function() {
     })
     /**
      * Call transpile command.
+     * @param {String} name - Name of the object to transpile
      * @return {String} - Stdout
      */
-    const transpile = function() {
-      const verified = path.resolve(target, '6-verify/com/eo2js/simple.xmir')
+    const transpile = function(name = 'simple') {
+      const verified = path.resolve(target, `6-verify/com/eo2js/${name}.xmir`)
       const foreign = [{
-        id: 'com.eo2js.simple',
+        id: `com.eo2js.${name}`,
         verified: verified
       }]
       fs.writeFileSync(path.resolve(target, 'eo-foreign.json'), JSON.stringify(foreign))
       fs.mkdirSync(path.resolve(target, '6-verify/com/eo2js'), {recursive: true})
-      fs.copyFileSync(path.resolve('test/resources/transpile/simple.xmir'), verified)
+      fs.copyFileSync(path.resolve(`test/resources/transpile/${name}.xmir`), verified)
       return runSync([
         'transpile',
         '--verbose',
@@ -60,7 +61,10 @@ describe('transpile', function() {
     })
     it('should generate JS files', function() {
       assertFilesExist(transpile(), target, ['project/com/eo2js/simple.js'])
-    });
+    })
+    it('should generate test JS file', function() {
+      assertFilesExist(transpile('simple-test'), target, ['project/com/eo2js/simple_test.test.js'])
+    })
   })
   describe('transformation packs', function() {
     this.timeout(0)

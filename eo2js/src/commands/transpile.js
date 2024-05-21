@@ -5,22 +5,38 @@ const saxon = require('saxon-js')
 const {XMLParser} = require('fast-xml-parser');
 
 /**
- * Get path from given object name.
- * E.g. org.eolang.int -> org/eolang/int
- * @param {String} name - Name of the object. May contain dots
- * @return {String} - path from object name
+ * Replace dots in given string with {@code path.sep}
+ * @param {String} str - String
+ * @return {String} - String with replaced dots
  */
-const pathFromName = function(name) {
-  return name.replace(/\./g, path.sep)
+const dotsToSeps = function(str) {
+  return str.replace(/\./g, path.sep)
 }
 
 /**
- * Export given variable from module.
- * @param {String} name - Variable name
- * @return {String} - `\n\nmodule.exports = ${string}`
+ * Get path from given object name.
+ * E.g.
+ * - name org.eolang.int + pckg '' -> path org/eolang/int
+ * - name org.eolang.int.test + pckg org.eolang -> path org/eolang/int.test
+ * If name ends with ".test" and package
+ * @param {String} name - Name of the object. May contain dots
+ * @param {String} pckg - Package of the object
+ * @return {String} - path from object name
  */
-const exporting = function(name) {
-  return `\n\nmodule.exports = ${name}`
+const pathFromName = function(name, pckg) {
+  let tail
+  if (pckg !== '') {
+    tail = name.slice(pckg.length).slice(1)
+  } else {
+    tail = name
+  }
+  let pth
+  if (tail.includes('.test')) {
+    pth = dotsToSeps(name.slice(0, name.indexOf(tail))) + tail
+  } else {
+    pth = dotsToSeps(name)
+  }
+  return pth
 }
 
 /**
@@ -31,6 +47,31 @@ const makeDirIfNotExist = function(dir) {
   if (!fs.existsSync(dir)) {
     fs.mkdirSync(dir, {recursive: true})
   }
+}
+
+/**
+ * Check if given XMIR has meta.
+ * @param {any} xmir - XMIR
+ * @param {String} name - Name of the meta
+ * @return {boolean} - If given XMIR has tests meta or not
+ */
+const hasMeta = function(xmir, name) {
+  const metas = xmir.program.metas.meta
+  return Array.isArray(metas) && metas.findIndex((meta) => meta.head === name) !== -1
+}
+
+/**
+ * Get package meta from XMIR.
+ * @param {any} xmir - XMIR
+ * @return {string} - Package meta of emtpy string
+ */
+const packageMeta = function(xmir) {
+  const pckg = 'package'
+  let meta = ''
+  if (hasMeta(xmir, pckg)) {
+    meta = xmir.program.metas.meta.find((mt) => mt.head === pckg).tail
+  }
+  return meta
 }
 
 /**
@@ -59,7 +100,12 @@ const transpile = function(options) {
     .forEach((tojo) => {
       const text = fs.readFileSync(tojo[verified]).toString()
       let xml = parser.parse(text)
-      const transpiled = path.resolve(options['target'], dir, `${pathFromName(xml['program']['@_name'])}.xmir`)
+      const pckg = packageMeta(xml)
+      const transpiled = path.resolve(
+        options['target'],
+        dir,
+        `${pathFromName(xml['program']['@_name'], pckg)}.xmir`
+      )
       makeDirIfNotExist(transpiled.substring(0, transpiled.lastIndexOf(path.sep)))
       fs.writeFileSync(transpiled, text)
       xml = text
@@ -76,14 +122,14 @@ const transpile = function(options) {
       if (!Array.isArray(objects)) {
         objects = [objects]
       }
-      const filtered = objects.filter((obj) => obj.hasOwnProperty('javascript') && !obj.hasOwnProperty('@_atom'))
-      if (filtered.length > 0) {
+      const filtered = objects.filter((obj) => !!obj && obj.hasOwnProperty('javascript') && !obj.hasOwnProperty('@_atom'))
+      const count = hasMeta(xml, 'tests') ? 0 : 1
+      if (filtered.length > count) {
         const first = filtered[0]
-        const dest = path.resolve(project, `${pathFromName(first['@_js-name'])}.js`)
+        const dest = path.resolve(project, `${pathFromName(first['@_js-name'], pckg)}.js`)
         makeDirIfNotExist(dest.substring(0, dest.lastIndexOf(path.sep)))
         fs.writeFileSync(dest, first['javascript'])
         filtered.slice(1).forEach((obj) => fs.appendFileSync(dest, `\n${obj['javascript']}`))
-        fs.appendFileSync(dest, exporting(first['@_name']))
       }
     })
 }

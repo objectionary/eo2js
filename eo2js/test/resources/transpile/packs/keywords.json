@@ -1,0 +1,35 @@
+{
+  "xsls": [
+    "objects",
+    "package",
+    "attrs",
+    "data",
+    "to-js"
+  ],
+  "tests": [
+    ".program.objects.object{.\"@_js-name\" === 'com.eo2js.while'}",
+    {
+      "node": ".program.objects.object{.\"@_name\" == 'while'}.javascript",
+      "method": "includes",
+      "args": [
+        "const _while = function() {",
+        "        let ret = while$if(rho)",
+        "        let ret = while$for(rho)"
+      ]
+    },
+    {
+      "node": ".program.objects.object[-1].javascript",
+      "method": "includes",
+      "args": [
+        "module.exports = _while"
+      ]
+    }
+  ],
+  "eo": [
+    "+package com.eo2js\n",
+    "# This is the default 64+ symbols comment in front of named abstract object.",
+    "[] > while",
+    "  [] > if /true",
+    "  [] > for"
+  ]
+}

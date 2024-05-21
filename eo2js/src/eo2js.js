@@ -17,7 +17,8 @@ program
   .option('-t, --target <path>', 'Target directory with all generated files', '.eoc')
   .option('-p, --project <path>', 'Path to result JavaScript project', 'project')
   .option('-r, --resources <path>', 'Path to the resources', 'src/resources')
-  .option('-d --dependency <path>', 'Path to local eo2js-runtime dependency')
+  .option('-d, --dependency <path>', 'Path to local eo2js-runtime dependency')
+  .option('-f, --foreign <path>', 'Path to foreign tojos', 'eo-foreign.json')
   .option('--alone', 'Just run a single command without dependencies')
   // .option('--hash <hex>', 'Hash in objectionary/home to compile against', parser)
   // .option('--parser <version>', 'Set the version of EO parser to use', parser)
@@ -33,7 +34,6 @@ program
  */
 program.command('transpile')
   .description('Convert XMIR to JavaScript executable files')
-  .option('-f, --foreign <path>', 'Path to foreign tojos', 'eo-foreign.json')
   .action(transpile)
 
 /**

@@ -8,7 +8,7 @@
   ],
   "tests": [
     {
-      "node": ".program.objects.object.javascript",
+      "node": ".program.objects.object{.\"@_name\" == 'simple'}.javascript",
       "method": "includes",
       "args": [
         [
@@ -21,6 +21,13 @@
           "          'text': ret_1",
           "        })"
         ]
+      ]
+    },
+    {
+      "node": ".program.objects.object[-1].javascript",
+      "method": "includes",
+      "args": [
+        "module.exports = simple"
       ]
     }
   ],

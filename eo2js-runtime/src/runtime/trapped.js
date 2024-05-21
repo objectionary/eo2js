@@ -1,9 +1,9 @@
 /**
- * Lazy object Proxy.
- * @param {function(): object} callback - Function that return. objects
+ * Trap for an object.
+ * @param {function(): object} callback - Function that returns object
  * @return {Object} - Object that evaluated lazily
  */
-const lazy = function(callback) {
+const trapped = function(callback) {
   return new Proxy(
     callback,
     {
@@ -17,4 +17,4 @@ const lazy = function(callback) {
   )
 }
 
-module.exports = lazy
+module.exports = trapped

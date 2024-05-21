@@ -101,6 +101,9 @@ const pack = function(params) {
         }).principalResult
       })
     res.xmir = xml
+    const saved = path.resolve(target, '3-transpiled')
+    fs.mkdirSync(saved, {recursive: true})
+    fs.writeFileSync(path.resolve(saved, 'test.xmir'), res.xmir)
     xml = parser.parse(xml, {})
     res.json = xml
     params.json['tests'].forEach((test) => {

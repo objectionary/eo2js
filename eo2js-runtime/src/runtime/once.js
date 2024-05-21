@@ -1,4 +1,4 @@
-const lazy = require('./lazy');
+const trapped = require('./trapped');
 
 /**
  * Evaluate object lazily only once.
@@ -7,7 +7,7 @@ const lazy = require('./lazy');
  */
 const once = function(callback) {
   let cached = null
-  return lazy(
+  return trapped(
     function() {
       if (cached == null) {
         cached = callback()

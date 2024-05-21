@@ -14,6 +14,7 @@ const ext = '.sef.json'
  * @return {String} - Stdout
  */
 const compile = function(source, dest) {
+  console.log(`Recompiling ${source}`)
   try {
     return execSync(
       [
@@ -31,6 +32,8 @@ const compile = function(source, dest) {
  * @param {Array.<String>|undefined} [names] - names of stylesheets to compile
  */
 const compileStylesheets = function(names) {
+  console.log('Recompiling stylesheets...')
+  let recompiled = 0
   names = names || all
   fs.readdirSync(xsls)
     .filter((xsl) => names.includes(xsl.substring(0, xsl.lastIndexOf('.xsl'))))
@@ -40,11 +43,14 @@ const compileStylesheets = function(names) {
       if (fs.existsSync(json)) {
         if (fs.statSync(xsl).mtimeMs >= fs.statSync(json).mtimeMs) {
           compile(xsl, json)
+          recompiled++
         }
       } else {
         compile(xsl, json)
+        recompiled++
       }
     })
+  console.log(`Recompiled ${recompiled} stylesheets`)
 }
 
 module.exports = compileStylesheets

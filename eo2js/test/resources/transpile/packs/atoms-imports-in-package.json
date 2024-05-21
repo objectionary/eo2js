@@ -1,0 +1,25 @@
+{
+  "xsls": [
+    "objects",
+    "package",
+    "attrs",
+    "data",
+    "to-js"
+  ],
+  "tests": [
+    {
+      "node": ".program.objects.object{.\"@_name\" == 'outer'}.javascript",
+      "method": "includes",
+      "args": [
+        "const outer$φ = require('eo2js-runtime/src/objects/org/eolang/outer$φ')",
+        "        let ret = outer$φ(rho)"
+      ]
+    }
+  ],
+  "eo": [
+    "+package org.eolang\n",
+    "# This is the default 64+ symbols comment in front of named abstract object.",
+    "[] > outer",
+    "  [] > @ /true"
+  ]
+}

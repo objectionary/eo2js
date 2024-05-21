@@ -65,6 +65,13 @@
           "  )"
         ]
       ]
+    },
+    {
+      "node": ".program.objects.object[-1].javascript",
+      "method": "includes",
+      "args": [
+        "module.exports = foo"
+      ]
     }
   ],
   "eo": [
