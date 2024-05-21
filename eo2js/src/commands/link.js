@@ -11,8 +11,7 @@ const main = '__main__.js'
 
 /**
  * Data to insert to package.json file.
- * If path to local dependency is present - eo2js-runtime dependency won't be added to
- * package.json file.
+ * If path to local dependency is present - eo2js-runtime dependency won't be added.
  * @param {String} [runtime] - path to local eo-runtime dependency
  * @return {{author: string, name: string, version: string}}
  */

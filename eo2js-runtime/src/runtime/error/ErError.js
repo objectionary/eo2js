@@ -1,6 +1,6 @@
 const ErAbstract = require('./ErAbstract');
 const dataized = require('../dataized');
-const data = require('../data');
+const {STRING} = require('../data');
 
 /**
  * This Error is thrown by the {@see error} object only.
@@ -22,7 +22,7 @@ class ErError extends ErAbstract {
    * @return {string}
    */
   static safeMessage(enclosure) {
-    return dataized(enclosure, data.STRING)
+    return dataized(enclosure, STRING)
   }
 }
 

@@ -5,6 +5,18 @@ const saxon = require('saxon-js')
 const {XMLParser} = require('fast-xml-parser');
 
 /**
+ * Verified key.
+ * @type {string}
+ */
+const verified = 'verified'
+
+/**
+ * Result directory for transpiled XMIRs.
+ * @type {string}
+ */
+const dir = '8-transpile'
+
+/**
  * Replace dots in given string with {@code path.sep}
  * @param {String} str - String
  * @return {String} - String with replaced dots
@@ -75,6 +87,49 @@ const packageMeta = function(xmir) {
 }
 
 /**
+ * Transform XMIR from given tojo and save.
+ * @param {Object} tojo - Tojo.
+ * @param {{target: String, project: String}} options - Program options
+ * @param {Array.<String>} transformations - List of transformations to apply to XMIR
+ * @param {any} parser - XML parser
+ */
+const transform = function(tojo, options, transformations, parser) {
+  const text = fs.readFileSync(tojo[verified]).toString()
+  let xml = parser.parse(text)
+  const pckg = packageMeta(xml)
+  const transpiled = path.resolve(
+    options.target,
+    dir,
+    `${pathFromName(xml['program']['@_name'], pckg)}.xmir`
+  )
+  makeDirIfNotExist(transpiled.substring(0, transpiled.lastIndexOf(path.sep)))
+  fs.writeFileSync(transpiled, text)
+  xml = text
+  transformations.forEach((transformation) => {
+    xml = saxon.transform({
+      stylesheetFileName: transformation,
+      sourceText: xml,
+      destination: 'serialized'
+    }).principalResult
+  })
+  fs.writeFileSync(transpiled, xml)
+  xml = parser.parse(xml)
+  let objects = xml.program.objects.object
+  if (!Array.isArray(objects)) {
+    objects = [objects]
+  }
+  const filtered = objects.filter((obj) => !!obj && obj.hasOwnProperty('javascript') && !obj.hasOwnProperty('@_atom'))
+  const count = hasMeta(xml, 'tests') ? 0 : 1
+  if (filtered.length > count) {
+    const first = filtered[0]
+    const dest = path.resolve(options.project, `${pathFromName(first['@_js-name'], pckg)}.js`)
+    makeDirIfNotExist(dest.substring(0, dest.lastIndexOf(path.sep)))
+    fs.writeFileSync(dest, first['javascript'])
+    filtered.slice(1).forEach((obj) => fs.appendFileSync(dest, `\n${obj['javascript']}`))
+  }
+}
+
+/**
  * Transpile XMIR to JavaScript.
  * @param {{foreign: String, project: String, resources: String}} options - Transpile command options
  */
@@ -91,47 +146,16 @@ const transpile = function(options) {
     'objects', 'package', 'tests', 'attrs', 'data', 'to-js'
   ].map((name) => path.resolve(options['resources'], `json/${name}.sef.json`))
   const parser = new XMLParser({ignoreAttributes: false})
-  const verified = 'verified'
-  const dir = '8-transpile'
   const project = path.resolve(options['target'], options['project'])
   fs.mkdirSync(project, {recursive: true})
   JSON.parse(fs.readFileSync(foreign).toString())
     .filter((tojo) => tojo.hasOwnProperty(verified))
-    .forEach((tojo) => {
-      const text = fs.readFileSync(tojo[verified]).toString()
-      let xml = parser.parse(text)
-      const pckg = packageMeta(xml)
-      const transpiled = path.resolve(
-        options['target'],
-        dir,
-        `${pathFromName(xml['program']['@_name'], pckg)}.xmir`
-      )
-      makeDirIfNotExist(transpiled.substring(0, transpiled.lastIndexOf(path.sep)))
-      fs.writeFileSync(transpiled, text)
-      xml = text
-      transformations.forEach((transformation) => {
-        xml = saxon.transform({
-          stylesheetFileName: transformation,
-          sourceText: xml,
-          destination: 'serialized'
-        }).principalResult
-      })
-      fs.writeFileSync(transpiled, xml)
-      xml = parser.parse(xml)
-      let objects = xml.program.objects.object
-      if (!Array.isArray(objects)) {
-        objects = [objects]
-      }
-      const filtered = objects.filter((obj) => !!obj && obj.hasOwnProperty('javascript') && !obj.hasOwnProperty('@_atom'))
-      const count = hasMeta(xml, 'tests') ? 0 : 1
-      if (filtered.length > count) {
-        const first = filtered[0]
-        const dest = path.resolve(project, `${pathFromName(first['@_js-name'], pckg)}.js`)
-        makeDirIfNotExist(dest.substring(0, dest.lastIndexOf(path.sep)))
-        fs.writeFileSync(dest, first['javascript'])
-        filtered.slice(1).forEach((obj) => fs.appendFileSync(dest, `\n${obj['javascript']}`))
-      }
-    })
+    .forEach((tojo) => transform(
+      tojo,
+      {target: options['target'], project},
+      transformations,
+      parser
+    ))
 }
 
 module.exports = transpile

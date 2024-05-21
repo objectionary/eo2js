@@ -1,6 +1,6 @@
 const object = require('../../../runtime/object')
 const {LAMBDA, RHO} = require('../../../runtime/attribute/specials');
-const data = require('../../../runtime/data');
+const {data} = require('../../../runtime/data');
 const dataized = require('../../../runtime/dataized');
 
 /**

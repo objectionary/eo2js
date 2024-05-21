@@ -1,7 +1,6 @@
 const object = require('../../../../runtime/object.js')
 const dataized = require('../../../../runtime/dataized')
-const data = require('../../../../runtime/data')
-const {STRING} = require('../../../../runtime/data')
+const {data, STRING} = require('../../../../runtime/data')
 const {LAMBDA} = require('../../../../runtime/attribute/specials')
 const at_void = require('../../../../runtime/attribute/at-void');
 

@@ -1,6 +1,6 @@
 const assert = require('assert');
 const tr = require('../../../../temp/objects/org/eolang/try');
-const data = require('../../../../temp/runtime/data');
+const {data, STRING, BOOL} = require('../../../../temp/runtime/data');
 const object = require('../../../../temp/runtime/object');
 const dataized = require('../../../../temp/runtime/dataized');
 const attr = require('../../../../temp/runtime/attribute/attr');
@@ -77,13 +77,13 @@ const tryObj = function(main, final) {
 
 describe('try', function() {
   it(`should catch error via ${PHI}`, function() {
-    assert.equal(dataized(tryObj(broken(PHI)), data.STRING), message)
+    assert.equal(dataized(tryObj(broken(PHI)), STRING), message)
   })
   it(`should catch error via ${LAMBDA}`, function() {
-    assert.equal(dataized(tryObj(broken(LAMBDA)), data.STRING), message)
+    assert.equal(dataized(tryObj(broken(LAMBDA)), STRING), message)
   })
   it('should be dataized to body', function() {
-    assert.equal(dataized(tryObj(main()), data.BOOL), true)
+    assert.equal(dataized(tryObj(main()), BOOL), true)
   })
   it('should dataize "finally" attribute', function() {
     const logs = []

@@ -25,8 +25,6 @@ program
   // .option('--latest', 'Use the latest parser version from Maven Central')
   // .option('-b, --batch', 'Run in batch mode, suppress interactive messages')
   // .option('--no-color', 'Disable colorization of console messages')
-  // .option('--track-optimization-steps', 'Save intermediate XMIR files')
-  // .option('-c, --clean', 'Delete ./.eoc directory')
   .option('--verbose', 'Print debug messages and full output of child processes');
 
 /**

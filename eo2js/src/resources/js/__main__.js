@@ -1,11 +1,11 @@
 const phi = require('eo2js-runtime/src/runtime/phi')
 const dataized = require('eo2js-runtime/src/runtime/dataized')
 const bytesOf = require('eo2js-runtime/src/runtime/bytes-of')
-const data = require('eo2js-runtime/src/runtime/data')
+const {data} = require('eo2js-runtime/src/runtime/data')
 const ErAbstract = require('eo2js-runtime/src/runtime/error/ErAbstract')
 
 /**
- * Run application.
+ * Application entry point.
  */
 const main = function() {
   try {

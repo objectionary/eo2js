@@ -39,12 +39,14 @@ const data = {
       })
     }
     return object
-  },
+  }
+}
+
+module.exports = {
+  data,
   INT: 'int',
   STRING: 'string',
   FLOAT: 'float',
   BOOL: 'bool',
   BYTES: 'bytes'
 }
-
-module.exports = data

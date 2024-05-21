@@ -1,5 +1,5 @@
 const assert = require('assert');
-const data = require('../../temp/runtime/data')
+const {data, INT, STRING, FLOAT, BOOL} = require('../../temp/runtime/data')
 const dataized = require('../../temp/runtime/dataized');
 
 const isObject = function(obj) {
@@ -17,7 +17,7 @@ describe('data', function() {
       assert.ok(isObject(data.toObject(5)))
     })
     it('should be dataized as int', function() {
-      assert.equal(dataized(data.toObject(42), data.INT), 42)
+      assert.equal(dataized(data.toObject(42), INT), 42)
     })
   })
   describe('to string', function() {
@@ -25,7 +25,7 @@ describe('data', function() {
       assert.ok(isObject(data.toObject('Hello')))
     })
     it('should be dataized as string', function() {
-      assert.equal(dataized(data.toObject('Hello'), data.STRING), 'Hello')
+      assert.equal(dataized(data.toObject('Hello'), STRING), 'Hello')
     })
   })
   describe('to float', function() {
@@ -33,7 +33,7 @@ describe('data', function() {
       assert.ok(isObject(data.toObject(42.7)))
     })
     it('should be dataized as float', function() {
-      assert.equal(dataized(data.toObject(13.2), data.FLOAT), 13.2)
+      assert.equal(dataized(data.toObject(13.2), FLOAT), 13.2)
     })
   })
   describe('to bool', function() {
@@ -41,7 +41,7 @@ describe('data', function() {
       assert.ok(isObject(data.toObject(true)))
     })
     it('should be dataized as bool', function() {
-      assert.equal(dataized(data.toObject(false), data.BOOL), false)
+      assert.equal(dataized(data.toObject(false), BOOL), false)
     })
   })
   describe('to bytes', function() {

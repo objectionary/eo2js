@@ -9,9 +9,6 @@ const trapped = function(callback) {
     {
       get: function(target, property, _) {
         return target()[property]
-      },
-      apply: function(target, thisArg, arguments) {
-        return target().call(thisArg, ...arguments)
       }
     }
   )
