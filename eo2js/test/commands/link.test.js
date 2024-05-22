@@ -12,15 +12,17 @@ describe('link', function() {
   })
   /**
    * Run "link" command.
+   * @param {String} [args] - Arguments
    * @return {String} - Stdout.
    */
-  const link = function() {
+  const link = function(...args) {
     return runSync([
       'link',
       '-t', target,
       '-p project',
       '--alone',
-      '-d', path.resolve('../eo2js-runtime')
+      '-d', path.resolve('../eo2js-runtime'),
+      ...args
     ])
   }
   it('should create all necessary files and install npm project', function(done) {
@@ -30,6 +32,11 @@ describe('link', function() {
       'node_modules/eo2js-runtime',
       '__main__.js'
     ])
+    done()
+  })
+  it('should add test dependency', function(done) {
+    this.timeout(5000)
+    assertFilesExist(link('--tests'), project, ['node_modules/mocha'])
     done()
   })
 })

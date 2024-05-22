@@ -13,7 +13,7 @@ describe('test', function() {
     fs.mkdirSync(project, {recursive: true})
   })
   it('should execute unit test', function() {
-    runSync(['link', '-t', target, '-p project', '--alone', '-d', runtime])
+    runSync(['link', '-t', target, '-p project', '--alone', '-d', runtime, '--tests'])
     fs.copyFileSync(
       path.resolve('test/resources/test/simple-test.test.js'),
       path.resolve(project, 'simple-test.test.js')

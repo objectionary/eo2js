@@ -39,6 +39,7 @@ program.command('transpile')
  */
 program.command('link')
   .description('Build npm project')
+  .option('--tests', 'Add dependency for testing', false)
   .action((opts) => {
     if (program.opts().alone === undefined) {
       transpile(opts)
@@ -67,7 +68,7 @@ program.command('test')
   .action((opts) => {
     if (program.opts().alone === undefined) {
       transpile(opts)
-      link(opts)
+      link({...opts, tests: true})
     }
     test(opts)
   })

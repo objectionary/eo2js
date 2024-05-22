@@ -12,19 +12,28 @@ const main = '__main__.js'
 /**
  * Data to insert to package.json file.
  * If path to local dependency is present - eo2js-runtime dependency won't be added.
- * @param {String} [runtime] - path to local eo-runtime dependency
- * @return {{author: string, name: string, version: string}}
+ * @param {String} [runtime] - Path to local eo-runtime dependency
+ * @param {boolean} [tests] - Add dependencies for testing
+ * @return {{author: string, name: string, version: string}} - The content for package.json file
  */
-const pckg = function(runtime) {
+const pckg = function(runtime, tests) {
   const def = {
     name: 'project',
     version: '1.0.0',
     author: 'eo2js',
-    type: 'commonjs'
+    type: 'commonjs',
+    dependencies: {}
   }
   if (!runtime) {
     def.dependencies = {
+      ...def.dependencies,
       'eo2js-runtime': 'latest'
+    }
+  }
+  if (tests) {
+    def.dependencies = {
+      ...def.dependencies,
+      'mocha': 'latest'
     }
   }
   return def
@@ -32,12 +41,15 @@ const pckg = function(runtime) {
 
 /**
  * Build npm project.
- * @param {{target: String, project: String, resources: String, dependency: ?String}} options - Program options
+ * @param {{target: String, project: String, resources: String, dependency: ?String, tests: ?boolean}} options - Program options
  */
 const link = function(options) {
   options = {...program.opts(), ...options}
   const project = path.resolve(options.target, options.project)
-  fs.writeFileSync(path.resolve(project, 'package.json'), JSON.stringify(pckg(options.dependency)))
+  fs.writeFileSync(
+    path.resolve(project, 'package.json'),
+    JSON.stringify(pckg(options.dependency, options.tests))
+  )
   execSync('npm install', {cwd: project})
   fs.copyFileSync(
     path.resolve(options.resources, `js/${main}`),

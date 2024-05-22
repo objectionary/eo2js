@@ -11,7 +11,7 @@ const test = function(options) {
   const dir = path.resolve(options.target, options.project)
   execSync(
     [
-      'mocha .',
+      'node ./node_modules/mocha/bin/mocha.js .',
       '--recursive',
       '--exclude "__main__.js"',
       '--exclude "node_modules/**"',
