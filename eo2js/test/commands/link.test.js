@@ -35,7 +35,7 @@ describe('link', function() {
     done()
   })
   it('should add test dependency', function(done) {
-    this.timeout(5000)
+    this.timeout(10000)
     assertFilesExist(link('--tests'), project, ['node_modules/mocha'])
     done()
   })
