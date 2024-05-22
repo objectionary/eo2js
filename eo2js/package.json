@@ -23,7 +23,6 @@
   },
   "devDependencies": {
     "grunt": "^1.6.1",
-    "eolang": "^0.18.0",
     "mocha": "^10.3.0",
     "xslt3": "^2.6.0",
     "eslint": "8.45.0",
