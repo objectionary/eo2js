@@ -50,7 +50,7 @@ describe('runtime tests', function() {
     fs.mkdirSync(project, {recursive: true})
   })
   it('should execute all eo-runtime tests', function(done) {
-    this.timeout('100s')
+    this.timeout(0)
     execSync([
       'git init',
       'git remote add origin https://github.com/objectionary/home.git',
