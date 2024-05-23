@@ -37,6 +37,23 @@ const exclude = [
 ].map((name) => `org/eolang/${name}.test.js`)
 
 /**
+ * Read all files from given directory.
+ * @param {String} dir - Directory
+ * @return {Generator<*|string, void, *>}
+ */
+const allFilesFrom = function*(dir) {
+  const files = fs.readdirSync(dir, { withFileTypes: true });
+
+  for (const file of files) {
+    if (file.isDirectory()) {
+      yield* allFilesFrom(path.join(dir, file.name));
+    } else {
+      yield path.join(dir, file.name);
+    }
+  }
+}
+
+/**
  * This test downloads EO tests from objectionary/home repository, parses and assembles them using
  * eo-maven-plugin, transpiles and executes using eo2js.
  */
@@ -58,6 +75,11 @@ describe('runtime tests', function() {
       'echo "tests/org/eolang" > .git/info/sparse-checkout',
       'git pull origin master'
     ].join(' && '), {cwd: home})
+    console.debug('Downloaded:')
+    for (const file of allFilesFrom(path.resolve(home, 'tests/org/eolang'))) {
+      console.debug(path.relative(home, file))
+    }
+    console.debug(`\nExcluded:\n${exclude.join('\n')}`)
     mvnw(
       ['register', 'assemble', 'verify'],
       {home, sources: 'tests', target: 'target'}
