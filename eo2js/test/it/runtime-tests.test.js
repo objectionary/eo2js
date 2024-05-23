@@ -48,7 +48,7 @@ const allFilesFrom = function(dir) {
     if (file.isDirectory()) {
       res.push(...allFilesFrom(path.join(dir, file.name)))
     } else {
-      res.push(dir, file.name)
+      res.push(path.resolve(dir, file.name))
     }
   }
   return res
@@ -73,10 +73,14 @@ describe('runtime tests', function() {
       'git init',
       'git remote add origin https://github.com/objectionary/home.git',
       'git config core.sparseCheckout true',
-      'echo "tests/org/eolang" > .git/info/sparse-checkout',
+      'echo tests/org/eolang > .git/info/sparse-checkout',
       'git pull origin master'
     ].join(' && '), {cwd: home})
-    console.debug(`Downloaded:\n${allFilesFrom(path.resolve(home, 'tests/org/eolang')).join(', ')}`)
+    console.debug(`Downloaded:\n${
+      allFilesFrom(path.resolve(home, 'tests', 'org', 'eolang'))
+        .map((pth) => path.relative(home, pth))
+        .join(', ')
+    }`)
     console.debug(`\nExcluded:\n${exclude.join(', ')}`)
     mvnw(
       ['register', 'assemble', 'verify'],
