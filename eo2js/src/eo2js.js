@@ -65,6 +65,7 @@ program.command('dataize')
  */
 program.command('test')
   .description('Run all visible unit tests')
+  .option('--exclude <string>', 'Excluded tests list', '')
   .action((opts) => {
     if (program.opts().alone === undefined) {
       transpile(opts)

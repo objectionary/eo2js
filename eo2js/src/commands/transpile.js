@@ -17,38 +17,16 @@ const verified = 'verified'
 const dir = '8-transpile'
 
 /**
- * Replace dots in given string with {@code path.sep}
- * @param {String} str - String
- * @return {String} - String with replaced dots
- */
-const dotsToSeps = function(str) {
-  return str.replace(/\./g, path.sep)
-}
-
-/**
  * Get path from given object name.
  * E.g.
  * - name org.eolang.int + pckg '' -> path org/eolang/int
  * - name org.eolang.int.test + pckg org.eolang -> path org/eolang/int.test
  * If name ends with ".test" and package
  * @param {String} name - Name of the object. May contain dots
- * @param {String} pckg - Package of the object
  * @return {String} - path from object name
  */
-const pathFromName = function(name, pckg) {
-  let tail
-  if (pckg !== '') {
-    tail = name.slice(pckg.length).slice(1)
-  } else {
-    tail = name
-  }
-  let pth
-  if (tail.includes('.test')) {
-    pth = dotsToSeps(name.slice(0, name.indexOf(tail))) + tail
-  } else {
-    pth = dotsToSeps(name)
-  }
-  return pth
+const pathFromName = function(name) {
+  return name.replace(/\./g, path.sep)
 }
 
 /**
@@ -73,20 +51,6 @@ const hasMeta = function(xmir, name) {
 }
 
 /**
- * Get package meta from XMIR.
- * @param {any} xmir - XMIR
- * @return {string} - Package meta of emtpy string
- */
-const packageMeta = function(xmir) {
-  const pckg = 'package'
-  let meta = ''
-  if (hasMeta(xmir, pckg)) {
-    meta = xmir.program.metas.meta.find((mt) => mt.head === pckg).tail
-  }
-  return meta
-}
-
-/**
  * Transform XMIR from given tojo and save.
  * @param {Object} tojo - Tojo.
  * @param {{target: String, project: String}} options - Program options
@@ -96,12 +60,8 @@ const packageMeta = function(xmir) {
 const transform = function(tojo, options, transformations, parser) {
   const text = fs.readFileSync(tojo[verified]).toString()
   let xml = parser.parse(text)
-  const pckg = packageMeta(xml)
-  const transpiled = path.resolve(
-    options.target,
-    dir,
-    `${pathFromName(xml['program']['@_name'], pckg)}.xmir`
-  )
+  const pth = pathFromName(xml['program']['@_name'])
+  const transpiled = path.resolve(options.target, dir, `${pth}.xmir`)
   makeDirIfNotExist(transpiled.substring(0, transpiled.lastIndexOf(path.sep)))
   fs.writeFileSync(transpiled, text)
   xml = text
@@ -119,10 +79,11 @@ const transform = function(tojo, options, transformations, parser) {
     objects = [objects]
   }
   const filtered = objects.filter((obj) => !!obj && obj.hasOwnProperty('javascript') && !obj.hasOwnProperty('@_atom'))
-  const count = hasMeta(xml, 'tests') ? 0 : 1
+  const isTest = hasMeta(xml, 'tests')
+  const count = isTest ? 0 : 1
   if (filtered.length > count) {
     const first = filtered[0]
-    const dest = path.resolve(options.project, `${pathFromName(first['@_js-name'], pckg)}.js`)
+    const dest = path.resolve(options.project, `${pth}${isTest ? '.test' : ''}.js`)
     makeDirIfNotExist(dest.substring(0, dest.lastIndexOf(path.sep)))
     fs.writeFileSync(dest, first['javascript'])
     filtered.slice(1).forEach((obj) => fs.appendFileSync(dest, `\n${obj['javascript']}`))

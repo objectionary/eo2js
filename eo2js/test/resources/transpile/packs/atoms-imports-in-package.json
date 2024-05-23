@@ -12,6 +12,7 @@
       "method": "includes",
       "args": [
         "const outer$φ = require('eo2js-runtime/src/objects/org/eolang/outer$φ')",
+        "const outer$in_side = require('eo2js-runtime/src/objects/org/eolang/outer$in-side')",
         "        let ret = outer$φ(rho)"
       ]
     }
@@ -20,6 +21,7 @@
     "+package org.eolang\n",
     "# This is the default 64+ symbols comment in front of named abstract object.",
     "[] > outer",
-    "  [] > @ /true"
+    "  [] > @ /true",
+    "  [] > in-side /true"
   ]
 }

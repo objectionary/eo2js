@@ -8,7 +8,7 @@
     "to-js"
   ],
   "tests": [
-    ".program.objects.object{.\"@_js-name\" == 'test_with_inner.test'}",
+    ".program{.\"@_tests\" == ''}.objects.object{.\"@_js-name\" == 'test_with_inner'}",
     {
       "node": ".program.objects.object{.\"@_name\" == 'test-with-inner'}.javascript",
       "method": "includes",

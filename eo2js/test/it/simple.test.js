@@ -25,7 +25,7 @@ describe('integration test', function() {
       {home, sources: 'src/eo', target: 'target'}
     )
   })
-  it('should execute simple integration test', function(done) {
+  it('should execute simple unit test', function(done) {
     const log = runSync(['test', '-t', target, '-p project -d', runtime])
     assert.ok(log.includes('test "story_is_not_empty" should work'))
     done()

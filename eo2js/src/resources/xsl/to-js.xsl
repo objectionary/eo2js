@@ -79,7 +79,7 @@ SOFTWARE.
   <!-- Clean name -->
   <xsl:function name="eo:clean" as="xs:string">
     <xsl:param name="n" as="xs:string"/>
-    <xsl:value-of select="replace(replace(replace(replace($n, '_', '__'), '-', '_'), '@', 'φ'), 'α', '_')"/>
+    <xsl:value-of select="replace(replace(replace(replace($n, '_', '__'), '-', '_'), '@', $PHI), 'α', '_')"/>
   </xsl:function>
   <!-- Concat arguments via _ -->
   <xsl:function name="eo:suffix" as="xs:string">
@@ -208,10 +208,6 @@ SOFTWARE.
           <xsl:value-of select="eo:object-name(., eo:suffix(../@line, ../@pos))"/>
         </xsl:otherwise>
       </xsl:choose>
-      <!-- Add .test for test object -->
-      <xsl:if test="//meta[head='tests'] and not(@parent)">
-        <xsl:text>.test</xsl:text>
-      </xsl:if>
     </xsl:attribute>
   </xsl:template>
   <!-- Object body -->
@@ -598,7 +594,7 @@ SOFTWARE.
       <xsl:value-of select="replace(@package, '\.', '/')"/>
       <xsl:text>/</xsl:text>
     </xsl:if>
-    <xsl:value-of select="eo:object-name(@name, eo:suffix(@line, @pos))"/>
+    <xsl:value-of select="replace(@name, '@', $PHI)"/>
     <xsl:text>')</xsl:text>
   </xsl:template>
   <xsl:template match="node()|@*">

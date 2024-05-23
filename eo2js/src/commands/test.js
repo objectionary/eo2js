@@ -4,7 +4,7 @@ const {execSync} = require('child_process')
 
 /**
  * Test command.
- * @param {{target: String, project: String}} options - Program options
+ * @param {{target: String, project: String, exclude: String}} options - Program options
  */
 const test = function(options) {
   options = {...program.opts(), ...options}
@@ -15,6 +15,7 @@ const test = function(options) {
       '--recursive',
       '--exclude "__main__.js"',
       '--exclude "node_modules/**"',
+      ...options.exclude.split(',').map((glob) => `--exclude "${glob}"`)
     ].join(' '),
     {stdio: 'inherit', cwd: dir}
   )
