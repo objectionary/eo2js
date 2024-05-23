@@ -39,18 +39,19 @@ const exclude = [
 /**
  * Read all files from given directory.
  * @param {String} dir - Directory
- * @return {Generator<*|string, void, *>}
+ * @return {Array.<String>} - Files from the directory
  */
-const allFilesFrom = function*(dir) {
+const allFilesFrom = function(dir) {
   const files = fs.readdirSync(dir, { withFileTypes: true });
-
+  const res = []
   for (const file of files) {
     if (file.isDirectory()) {
-      yield* allFilesFrom(path.join(dir, file.name));
+      res.push(...allFilesFrom(path.join(dir, file.name)))
     } else {
-      yield path.join(dir, file.name);
+      res.push(dir, file.name)
     }
   }
+  return res
 }
 
 /**
@@ -75,11 +76,8 @@ describe('runtime tests', function() {
       'echo "tests/org/eolang" > .git/info/sparse-checkout',
       'git pull origin master'
     ].join(' && '), {cwd: home})
-    console.debug('Downloaded:')
-    for (const file of allFilesFrom(path.resolve(home, 'tests/org/eolang'))) {
-      console.debug(path.relative(home, file))
-    }
-    console.debug(`\nExcluded:\n${exclude.join('\n')}`)
+    console.debug(`Downloaded:\n${allFilesFrom(path.resolve(home, 'tests/org/eolang')).join(', ')}`)
+    console.debug(`\nExcluded:\n${exclude.join(', ')}`)
     mvnw(
       ['register', 'assemble', 'verify'],
       {home, sources: 'tests', target: 'target'}
