@@ -42,7 +42,7 @@ const exclude = [
  * @return {Array.<String>} - Files from the directory
  */
 const allFilesFrom = function(dir) {
-  const files = fs.readdirSync(dir, { withFileTypes: true });
+  const files = fs.readdirSync(dir, {withFileTypes: true});
   const res = []
   for (const file of files) {
     if (file.isDirectory()) {
