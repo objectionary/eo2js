@@ -84,15 +84,15 @@ describe('bytesOf', function() {
       const bytes = [72, 101, 108, 108, 111, 44, 32, 119, 111, 114, 108, 100, 33]
       assert.deepEqual(bytesOf(bytes).asBytes(), bytes)
     })
-    // it('should convert hex bytes to int bytes', function() {
-    //   const hex = ['0x48', '0x65', '0x6C', '0x6C', '0x6F', '0x2C', '0x20', '0x77', '0x6F', '0x72', '0x6C', '0x64', '0x21']
-    //   const int = [72, 101, 108, 108, 111, 44, 32, 119, 111, 114, 108, 100, 33]
-    //   assert.deepEqual(bytesOf(hex).asBytes(), int)
-    // })
-    // it('should convert only hex bytes', function() {
-    //   const bts = [72, '0x65']
-    //   assert.deepEqual(bytesOf(bts).asBytes(), [72, 101])
-    // })
+    it('should convert hex bytes to int bytes', function() {
+      const hex = ['0x48', '0x65', '0x6C', '0x6C', '0x6F', '0x2C', '0x20', '0x77', '0x6F', '0x72', '0x6C', '0x64', '0x21']
+      const int = [72, 101, 108, 108, 111, 44, 32, 119, 111, 114, 108, 100, 33]
+      assert.deepEqual(bytesOf(hex).asBytes(), int)
+    })
+    it('should convert only hex bytes', function() {
+      const bts = [72, '0x65']
+      assert.deepEqual(bytesOf(bts).asBytes(), [72, 101])
+    })
     it('should fail while converting wrong format bytes', function() {
       const wrong = [1, 2, 'hello']
       assert.throws(() => bytesOf(wrong))
