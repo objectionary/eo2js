@@ -11,7 +11,7 @@ const {LAMBDA} = require('./specials');
 const at_lambda = function(object, callback) {
   return {
     put: function(_) {
-      throw new ErFailure(`You can't override ${LAMBDA} expression`)
+      throw new ErFailure(`You can't override ${LAMBDA} expression in ${object.toString()}`)
     },
     get: function() {
       return validated(() => callback(object))

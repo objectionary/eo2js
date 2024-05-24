@@ -1,20 +1,21 @@
 const object = require('../../../runtime/object')
-const {LAMBDA} = require('../../../runtime/attribute/specials');
-const ErFailure = require('../../../runtime/error/ErFailure');
+const {LAMBDA, RHO} = require('../../../runtime/attribute/specials');
+const at_void = require('../../../runtime/attribute/at-void');
+const {data} = require('../../../runtime/data');
+const dataized = require('../../../runtime/dataized');
 
 /**
  * Bytes.concat.
  * @return {Object} - Bytes.concat object
- * @todo #3:30min Implement bytes$concat atom. We need to implement the atom and make sure it
- *  works. For the details of implementation check the Java analogue on
- *  https://github.com/objectionary/eo/tree/master/eo-runtime/src/main/java/EOorg/EOeolang
  */
 const bytes$concat = function() {
   const obj = object('bytes$concat')
-  obj.assets[LAMBDA] = function(_) {
-    throw new ErFailure(
-      `Atom bytes$concat is not implemented yet`
-    )
+  obj.attrs['b'] = at_void('b')
+  obj.assets[LAMBDA] = function(self) {
+    return data.toObject([
+      ...dataized(self.take(RHO)),
+      ...dataized(self.take('b'))
+    ])
   }
   return obj
 }

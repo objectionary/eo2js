@@ -1,0 +1,27 @@
+{
+  "description": "This packs checks that void attributes are added before bound ones",
+  "xsls": [
+    "objects",
+    "package",
+    "attrs",
+    "data",
+    "to-js"
+  ],
+  "tests": [
+    {
+      "node": ".program.objects.object{.\"@_name\" == 'left'}.javascript",
+      "method": "includes",
+      "args": [
+        [
+          "  obj.attrs['x'] = attr.void('x')",
+          "  obj.attrs['y'] = attr.void('y')",
+          "  obj.attrs['φ'] = attr.once("
+        ]
+      ]
+    }
+  ],
+  "eo": [
+    "# Calculate bitwise left shift.",
+    "^.right x.neg > [x y] > left"
+  ]
+}

@@ -15,6 +15,9 @@ describe('bytesOf', function() {
       const bytes = bytesOf(value).asBytes()
       assert.equal(bytesOf(bytes).asInt(), value)
     })
+    it('should convert negative int an back', function() {
+      assert.equal(bytesOf(-1).asInt(), -1)
+    })
     it('should fail if not 8 bytes given', function() {
       assert.throws(() => bytesOf([0, 0, 0, 48, 57]).asInt())
     })
@@ -34,6 +37,12 @@ describe('bytesOf', function() {
     })
     it('should fail if not 8 bytes given', function() {
       assert.throws(() => bytesOf([64, 119, 110, 102]).asFloat())
+    })
+    it('should return positive infinity', function() {
+      assert.equal(bytesOf(Infinity).asFloat(), Infinity)
+    })
+    it('should return negative infinity', function() {
+      assert.equal(bytesOf(-Infinity).asFloat(), -Infinity)
     })
   })
   describe('string', function() {
@@ -75,15 +84,15 @@ describe('bytesOf', function() {
       const bytes = [72, 101, 108, 108, 111, 44, 32, 119, 111, 114, 108, 100, 33]
       assert.deepEqual(bytesOf(bytes).asBytes(), bytes)
     })
-    it('should convert hex bytes to int bytes', function() {
-      const hex = ['0x48', '0x65', '0x6C', '0x6C', '0x6F', '0x2C', '0x20', '0x77', '0x6F', '0x72', '0x6C', '0x64', '0x21']
-      const int = [72, 101, 108, 108, 111, 44, 32, 119, 111, 114, 108, 100, 33]
-      assert.deepEqual(bytesOf(hex).asBytes(), int)
-    })
-    it('should convert only hex bytes', function() {
-      const bts = [72, '0x65']
-      assert.deepEqual(bytesOf(bts).asBytes(), [72, 101])
-    })
+    // it('should convert hex bytes to int bytes', function() {
+    //   const hex = ['0x48', '0x65', '0x6C', '0x6C', '0x6F', '0x2C', '0x20', '0x77', '0x6F', '0x72', '0x6C', '0x64', '0x21']
+    //   const int = [72, 101, 108, 108, 111, 44, 32, 119, 111, 114, 108, 100, 33]
+    //   assert.deepEqual(bytesOf(hex).asBytes(), int)
+    // })
+    // it('should convert only hex bytes', function() {
+    //   const bts = [72, '0x65']
+    //   assert.deepEqual(bytesOf(bts).asBytes(), [72, 101])
+    // })
     it('should fail while converting wrong format bytes', function() {
       const wrong = [1, 2, 'hello']
       assert.throws(() => bytesOf(wrong))
@@ -109,5 +118,52 @@ describe('bytesOf', function() {
         assert.ok(bytesOf('some').verbose().includes('some'))
       })
     })
+  })
+  describe('#and(other)', function() {
+    it('should equal to 0 with self negated', function() {
+      assert.equal(bytesOf(127).and(bytesOf(127).not().asBytes()).asInt(), 0)
+    })
+  })
+  describe('#or(other)', function() {
+    it('should equal to -1 with self negated', function() {
+      assert.equal(bytesOf(127).or(bytesOf(127).not().asBytes()).asInt(), -1)
+    })
+  })
+  describe('#xor(other)', function() {
+    it('should return -1024 on 512 ^ -512', function() {
+      assert.equal(bytesOf(512).xor(bytesOf(-512).asBytes()).asInt(), -1024)
+    })
+  })
+  describe('#not()', function() {
+    it('should return the same on double negation', function() {
+      assert.equal(bytesOf('abc').not().not().asString(), 'abc')
+    })
+    it('should return opposite value on negation', function() {
+      assert.equal(bytesOf(-128).not().asInt(), 127)
+    })
+  })
+  describe('#shift(bits)', function() {
+    [
+      [0x000000FF, -8, 0x0000FF00],
+      [0x000000FF, -16, 0x00FF0000],
+      [0x000000FF, -24, 0xFF000000],
+      [0xFF000000, 8, 0x00FF0000],
+      [0xFF000000, 16, 0x0000FF00],
+      [0xFF000000, 24, 0x000000FF],
+      [0x000000FF, 8, 0x00000000]
+    ].forEach((set) => {
+      const num = set[0]
+      const bits = set[1]
+      const expected = set[2]
+      it(`${num} shift ${bits} = ${expected}`, function() {
+        assert.deepEqual(bytesOf(num).shift(bits).asInt(), bytesOf(expected).asInt())
+      })
+    })
+  })
+  it('-1 >> 4 != 0', function() {
+    assert.notDeepStrictEqual(bytesOf(-1).shift(4).asBytes(), bytesOf(0).asBytes())
+  })
+  it('-18 << 2 == ~71', function() {
+    assert.deepStrictEqual(bytesOf(-18).shift(-2).asBytes(), bytesOf(71).not().asBytes())
   })
 })

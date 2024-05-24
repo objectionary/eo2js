@@ -21,7 +21,7 @@ const data = {
         object = eolang.take('false')
       }
     } else {
-      if (typeof data === 'number') {
+      if (typeof data === 'number' || typeof data === 'bigint') {
         if (Number.isInteger(data)) {
           object = eolang.take('int')
         } else {

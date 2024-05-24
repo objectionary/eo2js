@@ -24,7 +24,7 @@ const dataized = function(object, type) {
   const bytes = bytesOf(data)
   if (type !== undefined) {
     if (type === INT) {
-      data = bytes.asInt()
+      data = Number(bytes.asInt())
     } else if (type === FLOAT) {
       data = bytes.asFloat()
     } else if (type === BOOL) {

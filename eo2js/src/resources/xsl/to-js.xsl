@@ -241,7 +241,15 @@ SOFTWARE.
     <xsl:text>const obj = object('</xsl:text>
     <xsl:value-of select="@name"/>
     <xsl:text>')</xsl:text>
-    <xsl:apply-templates select="attr">
+    <!-- Void attributes first -->
+    <xsl:apply-templates select="attr[void]">
+      <xsl:with-param name="object" select="."/>
+      <xsl:with-param name="indent">
+        <xsl:value-of select="eo:tabs(2)"/>
+      </xsl:with-param>
+    </xsl:apply-templates>
+    <!-- Bound attributes next -->
+    <xsl:apply-templates select="attr[not(void)]">
       <xsl:with-param name="object" select="."/>
       <xsl:with-param name="indent">
         <xsl:value-of select="eo:tabs(2)"/>

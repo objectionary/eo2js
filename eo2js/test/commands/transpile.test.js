@@ -9,6 +9,7 @@ const compileStylesheets = require('../../src/compile-stylesheets');
  * Just insert the names of the test pack, e.g. 'abstracts-to-objects',
  * and they will be executed. It's helpful when you're introducing new test pack
  * and don't want to wait until all other packs are executed.
+ * Don't forget to clear the array before push!
  * @type {string[]}
  */
 const only = []

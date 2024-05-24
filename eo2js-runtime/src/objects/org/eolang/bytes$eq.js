@@ -1,19 +1,22 @@
 const object = require('../../../runtime/object')
-const {LAMBDA} = require('../../../runtime/attribute/specials');
-const ErFailure = require('../../../runtime/error/ErFailure');
+const {LAMBDA, RHO} = require('../../../runtime/attribute/specials');
+const at_void = require('../../../runtime/attribute/at-void');
+const dataized = require('../../../runtime/dataized');
+const {data} = require('../../../runtime/data');
 
 /**
  * Bytes.eq.
  * @return {Object} - Bytes.eq object
- * @todo #3:30min Implement bytes$eq atom. We need to implement the atom and make sure it
- *  works. For the details of implementation check the Java analogue on
- *  https://github.com/objectionary/eo/tree/master/eo-runtime/src/main/java/EOorg/EOeolang
  */
 const bytes$eq = function() {
   const obj = object('bytes$eq')
-  obj.assets[LAMBDA] = function(_) {
-    throw new ErFailure(
-      `Atom bytes$eq is not implemented yet`
+  obj.attrs['b'] = at_void('b')
+  obj.assets[LAMBDA] = function(self) {
+    const rho = dataized(self.take(RHO))
+    const arg = dataized(self.take('b'))
+    return data.toObject(
+      rho.length === arg.length &&
+      rho.every((value, index) => arg[index] === value)
     )
   }
   return obj

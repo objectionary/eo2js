@@ -1,19 +1,18 @@
 const object = require('../../../runtime/object')
-const {LAMBDA} = require('../../../runtime/attribute/specials');
-const ErFailure = require('../../../runtime/error/ErFailure');
+const {LAMBDA, RHO} = require('../../../runtime/attribute/specials');
+const {data} = require('../../../runtime/data');
+const bytesOf = require('../../../runtime/bytes-of');
+const dataized = require('../../../runtime/dataized');
 
 /**
  * Bytes.not.
  * @return {Object} - Bytes.not object
- * @todo #3:30min Implement bytes$not atom. We need to implement the atom and make sure it
- *  works. For the details of implementation check the Java analogue on
- *  https://github.com/objectionary/eo/tree/master/eo-runtime/src/main/java/EOorg/EOeolang
  */
 const bytes$not = function() {
   const obj = object('bytes$not')
-  obj.assets[LAMBDA] = function(_) {
-    throw new ErFailure(
-      `Atom bytes$not is not implemented yet`
+  obj.assets[LAMBDA] = function(self) {
+    return data.toObject(
+      bytesOf(dataized(self.take(RHO))).not().asBytes()
     )
   }
   return obj
