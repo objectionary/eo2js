@@ -75,17 +75,17 @@ const object = function(name = 'object') {
       return copy
     },
     /**
-     * Retrieve object by attribute name or position
-     * @param {String} attr - Attribute name or position
-     * @return {Object} - Retrieved attribute by name or position
-     * @throws ErFailure - If something wrong with attribute retrieving
+     * Retrieve object by attribute/asset name
+     * @param {String} name - Attribute/asset name
+     * @return {Object} - Retrieved attribute/asset by name
+     * @throws ErFailure - If something wrong with attribute/asset retrieving
      */
-    take: function(attr) {
-      attr = String(attr)
+    take: function(name) {
+      name = String(name)
       let object
-      if (attr === RHO && !this.attrs.hasOwnProperty(RHO)) {
+      if (name === RHO && !this.attrs.hasOwnProperty(RHO)) {
         object = at_rho().get()
-      } else if (attr === LAMBDA) {
+      } else if (name === LAMBDA) {
         if (this.attrs.hasOwnProperty(LAMBDA)) {
           throw new ErFailure(`${LAMBDA} can't be used as attribute, only as asset`)
         }
@@ -93,20 +93,37 @@ const object = function(name = 'object') {
           throw new ErFailure(`Can't take ${LAMBDA} asset because it's absent`)
         }
         object = validated(
-          () => safe(with_rho(this.assets[LAMBDA](this), this, attr))
+          () => safe(with_rho(this.assets[LAMBDA](this), this, name))
         )
-      } else if (this.attrs.hasOwnProperty(attr)) {
+      } else if (this.attrs.hasOwnProperty(name)) {
         object = validated(
-          () => safe(with_rho(this.attrs[attr].get(), this, attr))
+          () => safe(with_rho(this.attrs[name].get(), this, name))
         )
       } else if (this.attrs.hasOwnProperty(PHI)) {
-        object = this.take(PHI).take(attr)
+        object = this.take(PHI).take(name)
       } else if (this.assets.hasOwnProperty(LAMBDA)) {
-        object = this.take(LAMBDA).take(attr)
+        object = this.take(LAMBDA).take(name)
       } else {
-        throw new ErFailure(`Can't find ${attr} attribute`)
+        throw new ErFailure(`Can't find ${name} attribute`)
       }
       return object
+    },
+    /**
+     * Retrieve data from the object
+     * @return {Array.<Number>} - Data
+     */
+    data: function() {
+      let data
+      if (this.assets.hasOwnProperty(DELTA)) {
+        data = this.assets[DELTA]
+      } else if (this.assets.hasOwnProperty(LAMBDA)) {
+        data = this.take(LAMBDA).data()
+      } else if (this.attrs.hasOwnProperty(PHI)) {
+        data = this.take(PHI).data()
+      } else {
+        throw new ErFailure(`There's no data in the object ${this.toString()}, can't take it`)
+      }
+      return data
     },
     /**
      * Print itself.

@@ -1,5 +1,3 @@
-const {DELTA} = require('./attribute/specials.js')
-const {LAMBDA, PHI} = require('./attribute/specials')
 const {INT, FLOAT, BOOL, BYTES, STRING} = require('./data')
 const bytesOf = require('./bytes-of');
 const ErFailure = require('./error/ErFailure');
@@ -11,34 +9,22 @@ const ErFailure = require('./error/ErFailure');
  * @return {string|number|boolean|array.<number>} - Data
  */
 const dataized = function(object, type) {
-  while (!object.assets.hasOwnProperty(DELTA)) {
-    if (object.assets.hasOwnProperty(LAMBDA)) {
-      object = object.take(LAMBDA)
-    } else if (object.attrs.hasOwnProperty(PHI)) {
-      object = object.take(PHI)
-    } else {
-      throw new ErFailure(`Can't dataize, asset ${DELTA} is absent`)
-    }
-  }
-  let data = object.assets[DELTA]
-  const bytes = bytesOf(data)
-  if (type !== undefined) {
-    if (type === INT) {
-      data = Number(bytes.asInt())
-    } else if (type === FLOAT) {
-      data = bytes.asFloat()
-    } else if (type === BOOL) {
-      data = bytes.asBool()
-    } else if (type === STRING) {
-      data = bytes.asString()
-    } else if (type === BYTES) {
-      data = bytes.asBytes()
-    } else {
-      throw new ErFailure(`Can't dataize to the given type (${type}), 
-      only ${INT}, ${FLOAT}, ${BOOL}, ${STRING}, ${BYTES} are allowed`)
-    }
-  } else if (Array.isArray(data)) {
+  const bytes = bytesOf(object.data())
+  type = type || BYTES
+  let data
+  if (type === INT) {
+    data = Number(bytes.asInt())
+  } else if (type === FLOAT) {
+    data = bytes.asFloat()
+  } else if (type === BOOL) {
+    data = bytes.asBool()
+  } else if (type === STRING) {
+    data = bytes.asString()
+  } else if (type === BYTES) {
     data = bytes.asBytes()
+  } else {
+    throw new ErFailure(`Can't dataize to the given type (${type}), 
+    only ${INT}, ${FLOAT}, ${BOOL}, ${STRING}, ${BYTES} are allowed`)
   }
   return data
 }

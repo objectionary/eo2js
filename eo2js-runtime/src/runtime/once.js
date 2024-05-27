@@ -1,5 +1,3 @@
-const trapped = require('./trapped');
-
 /**
  * Evaluate object lazily only once.
  * @param {function(): object} callback - Function to evaluate
@@ -7,12 +5,15 @@ const trapped = require('./trapped');
  */
 const once = function(callback) {
   let cached = null
-  return trapped(
-    function() {
-      if (cached == null) {
-        cached = callback()
+  return new Proxy(
+    callback,
+    {
+      get: function(target, property, _) {
+        if (cached === null) {
+          cached = target()
+        }
+        return cached[property]
       }
-      return cached
     }
   )
 }

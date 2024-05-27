@@ -23,18 +23,18 @@ describe('object', function() {
   })
   describe('#take()', function() {
     it('should set rho to self', function() {
-      const first = object()
-      const second = object()
+      const first = object('first')
+      const second = object('second')
       first.attrs['attr'] = at_simple(second)
-      assert.deepStrictEqual(first.take('attr').take(RHO), first)
+      assert.deepStrictEqual(first.take('attr').take(RHO).toString(), first.toString())
     })
     it('should not copy on dispatch if rho is set', function() {
       const first = object('f')
       const second = object('s')
       const third = with_rho(object('t'), second, 'attr')
       first.attrs['attr'] = at_simple(third)
-      assert.deepStrictEqual(first.take('attr'), third)
-      assert.deepStrictEqual(third.take(RHO), second)
+      assert.deepStrictEqual(first.take('attr').toString(), third.toString())
+      assert.deepStrictEqual(third.take(RHO).toString(), second.toString())
     })
     it('should copy object on dispatch', function() {
       const first = object()
@@ -182,10 +182,10 @@ describe('object', function() {
       assert.notDeepStrictEqual(obj.copy().take('attr'), attr)
     })
     it(`should save the ${RHO} attribute`, function() {
-      const obj = object()
-      const rho = object()
+      const obj = object('o')
+      const rho = object('rho')
       obj.attrs[RHO] = at_rho(rho)
-      assert.deepStrictEqual(obj.copy().take(RHO), rho)
+      assert.deepStrictEqual(obj.copy().take(RHO).toString(), rho.toString())
     })
     it('should copy assets', function() {
       const obj = object()

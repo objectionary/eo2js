@@ -9,7 +9,11 @@ const {PHI, LAMBDA} = require('../../../../temp/runtime/attribute/specials');
 const at_simple = require('../../../../temp/runtime/attribute/at-simple');
 const stdout = require('../../../../temp/objects/org/eolang/io/stdout');
 
-const message = 'something is broken'
+/**
+ * Error message.
+ * @type {string}
+ */
+const MESSAGE = 'something is broken'
 
 /**
  * Broken object that throws {@link ErFailure}.
@@ -19,12 +23,12 @@ const message = 'something is broken'
 const broken = function(name) {
   const obj = object('broken')
   if (name === LAMBDA) {
-    obj.assets[LAMBDA] = function() {
-      throw new ErFailure(message)
+    obj.assets[LAMBDA] = function(_) {
+      throw new ErFailure(MESSAGE)
     }
   } else {
     obj.attrs[name] = attr.lambda(obj, function(_) {
-      throw new ErFailure(message)
+      throw new ErFailure(MESSAGE)
     })
   }
   return obj
@@ -77,10 +81,10 @@ const tryObj = function(main, final) {
 
 describe('try', function() {
   it(`should catch error via ${PHI}`, function() {
-    assert.equal(dataized(tryObj(broken(PHI)), STRING), message)
+    assert.equal(dataized(tryObj(broken(PHI)), STRING), MESSAGE)
   })
   it(`should catch error via ${LAMBDA}`, function() {
-    assert.equal(dataized(tryObj(broken(LAMBDA)), STRING), message)
+    assert.equal(dataized(tryObj(broken(LAMBDA)), STRING), MESSAGE)
   })
   it('should be dataized to body', function() {
     assert.equal(dataized(tryObj(main()), BOOL), true)

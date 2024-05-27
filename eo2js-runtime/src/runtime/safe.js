@@ -1,4 +1,5 @@
 const validated = require('./validated');
+const trapped = require('./trapped');
 
 /**
  * Object that catches {@link ErFailure} and
@@ -7,15 +8,12 @@ const validated = require('./validated');
  * @return {Object} - Safe object
  */
 const safe = function(origin) {
-  const take = origin.take
-  const wth = origin.with
-  origin.take = function(name) {
-    return validated(() => take.call(origin, name))
-  }
-  origin.with = function(bindings) {
-    return validated(() => wth.call(origin, bindings))
-  }
-  return origin
+  return trapped(
+    origin,
+    function(_, target, thisArg, args) {
+      return validated(() => target.call(origin, ...args))
+    }
+  )
 }
 
 module.exports = safe

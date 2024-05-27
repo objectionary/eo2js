@@ -1,19 +1,21 @@
 const object = require('../../../runtime/object')
-const {LAMBDA} = require('../../../runtime/attribute/specials');
-const ErFailure = require('../../../runtime/error/ErFailure');
+const {LAMBDA, RHO} = require('../../../runtime/attribute/specials');
+const at_void = require('../../../runtime/attribute/at-void');
+const dataized = require('../../../runtime/dataized');
+const {INT, data, STRING} = require('../../../runtime/data');
 
 /**
  * String.slice.
  * @return {Object} - String.slice object
- * @todo #3:30min Implement string$slice atom. We need to implement the atom and make sure it
- *  works. For the details of implementation check the Java analogue on
- *  https://github.com/objectionary/eo/tree/master/eo-runtime/src/main/java/EOorg/EOeolang
  */
 const string$slice = function() {
   const obj = object('string$slice')
-  obj.assets[LAMBDA] = function(_) {
-    throw new ErFailure(
-      `Atom string$slice is not implemented yet`
+  obj.attrs['start'] = at_void('start')
+  obj.attrs['len'] = at_void('len')
+  obj.assets[LAMBDA] = function(self) {
+    const start = dataized(self.take('start'), INT)
+    return data.toObject(
+      dataized(self.take(RHO), STRING).slice(start, start + dataized(self.take('len'), INT))
     )
   }
   return obj
