@@ -52,7 +52,7 @@ const allFilesFrom = function(dir) {
  * Don't forget to set it to TRUE before push!
  * @type {boolean}
  */
-const COMPILE = false
+const COMPILE = true
 
 /**
  * This test downloads EO tests from objectionary/home repository, parses and assembles them using
