@@ -8,10 +8,10 @@ const at_rho = require('../../../../temp/runtime/attribute/at-rho');
 describe('int$plus', function() {
   it('should add two integers', function() {
     const plus = int$plus()
-    plus.attrs[RHO] = at_rho(data.toObject(7))
+    plus.attrs[RHO] = at_rho(data.toObject(BigInt(7)))
     assert.equal(
-      dataized(plus.with({'x': data.toObject(3)}), INT),
-      10
+      dataized(plus.with({'x': data.toObject(BigInt(3))}), INT),
+      BigInt(10)
     )
   })
 })

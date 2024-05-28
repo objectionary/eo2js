@@ -10,13 +10,13 @@ describe('dataized', function() {
     assert.throws(() => dataized(object()))
   })
   it(`should return ${DELTA} asset if present`, function() {
-    const value = 5
+    const value = BigInt(5)
     const obj = object()
     obj.assets[DELTA] = value
     assert.deepEqual(dataized(obj), [0, 0, 0, 0, 0, 0, 0, 5])
   })
   it(`should return ${DELTA} asset through ${PHI} attribute`, function() {
-    const value = 5
+    const value = BigInt(5)
     const obj = object()
     const phi = object(obj)
     phi.assets[DELTA] = value
@@ -24,7 +24,7 @@ describe('dataized', function() {
     assert.deepEqual(dataized(obj), [0, 0, 0, 0, 0, 0, 0, 5])
   });
   it(`should return ${DELTA} asset through ${LAMBDA} asset`, function() {
-    const value = 10
+    const value = BigInt(10)
     const obj = object()
     const other = object()
     other.assets[DELTA] = value

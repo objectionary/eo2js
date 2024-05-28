@@ -6,14 +6,14 @@ const ErFailure = require('./error/ErFailure');
  * Dataized.
  * @param {object} object - Object to dataize
  * @param {string} [type] - Type to cast to
- * @return {string|number|boolean|array.<number>} - Data
+ * @return {string|number|BigInt|boolean|array.<number>} - Data
  */
 const dataized = function(object, type) {
   const bytes = bytesOf(object.data())
   type = type || BYTES
   let data
   if (type === INT) {
-    data = Number(bytes.asInt())
+    data = bytes.asInt()
   } else if (type === FLOAT) {
     data = bytes.asFloat()
   } else if (type === BOOL) {

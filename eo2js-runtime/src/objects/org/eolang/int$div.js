@@ -14,11 +14,11 @@ const int$div = function() {
   obj.attrs['x'] = at_void('x')
   obj.assets[LAMBDA] = function(self) {
     const arg = dataized(self.take('x'), INT)
-    if (arg === 0) {
+    if (arg === BigInt(0)) {
       throw new ErFailure(`Can't divide ${arg} by zero`)
     }
     return data.toObject(
-      dataized(self.take(RHO), INT) / arg
+      BigInt(dataized(self.take(RHO), INT) / arg)
     )
   }
   return obj

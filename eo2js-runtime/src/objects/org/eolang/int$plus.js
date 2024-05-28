@@ -13,7 +13,7 @@ const int$plus = function() {
   obj.attrs['x'] = at_void('x')
   obj.assets[LAMBDA] = function(self) {
     return data.toObject(
-      dataized(self.take(RHO), INT) + dataized(self.take('x'), INT)
+      BigInt(dataized(self.take(RHO), INT) + dataized(self.take('x'), INT))
     )
   }
   return obj

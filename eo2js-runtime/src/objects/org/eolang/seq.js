@@ -11,7 +11,7 @@ const taken = require('../../../runtime/taken');
  * @return {Object[]} - Array of EO tuple elements.
  */
 const tupleAsArray = function(tuple) {
-  const length = dataized(tuple.take('length'), INT)
+  const length = Number(dataized(tuple.take('length'), INT))
   const res = Array(length)
   let external = tuple
   for (let idx = length - 1; idx >= 0; --idx) {

@@ -11,7 +11,7 @@ const bytes$size = function() {
   const obj = object('bytes$size')
   obj.assets[LAMBDA] = function(self) {
     return data.toObject(
-      dataized(self.take(RHO)).length
+      BigInt(dataized(self.take(RHO)).length)
     )
   }
   return obj

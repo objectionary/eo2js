@@ -8,10 +8,10 @@ const at_rho = require('../../../../temp/runtime/attribute/at-rho');
 describe('int$div', function() {
   it('should divide two integers', function() {
     const div = int$div()
-    div.attrs[RHO] = at_rho(data.toObject(42))
+    div.attrs[RHO] = at_rho(data.toObject(BigInt(42)))
     assert.equal(
-      dataized(div.with({'x': data.toObject(6)}), INT),
-      7
+      dataized(div.with({'x': data.toObject(BigInt(6))}), INT),
+      BigInt(7)
     )
   })
 })

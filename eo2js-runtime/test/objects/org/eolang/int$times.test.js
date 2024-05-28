@@ -8,10 +8,10 @@ const at_rho = require('../../../../temp/runtime/attribute/at-rho');
 describe('int$times', function() {
   it('should multiply two integers', function() {
     const times = int$times()
-    times.attrs[RHO] = at_rho(data.toObject(3))
+    times.attrs[RHO] = at_rho(data.toObject(BigInt(3)))
     assert.equal(
-      dataized(times.with({'x': data.toObject(4)}), INT),
-      12
+      dataized(times.with({'x': data.toObject(BigInt(4))}), INT),
+      BigInt(12)
     )
   })
 })

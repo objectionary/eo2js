@@ -4,19 +4,19 @@ const bytesOf = require('../../temp/runtime/bytes-of')
 describe('bytesOf', function() {
   describe('int', function() {
     it('should return the same int ', function() {
-      const value = 5
+      const value = BigInt(5)
       assert.equal(bytesOf(value).asInt(), value)
     })
     it('should return valid int bytes', function() {
-      assert.deepEqual(bytesOf(12345).asBytes(), [0, 0, 0, 0, 0, 0, 48, 57])
+      assert.deepEqual(bytesOf(BigInt(12345)).asBytes(), [0, 0, 0, 0, 0, 0, 48, 57])
     })
     it('should convert to bytes and back', function() {
-      const value = 1234
+      const value = BigInt(1234)
       const bytes = bytesOf(value).asBytes()
       assert.equal(bytesOf(bytes).asInt(), value)
     })
     it('should convert negative int an back', function() {
-      assert.equal(bytesOf(-1).asInt(), -1)
+      assert.equal(bytesOf(BigInt(-1)).asInt(), BigInt(-1))
     })
     it('should fail if not 8 bytes given', function() {
       assert.throws(() => bytesOf([0, 0, 0, 48, 57]).asInt())
@@ -109,7 +109,7 @@ describe('bytesOf', function() {
         assert.equal(bytesOf([2]).verbose(), '[2]')
       })
       it('length is 8', function() {
-        assert.ok(bytesOf(5).verbose().startsWith('[0,0,0,0,0,0,0,5] = 5, or '))
+        assert.ok(bytesOf(BigInt(BigInt(5))).verbose().startsWith('[0,0,0,0,0,0,0,5] = 5, or '))
         assert.ok(bytesOf(7.3).verbose().includes(', or 7.3, or'))
         assert.ok(bytesOf('abcdefgh').verbose().includes('abcdefgh'))
       })
@@ -131,7 +131,7 @@ describe('bytesOf', function() {
   })
   describe('#xor(other)', function() {
     it('should return -1024 on 512 ^ -512', function() {
-      assert.equal(bytesOf(512).xor(bytesOf(-512).asBytes()).asInt(), -1024)
+      assert.equal(bytesOf(BigInt(512)).xor(bytesOf(BigInt(-512)).asBytes()).asInt(), BigInt(-1024))
     })
   })
   describe('#not()', function() {
@@ -139,7 +139,7 @@ describe('bytesOf', function() {
       assert.equal(bytesOf('abc').not().not().asString(), 'abc')
     })
     it('should return opposite value on negation', function() {
-      assert.equal(bytesOf(-128).not().asInt(), 127)
+      assert.equal(bytesOf(BigInt(-128)).not().asInt(), BigInt(127))
     })
   })
   describe('#shift(bits)', function() {
@@ -152,18 +152,18 @@ describe('bytesOf', function() {
       [0xFF000000, 24, 0x000000FF],
       [0x000000FF, 8, 0x00000000]
     ].forEach((set) => {
-      const num = set[0]
-      const bits = set[1]
-      const expected = set[2]
+      const num = BigInt(set[0])
+      const bits = BigInt(set[1])
+      const expected = BigInt(set[2])
       it(`${num} shift ${bits} = ${expected}`, function() {
         assert.deepEqual(bytesOf(num).shift(bits).asInt(), bytesOf(expected).asInt())
       })
     })
   })
   it('-1 >> 4 != 0', function() {
-    assert.notDeepStrictEqual(bytesOf(-1).shift(4).asBytes(), bytesOf(0).asBytes())
+    assert.notDeepStrictEqual(bytesOf(BigInt(-1)).shift(4).asBytes(), bytesOf(BigInt(0)).asBytes())
   })
   it('-18 << 2 == ~71', function() {
-    assert.deepStrictEqual(bytesOf(-18).shift(-2).asBytes(), bytesOf(71).not().asBytes())
+    assert.deepStrictEqual(bytesOf(BigInt(-18)).shift(-2).asBytes(), bytesOf(BigInt(71)).not().asBytes())
   })
 })

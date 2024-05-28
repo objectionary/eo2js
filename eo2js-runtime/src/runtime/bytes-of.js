@@ -1,3 +1,4 @@
+const ErFailure = require('./error/ErFailure');
 /**
  * The number of bits used to represent a byte value in two's complement binary form.
  * @type {number}
@@ -38,14 +39,15 @@ const hexToInt = function(bytes) {
  */
 const adjustNumber = function(bytes) {
   if (bytes.length === 8) {
-    const bts = bytesOf(
+    const number = bytesOf(
       new DataView(new Int8Array(bytes).buffer).getBigInt64(0)
     ).asBytes()
-    for (let i = 0; i < bytes.length; ++i) {
-      if (bytes[i] !== bts[i]) {
-        bytes[i] = bytes[i] - 256
+    return bytes.map((byte, index) => {
+      if (Math.abs(byte - number[index]) === 256) {
+        return byte - 256
       }
-    }
+      return byte
+    })
   }
   return bytes
 }
@@ -81,7 +83,7 @@ const bytesOf = function(data) {
   if (typeof data === 'number' || typeof data === 'bigint') {
     const buffer = new ArrayBuffer(8)
     const view = new DataView(buffer)
-    if (Number.isInteger(data) || typeof data === 'bigint') {
+    if (typeof data === 'bigint') {
       view.setBigInt64(0, BigInt(data))
     } else {
       view.setFloat64(0, data)
@@ -92,8 +94,7 @@ const bytesOf = function(data) {
   } else if (typeof data === 'boolean') {
     bytes = [data ? 1 : 0]
   } else if (Array.isArray(data)) {
-    bytes = hexToInt(data)
-    bytes = adjustNumber(bytes)
+    bytes = adjustNumber(hexToInt(data))
   } else {
     throw new Error(`Can't convert to bytes object of given type (${typeof data})`)
   }
@@ -111,7 +112,7 @@ const bytesOf = function(data) {
      */
     asInt: function() {
       if (bytes.length !== 8) {
-        throw new Error(`Byte array must be 8 bytes long to convert to int (${bytes})`)
+        throw new ErFailure(`Byte array must be 8 bytes long to convert to int (${bytes})`)
       }
       return new DataView(new Int8Array(bytes).buffer).getBigInt64(0)
     },

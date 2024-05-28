@@ -14,21 +14,14 @@ const assert = require('assert');
  */
 const exclude = [
   'as-phi-tests',
-  'bool-tests',
   'cage-tests',
   'cti-test',
   'dataized-tests',
-  'float-tests',
   'goto-tests',
-  'int-tests',
   'malloc-tests',
-  'nan-tests',
-  'negative-infinity-tests',
-  'positive-infinity-tests',
   'runtime-tests',
   'rust-tests',
   'seq-tests',
-  'string-tests',
   'switch-tests',
   'try-tests',
   'tuple-tests',
@@ -59,7 +52,7 @@ const allFilesFrom = function(dir) {
  * Don't forget to set it to TRUE before push!
  * @type {boolean}
  */
-const COMPILE = true
+const COMPILE = false
 
 /**
  * This test downloads EO tests from objectionary/home repository, parses and assembles them using

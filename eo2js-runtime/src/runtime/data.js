@@ -3,7 +3,7 @@ const bytesOf = require('./bytes-of');
 
 /**
  * Data to object converter.
- * @type {{BYTES: string, FLOAT: string, BOOL: string, STRING: string, INT: string, toObject: (function(string|boolean|number|array.<string>|array.<number>): object)}}
+ * @type {{BYTES: string, FLOAT: string, BOOL: string, STRING: string, INT: string, toObject: (function(string|boolean|number|BigInt|array.<string>|array.<number>): object)}}
  */
 const data = {
   toObject: function(data) {
@@ -21,12 +21,10 @@ const data = {
         object = eolang.take('false')
       }
     } else {
-      if (typeof data === 'number' || typeof data === 'bigint') {
-        if (Number.isInteger(data)) {
-          object = eolang.take('int')
-        } else {
-          object = eolang.take('float')
-        }
+      if (typeof data === 'number') {
+        object = eolang.take('float')
+      } else if (typeof data === 'bigint') {
+        object = eolang.take('int')
       } else if (typeof data === 'string') {
         object = eolang.take('string')
       } else {

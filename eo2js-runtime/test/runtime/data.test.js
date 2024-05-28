@@ -17,7 +17,8 @@ describe('data', function() {
       assert.ok(isObject(data.toObject(5)))
     })
     it('should be dataized as int', function() {
-      assert.equal(dataized(data.toObject(42), INT), 42)
+      const value = BigInt(42)
+      assert.equal(dataized(data.toObject(value), INT), value)
     })
   })
   describe('to string', function() {

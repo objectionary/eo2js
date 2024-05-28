@@ -15,7 +15,9 @@ const bytes$slice = function() {
   obj.assets[LAMBDA] = function(self) {
     const start = dataized(self.take('start'), INT)
     return data.toObject(
-      dataized(self.take(RHO)).slice(start, start + dataized(self.take('len'), INT))
+      dataized(self.take(RHO)).slice(
+        Number(start), Number(start + dataized(self.take('len'), INT))
+      )
     )
   }
   return obj
