@@ -142,6 +142,10 @@ const object = function(name = 'object') {
     /**
      * Forma of itself.
      * @return {String} - Forma
+     * @todo #61:30min Make forma contained full FQN of the object. Now forma of the object is the
+     *  last part of its FQN. For example, if object is 'org.eolang.int', it's forma is 'int' which
+     *  is wrong, it should be 'org.eolang.int'. So we need to fix this naming and make sure
+     *  that, for example, 'org.eolang.int' and 'com.example.int' have different formas.
      */
     forma: function() {
       return name
