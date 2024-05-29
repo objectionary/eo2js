@@ -27,7 +27,7 @@ class ErError extends ErAbstract {
     try {
       const raw = dataized(enclosure)
       result = `${enclosure.toString()}(${DELTA} = ${bytesOf(raw).verbose()})`
-    } catch (first) {
+    } catch (ex) {
       result = enclosure.toString();
     }
     return result
