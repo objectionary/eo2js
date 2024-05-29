@@ -4,6 +4,9 @@ const ErFailure = require('./error/ErFailure');
 /**
  * Max possible depth of cage recursion
  * @type {number}
+ * @todo #61:30min Find a way to set this parameter dynamically via command line options. This
+ *  parameter is used to limit cage self recursion. It would be better to be able to set it via
+ *  command line options and environment variables.
  */
 const RECURSION_THRESHOLD = 100
 
