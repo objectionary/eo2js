@@ -7,10 +7,12 @@
 const float = function() {
   const object = require('../../../runtime/object')
   const attr = require('../../../runtime/attribute/attr')
+  const plus = require('../../../objects/org/eolang/int$plus')
   const {PHI} = require('../../../runtime/attribute/specials')
   const obj = object('float')
   obj.attrs['as-bytes'] = attr.void('as-bytes')
   obj.attrs[PHI] = attr.once(attr.lambda(obj, (rho) => rho.take('as-bytes')))
+  obj.attrs['plus'] = attr.simple(plus())
   return obj
 }
 

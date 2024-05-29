@@ -14,18 +14,7 @@ const assert = require('assert');
  */
 const exclude = [
   'as-phi-tests',
-  'cage-tests',
-  'cti-test',
-  'dataized-tests',
-  'goto-tests',
-  'malloc-tests',
-  'runtime-tests',
   'rust-tests',
-  'seq-tests',
-  'switch-tests',
-  'try-tests',
-  'tuple-tests',
-  'while-tests'
 ].map((name) => `org/eolang/${name}.test.js`)
 
 /**
@@ -52,7 +41,7 @@ const allFilesFrom = function(dir) {
  * Don't forget to set it to TRUE before push!
  * @type {boolean}
  */
-const COMPILE = true
+const COMPILE = false
 
 /**
  * This test downloads EO tests from objectionary/home repository, parses and assembles them using

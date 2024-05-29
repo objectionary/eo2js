@@ -48,7 +48,7 @@ describe('object', function() {
       const phi = object()
       phi.attrs['attr'] = at_simple(first)
       second.attrs[PHI] = at_simple(phi)
-      assert.equal(second.take('attr').toString(), 'first')
+      assert.ok(second.take('attr').toString().includes('first'))
     })
     it(`should return object through ${LAMBDA} asset`, function() {
       const first = object('first')
@@ -58,7 +58,7 @@ describe('object', function() {
       second.assets[LAMBDA] = function(_) {
         return third
       }
-      assert.equal(second.take('attr').toString(), 'first')
+      assert.ok(second.take('attr').toString().includes('first'))
     })
     it('should throw an error if no attribute with given name', function() {
       assert.throws(() => object().take('attr'))
@@ -128,14 +128,14 @@ describe('object', function() {
       const second = object('second')
       first.attrs['attr'] = at_void('attr')
       first = first.with({attr: second})
-      assert.equal(first.take('attr').toString(), 'second')
+      assert.ok(first.take('attr').toString().includes('second'))
     })
     it('should put object by position', function() {
       let first = object()
       const second = object('second')
       first.attrs['attr'] = at_void('attr')
       first = first.with({0: second})
-      assert.equal(first.take('attr').toString(), 'second')
+      assert.ok(first.take('attr').toString().includes('second'))
     })
     it('should put object by 2nd position', function() {
       let first = object()
@@ -144,14 +144,15 @@ describe('object', function() {
       first.attrs['s'] = at_void('s')
       first = first.with({1: second})
       assert.throws(() => first.take('f'))
-      assert.equal(first.take('s').toString(), 's')
+      assert.ok(first.take('s').toString().includes('s'))
     })
     it('should return copy of self', function() {
       const obj = object('somebody')
       obj.attrs['f'] = at_void('f')
       const applied = obj.with({f: object()})
       assert.notDeepStrictEqual(applied, obj)
-      assert.equal(applied.toString(), obj.toString())
+      assert.notEqual(applied.toString(), obj.toString())
+      assert.ok(applied.toString().includes('somebody'))
     })
     it('should throw an error if position is negative', function() {
       const obj = object()

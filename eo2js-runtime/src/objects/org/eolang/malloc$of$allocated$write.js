@@ -1,20 +1,25 @@
 const object = require('../../../runtime/object')
-const {LAMBDA} = require('../../../runtime/attribute/specials');
-const ErFailure = require('../../../runtime/error/ErFailure');
+const {LAMBDA, RHO} = require('../../../runtime/attribute/specials');
+const at_void = require('../../../runtime/attribute/at-void');
+const {data, INT} = require('../../../runtime/data');
+const heaps = require('../../../runtime/heaps');
+const dataized = require('../../../runtime/dataized');
 
 /**
  * Malloc.of.allocated.write.
  * @return {Object} - Malloc.of.allocated.write object
- * @todo #3:30min Implement malloc$of$allocated$write atom. We need to implement the atom and make
- *  sure it works. For the details of implementation check the Java analogue on
- *  https://github.com/objectionary/eo/tree/master/eo-runtime/src/main/java/EOorg/EOeolang
  */
 const malloc$of$allocated$write = function() {
   const obj = object('malloc$of$allocated$write')
-  obj.assets[LAMBDA] = function(_) {
-    throw new ErFailure(
-      `Atom malloc$of$allocated$write is not implemented yet`
+  obj.attrs['offset'] = at_void('offset')
+  obj.attrs['data'] = at_void('data')
+  obj.assets[LAMBDA] = function(self) {
+    heaps.write(
+      Number(dataized(self.take(RHO).take('id'), INT)),
+      Number(dataized(self.take('offset'), INT)),
+      dataized(self.take('data'))
     )
+    return data.toObject(true)
   }
   return obj
 }

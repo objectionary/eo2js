@@ -1,6 +1,7 @@
 const ErAbstract = require('./ErAbstract');
 const dataized = require('../dataized');
-const {STRING} = require('../data');
+const {DELTA} = require('../attribute/specials');
+const bytesOf = require('../bytes-of');
 
 /**
  * This Error is thrown by the {@see error} object only.
@@ -22,7 +23,14 @@ class ErError extends ErAbstract {
    * @return {string}
    */
   static safeMessage(enclosure) {
-    return dataized(enclosure, STRING)
+    let result
+    try {
+      const raw = dataized(enclosure)
+      result = `${enclosure.toString()}(${DELTA} = ${bytesOf(raw).verbose()})`
+    } catch (first) {
+      result = enclosure.toString();
+    }
+    return result
   }
 }
 

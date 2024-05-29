@@ -7,11 +7,18 @@ const with_rho = require('./with-rho');
 const {DELTA} = require('./attribute/specials');
 
 /**
+ * Vertex counter.
+ * @type {number}
+ */
+let vertex = 0
+
+/**
  * Object.
  * @param {String} name - Name of the object
  * @return {object} Object
  */
 const object = function(name = 'object') {
+  const vtx = ++vertex
   return {
     /**
      * Attributes.
@@ -87,10 +94,10 @@ const object = function(name = 'object') {
         object = at_rho().get()
       } else if (name === LAMBDA) {
         if (this.attrs.hasOwnProperty(LAMBDA)) {
-          throw new ErFailure(`${LAMBDA} can't be used as attribute, only as asset`)
+          throw new ErFailure(`'${LAMBDA}' can't be used as attribute, only as asset`)
         }
         if (!this.assets.hasOwnProperty(LAMBDA)) {
-          throw new ErFailure(`Can't take ${LAMBDA} asset because it's absent`)
+          throw new ErFailure(`Can't take '${LAMBDA}' asset because it's absent`)
         }
         object = validated(
           () => safe(with_rho(this.assets[LAMBDA](this), this, name))
@@ -104,7 +111,7 @@ const object = function(name = 'object') {
       } else if (this.assets.hasOwnProperty(LAMBDA)) {
         object = this.take(LAMBDA).take(name)
       } else {
-        throw new ErFailure(`Can't find ${name} attribute`)
+        throw new ErFailure(`Can't find '${name}' attribute in '${this.toString()}'`)
       }
       return object
     },
@@ -130,7 +137,14 @@ const object = function(name = 'object') {
      * @return {String} - String representation of object
      */
     toString: function() {
-      return `${name}`
+      return `${name}ν${vtx}`
+    },
+    /**
+     * Forma of itself.
+     * @return {String} - Forma
+     */
+    forma: function() {
+      return name
     }
   }
 }

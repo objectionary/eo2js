@@ -24,7 +24,7 @@ const tryFind = function(dir, name, fqn) {
   } else {
     const file = `${pth}.js`
     if (fs.existsSync(file)) {
-      this.attrs[name] = at_simple(with_rho(require(file)(), this, name))
+      this.attrs[name] = at_simple(require(file)())
       obj = this.take(name)
     }
   }
@@ -75,7 +75,7 @@ const pckg = function(fqn, rho) {
   obj.take = function(name) {
     let obj
     if (this.attrs.hasOwnProperty(name)) {
-      obj = this.attrs[name].get()
+      obj = with_rho(this.attrs[name].get(), this, name)
     } else if (!name.includes('.')) {
       const before = this.assets[LAMBDA](this)
       const full = before === '' ? name : `${before.substring(1)}.${name}`

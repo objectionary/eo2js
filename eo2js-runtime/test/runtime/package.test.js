@@ -45,6 +45,13 @@ describe('package object', function() {
       it('should not fail if finds EO object', function() {
         assert.doesNotThrow(() => pckg('', {}).take('org.eolang.io.stdout').toString())
       })
+      it('should return new object on every dispatch', function() {
+        const empty = pckg('', {})
+        assert.notEqual(
+          empty.take('org.eolang.io.stdout').toString(),
+          empty.take('org.eolang.io.stdout').toString()
+        )
+      })
       it('should find object outside "node_modules"', function() {
         const modules = path.resolve(__dirname, 'temp/node_modules')
         fs.mkdirSync(modules, {recursive: true})
