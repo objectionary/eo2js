@@ -198,4 +198,22 @@ describe('object', function() {
       assert.deepStrictEqual(obj.assets, copy.assets)
     })
   })
+  describe('#φTerm()', function() {
+    it('should contain all properties', function() {
+      const somebody = object('somebody')
+      somebody.attrs['m'] = at_void('m')
+      const obj = object('x')
+      obj.attrs['y'] = at_void('y')
+      obj.attrs['s'] = at_simple(somebody)
+      obj.assets[DELTA] = [1, 2, 3]
+      obj.assets[LAMBDA] = () => {}
+      const term = obj.φTerm()
+      console.debug(term)
+      assert.ok(term.includes('·x⟦'))
+      assert.ok(term.includes('Δ ↦ [1, 2, 3],'))
+      assert.ok(term.includes('λ ↦ Lambda'))
+      assert.ok(term.includes('s ↦ λ,'))
+      assert.ok(term.includes('y ↦ Ø,'))
+    })
+  })
 })

@@ -149,6 +149,30 @@ const object = function(name = 'object') {
      */
     forma: function() {
       return name
+    },
+    /**
+     * Represent self as φ term.
+     * @return {String} - Self as φ calculus term
+     */
+    φTerm: function() {
+      const list = []
+      const binding = (left, right) => `${left} ↦ ${right}`
+      if (this.assets.hasOwnProperty(DELTA)) {
+        list.push(binding(DELTA, `[${this.assets[DELTA].join(', ')}]`))
+      }
+      if (this.assets.hasOwnProperty(LAMBDA)) {
+        list.push(binding(LAMBDA, 'Lambda'))
+      }
+      list.push(
+        ...Object.keys(this.attrs)
+          .filter((attr) => attr !== RHO)
+          .map((attr) => binding(attr, this.attrs[attr].φTerm()))
+      )
+      let term = name
+      if (list.length !== 0) {
+        term = `ν${vtx}·${term}⟦\n\t${list.sort().join(',\n').replaceAll(/\n/g, '\n\t')}\n⟧`
+      }
+      return term
     }
   }
 }

@@ -13,7 +13,6 @@ const assert = require('assert');
  * @type {string[]}
  */
 const exclude = [
-  'as-phi-tests',
   'rust-tests',
 ].map((name) => `org/eolang/${name}.test.js`)
 

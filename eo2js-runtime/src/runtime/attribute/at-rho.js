@@ -1,5 +1,7 @@
 const ErFailure = require('../error/ErFailure');
 const {RHO} = require('./specials');
+const at_term = require('./at-term');
+
 /**
  * Attribute that keeps \rho.
  * @param {Object} [object] - Rho object
@@ -7,7 +9,7 @@ const {RHO} = require('./specials');
  */
 const at_rho = function(object = null) {
   let rho = object
-  return {
+  return at_term({
     put: function(obj) {
       if (rho == null) {
         rho = obj
@@ -22,7 +24,7 @@ const at_rho = function(object = null) {
     copy: function(_) {
       return at_rho(rho)
     }
-  }
+  })
 }
 
 module.exports = at_rho

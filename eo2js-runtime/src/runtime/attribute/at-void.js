@@ -1,4 +1,5 @@
 const ErFailure = require('../error/ErFailure');
+const {EMPTY} = require('./specials');
 
 /**
  * Void attribute.
@@ -14,7 +15,6 @@ const at_void = function(name, object = null) {
         throw new ErFailure(`Void attribute '${name}' is already set, can't reset`)
       }
       obj = object
-      return true
     },
     get: function() {
       if (obj == null) {
@@ -24,6 +24,15 @@ const at_void = function(name, object = null) {
     },
     copy: function(_) {
       return at_void(name, obj)
+    },
+    φTerm: function() {
+      let term
+      if (obj === null) {
+        term = EMPTY
+      } else {
+        term = obj.φTerm()
+      }
+      return term
     }
   }
 }

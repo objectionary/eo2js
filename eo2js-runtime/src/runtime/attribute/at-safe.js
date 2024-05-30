@@ -1,5 +1,6 @@
 const validated = require('../validated');
 const safe = require('../safe');
+const at_term = require('./at-term');
 
 /**
  * Attribute that catches {@link ErFailure} and throws {@link ErError}.
@@ -7,9 +8,9 @@ const safe = require('../safe');
  * @return {Object} - Attribute
  */
 const at_safe = function(origin) {
-  return {
+  return at_term({
     put: function(object) {
-      return origin.put(object)
+      origin.put(object)
     },
     get: function() {
       return validated(() => safe(origin.get()))
@@ -17,7 +18,7 @@ const at_safe = function(origin) {
     copy: function(rho) {
       return at_safe(origin.copy(rho))
     }
-  }
+  })
 }
 
 module.exports = at_safe

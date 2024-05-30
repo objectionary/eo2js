@@ -18,6 +18,9 @@ const at_lambda = function(object, callback) {
     },
     copy: function(rho) {
       return at_lambda(rho, callback)
+    },
+    φTerm: function() {
+      return LAMBDA
     }
   }
 }
