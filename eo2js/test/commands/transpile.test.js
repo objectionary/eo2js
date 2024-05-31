@@ -62,9 +62,11 @@ describe('transpile', function() {
     })
     it('should generate JS files', function() {
       assertFilesExist(transpile(), target, ['project/com/eo2js/simple.js'])
-    })
-    it('should generate test JS file', function() {
-      assertFilesExist(transpile('simple-test'), target, ['project/com/eo2js/simple-test.test.js'])
+    });
+    ['simple-test', 'alone-test'].forEach((name) => {
+      it(`should generate test JS file for ${name}`, function() {
+        assertFilesExist(transpile(name), target, [`project/com/eo2js/${name}.test.js`])
+      })
     })
   })
   describe('transformation packs', function() {

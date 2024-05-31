@@ -47,7 +47,15 @@ const makeDirIfNotExist = function(dir) {
  */
 const hasMeta = function(xmir, name) {
   const metas = xmir.program.metas.meta
-  return Array.isArray(metas) && metas.findIndex((meta) => meta.head === name) !== -1
+  let res
+  if (Array.isArray(metas)) {
+    res = metas.findIndex((meta) => meta.head === name) !== -1
+  } else if (typeof metas === 'object' && metas.hasOwnProperty('head')) {
+    res = metas.head === name
+  } else {
+    throw new Error(`Unexpected type ${typeof metas} of metas in given XMIR:\n${xmir}`)
+  }
+  return res
 }
 
 /**
