@@ -27,20 +27,73 @@ SOFTWARE.
   <xsl:output encoding="UTF-8" method="xml"/>
   <!-- VARIABLES -->
   <xsl:variable name="keywords" as="element()*">
-    <a>false</a>
-    <a>true</a>
-    <a>for</a>
-    <a>if</a>
-    <a>switch</a>
-    <a>const</a>
-    <a>while</a>
-    <a>let</a>
-    <a>do</a>
-    <a>try</a>
+    <a>abstract</a>
+    <a>async</a>
+    <a>await</a>
+    <a>boolean</a>
+    <a>break</a>
+    <a>byte</a>
+    <a>case</a>
     <a>catch</a>
-    <a>finally</a>
-    <a>function</a>
+    <a>char</a>
     <a>class</a>
+    <a>const</a>
+    <a>constructor</a>
+    <a>continue</a>
+    <a>debugger</a>
+    <a>default</a>
+    <a>delete</a>
+    <a>do</a>
+    <a>double</a>
+    <a>else</a>
+    <a>enum</a>
+    <a>eval</a>
+    <a>export</a>
+    <a>extends</a>
+    <a>false</a>
+    <a>final</a>
+    <a>finally</a>
+    <a>float</a>
+    <a>for</a>
+    <a>function</a>
+    <a>goto</a>
+    <a>if</a>
+    <a>implements</a>
+    <a>import</a>
+    <a>in</a>
+    <a>instanceof</a>
+    <a>int</a>
+    <a>interface</a>
+    <a>let</a>
+    <a>long</a>
+    <a>native</a>
+    <a>new</a>
+    <a>null</a>
+    <a>of</a>
+    <a>package</a>
+    <a>private</a>
+    <a>protected</a>
+    <a>proto</a>
+    <a>prototype</a>
+    <a>public</a>
+    <a>return</a>
+    <a>short</a>
+    <a>static</a>
+    <a>super</a>
+    <a>synchronized</a>
+    <a>switch</a>
+    <a>this</a>
+    <a>throw</a>
+    <a>true</a>
+    <a>transient</a>
+    <a>try</a>
+    <a>typeof</a>
+    <a>var</a>
+    <a>void</a>
+    <a>volatile</a>
+    <a>while</a>
+    <a>with</a>
+    <a>yield</a>
   </xsl:variable>
   <!-- Disclaimer -->
   <xsl:variable name="disclaimer">
