@@ -22,8 +22,7 @@ const compile = function(source, dest) {
         'node node_modules/xslt3/xslt3.js',
         `-xsl:${source}`,
         `-export:${dest}`
-      ].join(' '),
-      { shell: true }
+      ].join(' ')
     ).toString()
   } catch (_) { /* eslint-disable-line */
   }

@@ -17,7 +17,7 @@ const test = function(options) {
       '--exclude "node_modules/**"',
       ...options.exclude.split(',').map((glob) => `--exclude "${glob}"`)
     ].join(' '),
-    {stdio: 'inherit', cwd: dir, shell: true}
+    {stdio: 'inherit', cwd: dir}
   )
 }
 

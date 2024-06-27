@@ -11,7 +11,7 @@ const {execSync} = require('child_process')
 const dataize = function(obj, args, options) {
   options = {...program.opts(), ...options}
   const main = path.resolve(options.target, options.project, '__main__.js')
-  execSync(['node', main, obj, ...args].join(' '), {stdio: 'inherit', shell: true})
+  execSync(['node', main, obj, ...args].join(' '), {stdio: 'inherit'})
 }
 
 module.exports = dataize
