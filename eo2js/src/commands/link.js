@@ -50,7 +50,7 @@ const link = function(options) {
     path.resolve(project, 'package.json'),
     JSON.stringify(pckg(options.dependency, options.tests))
   )
-  execSync('npm install', {cwd: project})
+  execSync('npm install', {cwd: project, shell: true})
   fs.copyFileSync(
     path.resolve(options.resources, `js/${main}`),
     path.resolve(project, main)

@@ -21,7 +21,8 @@ const execNode = function(js, args, print) {
       {
         timeout: 1200000,
         windowsHide: true,
-        stdio: print ? null : 'ignore'
+        stdio: print ? null : 'ignore',
+        shell: true
       }
     ).toString()
   } catch (ex) {

@@ -20,12 +20,12 @@ const version = function() {
 }
 
 /**
- * Shell to use (depending on operating system).
- * @returns {true|undefined} - True for win32 or "undefined" if default one should be used
+ * The shell to use (depending on operating system).
+ * @returns {string|undefined} - Path to shell or "undefined" if default one should be used
  */
 function shell() {
   if (process.platform === 'win32') {
-    return true;
+    return 'C:\\Windows\\SysWOW64\\WindowsPowerShell\\v1.0\\powershell.exe';
   }
   return undefined
 }
