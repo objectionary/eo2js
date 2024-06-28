@@ -28,8 +28,10 @@
           "    )"
         ],
         [
-          "it('test \"test_with_inner\" should work', function() {",
+          "it('test \"test_with_inner\" should work', function(done) {",
+          "  this.timeout(0)",
           "  assert.ok(dataized(test_with_inner(), BOOL))",
+          "  done()",
           "})"
         ]
       ]

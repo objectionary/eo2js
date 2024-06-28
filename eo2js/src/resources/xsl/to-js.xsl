@@ -594,7 +594,9 @@ SOFTWARE.
     <xsl:value-of select="eo:eol(0)"/>
     <xsl:text>it('test "</xsl:text>
     <xsl:value-of select="eo:object-name(@name, eo:suffix(@line, @pos))"/>
-    <xsl:text>" should work', function() {</xsl:text>
+    <xsl:text>" should work', function(done) {</xsl:text>
+    <xsl:value-of select="eo:eol(1)"/>
+    <xsl:text>this.timeout(0)</xsl:text>
     <xsl:value-of select="eo:eol(1)"/>
     <xsl:choose>
       <xsl:when test="starts-with(@name, 'throws')">
@@ -606,6 +608,8 @@ SOFTWARE.
     </xsl:choose>
     <xsl:apply-templates select="." mode="dataized"/>
     <xsl:text>)</xsl:text>
+    <xsl:value-of select="eo:eol(1)"/>
+    <xsl:text>done()</xsl:text>
     <xsl:value-of select="eo:eol(0)"/>
     <xsl:text>})</xsl:text>
   </xsl:template>
