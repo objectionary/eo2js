@@ -18,8 +18,10 @@
         "const {BOOL} = require('eo2js-runtime/src/runtime/data')",
         "const my_test = function() {",
         [
-          "it('test \"my_test\" should work', function() {",
+          "it('test \"my_test\" should work', function(done) {",
+          "  this.timeout(0)",
           "  assert.ok(dataized(my_test(), BOOL))",
+          "  done()",
           "})"
         ]
       ]

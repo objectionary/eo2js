@@ -20,12 +20,8 @@ program
   .option('-r, --resources <path>', 'Path to the resources', 'src/resources')
   .option('-d, --dependency <path>', 'Path to local eo2js-runtime dependency')
   .option('-f, --foreign <path>', 'Path to foreign tojos', 'eo-foreign.json')
+  .option('--runtime-version <semver>', 'Version of the eo2js-runtime to use', 'latest')
   .option('--alone', 'Just run a single command without dependencies')
-  // .option('--hash <hex>', 'Hash in objectionary/home to compile against', parser)
-  // .option('--parser <version>', 'Set the version of EO parser to use', parser)
-  // .option('--latest', 'Use the latest parser version from Maven Central')
-  // .option('-b, --batch', 'Run in batch mode, suppress interactive messages')
-  // .option('--no-color', 'Disable colorization of console messages')
   .option('--verbose', 'Print debug messages and full output of child processes');
 
 /**
