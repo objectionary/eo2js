@@ -56,7 +56,10 @@ const link = function(options) {
     path.resolve(project, 'package.json'),
     JSON.stringify(pckg(options))
   )
-  execSync('npm install', {cwd: project})
+  const packageLockPath = path.resolve(project, 'package-lock.json')
+  if (!fs.existsSync(packageLockPath)) {
+    execSync('npm install', {cwd: project})
+  }
   fs.copyFileSync(
     path.resolve(options.resources, `js/${main}`),
     path.resolve(project, main)
