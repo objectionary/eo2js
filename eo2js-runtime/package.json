@@ -10,7 +10,7 @@
     "test": "grunt"
   },
   "devDependencies": {
-    "eslint": "9.6.0",
+    "eslint": "9.13.0",
     "eslint-config-google": "0.14.0",
     "grunt": "1.6.1",
     "grunt-contrib-clean": "2.0.1",
