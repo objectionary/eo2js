@@ -24,7 +24,7 @@ const hexToInt = function(bytes) {
       byte = parseInt(hex, 16)
     } else {
       throw new Error(
-        `Wrong format of element ${hex} in byte array ${bytes}\nShould be either integer of hexadecimal starting with '0x'`
+          `Wrong format of element ${hex} in byte array ${bytes}\nShould be either integer of hexadecimal starting with '0x'`
       )
     }
     return byte
@@ -38,19 +38,16 @@ const hexToInt = function(bytes) {
  * @return {Array.<Number>} - Adjusted byte array
  */
 const adjustNumber = function(bytes) {
-  if (bytes.length === 8) {
-    const number = bytesOf(
+  if (bytes.length !== 8) return bytes;
+
+  const number = bytesOf(
       new DataView(new Int8Array(bytes).buffer).getBigInt64(0)
-    ).asBytes()
-    return bytes.map((byte, index) => {
-      if (Math.abs(byte - number[index]) === 256) {
-        return byte - 256
-      }
-      return byte
-    })
-  }
-  return bytes
-}
+  ).asBytes();
+
+  return bytes.map((byte, index) =>
+      Math.abs(byte - number[index]) === 256 ? byte - 256 : byte
+  );
+};
 
 /**
  * Bytes of.
