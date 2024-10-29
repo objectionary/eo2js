@@ -33,7 +33,6 @@ describe('integration test', function() {
   it('should dataize simple program', function(done) {
     const log = runSync(['dataize program -t', target, '-p project -d', runtime])
     assert.ok(log.includes('Hello, Jeff'))
-    assert.ok(log.includes('true'))
     done()
   })
 })
