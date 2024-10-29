@@ -11,7 +11,7 @@ const app = function() {
   obj.attrs[PHI] = attr.lambda(
     obj, (_) => {
       const inner = object('app$phi')
-      inner.assets[DELTA] = bytesOf('Hello, world!').asBytes()
+      inner.assets[DELTA] = bytesOf.string('Hello, world!').asBytes()
       return inner
     }
   )

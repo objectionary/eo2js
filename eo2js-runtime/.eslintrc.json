@@ -6,11 +6,11 @@
   "rules": {
     "semi": "off",
     "comma-dangle": "off",
-    "indent": [ "error", 2 ],
+    "indent": [ "error", 2 , { "SwitchCase" : 1 }],
     "camelcase": "off",
     "max-len": [ "error", { "code": 300 } ]
   },
   "parserOptions": {
-    "ecmaVersion": 2019
+    "ecmaVersion": 2021
   }
 }

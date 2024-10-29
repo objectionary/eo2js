@@ -1,6 +1,6 @@
 const ErFailure = require('./error/ErFailure');
 const ErError = require('./error/ErError');
-const {data} = require('./data');
+const data = require('./data');
 
 /**
  * Validate given callback.

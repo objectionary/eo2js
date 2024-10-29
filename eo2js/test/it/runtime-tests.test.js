@@ -69,8 +69,8 @@ describe('runtime tests', function() {
       ].join(' && '), {cwd: home})
       console.debug(`Downloaded:\n${
         allFilesFrom(path.resolve(home, 'tests', 'org', 'eolang'))
-          .map((pth) => path.relative(home, pth))
-          .join(', ')
+          .map((pth) => `- ${path.relative(home, pth)}`)
+          .join('\n')
       }`)
       console.debug(`\nExcluded:\n${exclude.join(', ')}`)
       mvnw(

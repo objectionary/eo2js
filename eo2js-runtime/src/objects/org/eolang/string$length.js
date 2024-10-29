@@ -1,7 +1,8 @@
 const object = require('../../../runtime/object')
 const {LAMBDA, RHO} = require('../../../runtime/attribute/specials');
-const {data, STRING} = require('../../../runtime/data');
+const {STRING} = require('../../../runtime/types');
 const dataized = require('../../../runtime/dataized');
+const data = require('../../../runtime/data')
 
 /**
  * String.length.
@@ -11,7 +12,7 @@ const string$length = function() {
   const obj = object('string$length')
   obj.assets[LAMBDA] = function(self) {
     return data.toObject(
-      BigInt(dataized(self.take(RHO), STRING).length)
+      dataized(self.take(RHO), STRING).length
     )
   }
   return obj

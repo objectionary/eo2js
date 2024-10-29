@@ -1,22 +1,23 @@
 const dataized = require('../../../runtime/dataized')
 const object = require('../../../runtime/object')
-const {data, FLOAT} = require('../../../runtime/data')
+const {NUMBER} = require('../../../runtime/types')
 const {LAMBDA, RHO} = require('../../../runtime/attribute/specials')
 const at_void = require('../../../runtime/attribute/at-void')
+const data = require('../../../runtime/data')
 
 /**
- * Float.gt.
- * @return {any} - Float.gt object
+ * Number.times.
+ * @return {any} - Number.times object
  */
-const float$gt = function() {
-  const obj = object('float$gt')
+const number$times = function() {
+  const obj = object('number$times')
   obj.attrs['x'] = at_void('x')
   obj.assets[LAMBDA] = function(self) {
     return data.toObject(
-      dataized(self.take(RHO), FLOAT) > dataized(self.take('x'), FLOAT)
+      dataized(self.take(RHO), NUMBER) * dataized(self.take('x'), NUMBER)
     )
   }
   return obj
 }
 
-module.exports = float$gt
+module.exports = number$times

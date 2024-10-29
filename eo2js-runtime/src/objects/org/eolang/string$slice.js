@@ -2,7 +2,8 @@ const object = require('../../../runtime/object')
 const {LAMBDA, RHO} = require('../../../runtime/attribute/specials');
 const at_void = require('../../../runtime/attribute/at-void');
 const dataized = require('../../../runtime/dataized');
-const {INT, data, STRING} = require('../../../runtime/data');
+const {NUMBER, STRING} = require('../../../runtime/types');
+const data = require('../../../runtime/data')
 const ErFailure = require('../../../runtime/error/ErFailure');
 
 /**
@@ -15,8 +16,8 @@ const string$slice = function() {
   obj.attrs['len'] = at_void('len')
   obj.assets[LAMBDA] = function(self) {
     const str = dataized(self.take(RHO), STRING)
-    const start = dataized(self.take('start'), INT)
-    const length = dataized(self.take('len'), INT)
+    const start = dataized(self.take('start'), NUMBER)
+    const length = dataized(self.take('len'), NUMBER)
     const end = length + start;
     if (start < 0) {
       throw new ErFailure(

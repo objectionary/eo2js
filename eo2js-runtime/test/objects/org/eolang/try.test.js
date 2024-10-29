@@ -1,13 +1,14 @@
 const assert = require('assert');
 const tr = require('../../../../temp/objects/org/eolang/try');
-const {data, STRING, BOOL} = require('../../../../temp/runtime/data');
+const {STRING, BOOL} = require('../../../../temp/runtime/types');
 const object = require('../../../../temp/runtime/object');
 const dataized = require('../../../../temp/runtime/dataized');
 const attr = require('../../../../temp/runtime/attribute/attr');
 const ErFailure = require('../../../../temp/runtime/error/ErFailure');
 const {PHI, LAMBDA} = require('../../../../temp/runtime/attribute/specials');
 const at_simple = require('../../../../temp/runtime/attribute/at-simple');
-const stdout = require('../../../../temp/objects/org/eolang/io/stdout');
+const stdout = require('../../../../temp/objects/org/eolang/io/console$write$written-bytes');
+const data = require('../../../../temp/runtime/data')
 
 /**
  * Error message.

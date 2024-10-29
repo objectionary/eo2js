@@ -1,9 +1,10 @@
 const object = require('../../../runtime/object')
 const {LAMBDA, RHO} = require('../../../runtime/attribute/specials');
 const at_void = require('../../../runtime/attribute/at-void');
-const {data, INT} = require('../../../runtime/data');
+const {NUMBER} = require('../../../runtime/types');
 const bytesOf = require('../../../runtime/bytes-of');
 const dataized = require('../../../runtime/dataized');
+const data = require('../../../runtime/data')
 
 /**
  * Bytes.right.
@@ -14,8 +15,8 @@ const bytes$right = function() {
   obj.attrs['x'] = at_void('x')
   obj.assets[LAMBDA] = function(self) {
     return data.toObject(
-      bytesOf(dataized(self.take(RHO)))
-        .shift(dataized(self.take('x'), INT))
+      bytesOf.bytes(dataized(self.take(RHO)))
+        .shift(dataized(self.take('x'), NUMBER))
         .asBytes()
     )
   }

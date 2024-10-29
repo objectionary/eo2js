@@ -1,9 +1,10 @@
 const object = require('../../../runtime/object')
 const {LAMBDA, RHO} = require('../../../runtime/attribute/specials');
 const at_void = require('../../../runtime/attribute/at-void');
-const {data, INT} = require('../../../runtime/data');
+const {NUMBER} = require('../../../runtime/types');
 const heaps = require('../../../runtime/heaps');
 const dataized = require('../../../runtime/dataized');
+const data = require('../../../runtime/data')
 
 /**
  * Malloc.of.allocated.write.
@@ -15,8 +16,8 @@ const malloc$of$allocated$write = function() {
   obj.attrs['data'] = at_void('data')
   obj.assets[LAMBDA] = function(self) {
     heaps.write(
-      Number(dataized(self.take(RHO).take('id'), INT)),
-      Number(dataized(self.take('offset'), INT)),
+      dataized(self.take(RHO).take('id'), NUMBER),
+      dataized(self.take('offset'), NUMBER),
       dataized(self.take('data'))
     )
     return data.toObject(true)

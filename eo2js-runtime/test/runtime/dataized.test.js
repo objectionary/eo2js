@@ -2,7 +2,7 @@ const {DELTA, PHI, LAMBDA} = require('../../temp/runtime/attribute/specials')
 const assert = require('assert')
 const dataized = require('../../temp/runtime/dataized')
 const object = require('../../temp/runtime/object')
-const {INT, FLOAT, BOOL, STRING, BYTES} = require('../../temp/runtime/data')
+const {NUMBER, BOOL, STRING, BYTES} = require('../../temp/runtime/types')
 const at_simple = require('../../temp/runtime/attribute/at-simple');
 
 describe('dataized', function() {
@@ -10,50 +10,44 @@ describe('dataized', function() {
     assert.throws(() => dataized(object()))
   })
   it(`should return ${DELTA} asset if present`, function() {
-    const value = BigInt(5)
+    const bytes = [0, 5]
     const obj = object()
-    obj.assets[DELTA] = value
-    assert.deepEqual(dataized(obj), [0, 0, 0, 0, 0, 0, 0, 5])
+    obj.assets[DELTA] = bytes
+    assert.deepEqual(dataized(obj), bytes)
   })
   it(`should return ${DELTA} asset through ${PHI} attribute`, function() {
-    const value = BigInt(5)
+    const bytes = [0, 5]
     const obj = object()
     const phi = object(obj)
-    phi.assets[DELTA] = value
+    phi.assets[DELTA] = bytes
     obj.attrs[PHI] = at_simple(phi)
-    assert.deepEqual(dataized(obj), [0, 0, 0, 0, 0, 0, 0, 5])
+    assert.deepEqual(dataized(obj), bytes)
   });
   it(`should return ${DELTA} asset through ${LAMBDA} asset`, function() {
-    const value = BigInt(10)
+    const bytes = [0, 10]
     const obj = object()
     const other = object()
-    other.assets[DELTA] = value
+    other.assets[DELTA] = bytes
     obj.assets[LAMBDA] = function(_) {
       return other
     }
-    assert.deepEqual(dataized(obj), [0, 0, 0, 0, 0, 0, 0, 10])
+    assert.deepEqual(dataized(obj), [0, 10])
   });
-  it('should successfully cast zero to int', function() {
+  it('should successfully cast zero to number', function() {
     const obj = object()
     obj.assets[DELTA] = ['0x00', '0x00', '0x00', '0x00', '0x00', '0x00', '0x00', '0x00']
-    assert.equal(dataized(obj, INT), 0)
-  });
-  it('should successfully cast 12345 to integer', function() {
-    const num = ['0x00', '0x00', '0x00', '0x00', '0x00', '0x00', '0x30', '0x39'];
-    const obj = object()
-    obj.assets[DELTA] = num
-    assert.equal(dataized(obj, INT), 12345)
+    assert.equal(dataized(obj, NUMBER), 0)
   });
   it('should successfully cast zero to float', function() {
     const obj = object()
     obj.assets[DELTA] = ['0x00', '0x00', '0x00', '0x00', '0x00', '0x00', '0x00', '0x00']
-    assert.equal(dataized(obj, FLOAT), 0.0)
+    assert.equal(dataized(obj, NUMBER), 0.0)
   });
   it('should successfully cast 374.9 to float', function() {
     const num = ['0x40', '0x77', '0x6E', '0x66', '0x66', '0x66', '0x66', '0x66'];
     const obj = object()
     obj.assets[DELTA] = num
-    assert.equal(dataized(obj, FLOAT), 374.9)
+    assert.equal(dataized(obj, NUMBER), 374.9)
   });
   it('should successfully cast "Hello, world!" to string', function() {
     const hello = ['0x48', '0x65', '0x6C', '0x6C', '0x6F', '0x2C', '0x20', '0x77', '0x6F', '0x72', '0x6C', '0x64', '0x21']
