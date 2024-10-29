@@ -13,8 +13,9 @@ const malloc$of$φ = function() {
   const obj = object('malloc$of$φ')
   obj.assets[LAMBDA] = function(self) {
     const rho = self.take(RHO);
-    const size = Number(dataized(rho.take('size'), NUMBER))
-    const identifier = heaps.malloc(size)
+    const identifier = heaps.malloc(
+      Number(dataized(rho.take('size'), NUMBER))
+    )
     let res;
     try {
       dataized(
@@ -24,7 +25,7 @@ const malloc$of$φ = function() {
           })
         })
       )
-      res = data.toObject(heaps.read(identifier, 0, size))
+      res = data.toObject(heaps.read(identifier, 0, heaps.size(identifier)))
     } finally {
       heaps.free(identifier)
     }
