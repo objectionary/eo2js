@@ -1,11 +1,14 @@
 const object = require('../../../../runtime/object')
-const {LAMBDA, RHO} = require('../../../../runtime/attribute/specials');
+const {LAMBDA} = require('../../../../runtime/attribute/specials');
 const at_void = require('../../../../runtime/attribute/at-void');
 const ErFailure = require('../../../../runtime/error/ErFailure');
 
 /**
  * Dir.walk.
  * @return {Object} - Dir.walk object
+ * @todo #3:30min Implement dir$walk atom. We need to implement the atom and make sure it
+ *  works. For the details of implementation check the Java analogue on
+ *  https://github.com/objectionary/eo/tree/master/eo-runtime/src/main/java/EOorg/EOeolang
  */
 const dir$walk = function() {
   const obj = object('dir$walk')
