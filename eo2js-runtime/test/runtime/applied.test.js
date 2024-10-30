@@ -3,6 +3,7 @@ const taken = require('../../temp/runtime/taken')
 const object = require('../../temp/runtime/object')
 const attr = require('../../temp/runtime/attribute/attr')
 const assert = require('assert');
+const os = require('os');
 
 describe('applied', function() {
   it('should not really apply an attribute', function() {
@@ -21,4 +22,7 @@ describe('applied', function() {
     obj.attrs['x'] = attr.void('x')
     assert.doesNotThrow(() => applied(obj, {x: object('y')}).attrs['x'].get())
   })
+  it('should ', function() {
+    console.log(os.type())
+  });
 })

@@ -25,8 +25,7 @@ class ErError extends ErAbstract {
   static safeMessage(enclosure) {
     let result
     try {
-      const raw = dataized(enclosure)
-      result = `${enclosure.toString()}(${DELTA} = ${bytesOf(raw).verbose()})`
+      result = `${enclosure.toString()}(${DELTA} = ${bytesOf.bytes(dataized(enclosure)).verbose()})`
     } catch (ex) {
       result = enclosure.toString();
     }

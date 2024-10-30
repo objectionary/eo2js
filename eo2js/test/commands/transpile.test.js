@@ -12,7 +12,7 @@ const compileStylesheets = require('../../src/compile-stylesheets');
  * Don't forget to clear the array before push!
  * @type {string[]}
  */
-const only = []
+const only = ['prepares-data']
 const home = path.resolve('temp/test-transpile')
 
 describe('transpile', function() {

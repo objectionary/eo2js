@@ -24,5 +24,4 @@
 
 # A program.
 [args] > program
-  QQ.io.stdout > @
-    story
+  story > @

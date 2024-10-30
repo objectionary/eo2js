@@ -2,7 +2,7 @@ const object = require('../../../runtime/object')
 const {LAMBDA, RHO} = require('../../../runtime/attribute/specials');
 const at_void = require('../../../runtime/attribute/at-void');
 const dataized = require('../../../runtime/dataized');
-const {data} = require('../../../runtime/data');
+const data = require('../../../runtime/data');
 
 /**
  * Bytes.eq.

@@ -21,7 +21,7 @@ const main = function() {
       })
       app = app.with({0: args})
     }
-    console.log(bytesOf(dataized(app)).verbose())
+    console.log(bytesOf.bytes(dataized(app)).verbose())
   } catch (error) {
     if (error instanceof ErAbstract) {
       console.error(error.message)

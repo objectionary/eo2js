@@ -1,6 +1,6 @@
 const assert = require('assert');
 const error = require('../../../../temp/objects/org/eolang/error');
-const {data} = require('../../../../temp/runtime/data');
+const data = require('../../../../temp/runtime/data');
 const object = require('../../../../temp/runtime/object');
 const dataized = require('../../../../temp/runtime/dataized');
 const ErError = require('../../../../temp/runtime/error/ErError');
