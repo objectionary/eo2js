@@ -58,12 +58,12 @@ const link = function(options) {
   )
   const packageLockPath = path.resolve(project, 'package-lock.json')
   if (!fs.existsSync(packageLockPath)) {
-    execSync('npm install', { cwd: project })
+    execSync('npm install', {cwd: project})
     if (options.dependency) {
       fs.cpSync(
         options.dependency,
         path.resolve(project, 'node_modules/eo2js-runtime'),
-        { recursive: true }
+        {recursive: true}
       )
     }
   }
