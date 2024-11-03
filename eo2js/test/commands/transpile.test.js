@@ -40,7 +40,7 @@ describe('transpile', function() {
      * @param {String} name - Name of the object to transpile
      * @return {String} - Stdout
      */
-    const transpile = function(name = 'simple') {
+    const transpile = function(name = 'simple', copyVerifiedFile = true) {
       const verified = path.resolve(target, `6-verify/com/eo2js/${name}.xmir`)
       const foreign = [{
         id: `com.eo2js.${name}`,
@@ -48,7 +48,9 @@ describe('transpile', function() {
       }]
       fs.writeFileSync(path.resolve(target, 'eo-foreign.json'), JSON.stringify(foreign))
       fs.mkdirSync(path.resolve(target, '6-verify/com/eo2js'), {recursive: true})
-      fs.copyFileSync(path.resolve(`test/resources/transpile/${name}.xmir`), verified)
+      if (copyVerifiedFile) {
+        fs.copyFileSync(path.resolve(`test/resources/transpile/${name}.xmir`), verified)
+      }
       return runSync([
         'transpile',
         '--verbose',
@@ -69,18 +71,20 @@ describe('transpile', function() {
       })
     })
     it('should skip transpilation if source was not modified', function() {
-      const output1 = transpile()
-      assert.ok(output1.includes('Skipping') === false)
-      const output2 = transpile() 
-      assert.ok(output2.includes('Skipping'))
+      transpile('simple', true)
+      const transpiled = path.resolve(target, '8-transpile/com/eo2js/simple.xmir')
+      const firstModifiedTime = fs.statSync(transpiled).mtime
+      transpile('simple', false)
+      const secondModifiedTime = fs.statSync(transpiled).mtime
+      assert.equal(firstModifiedTime.getTime(), secondModifiedTime.getTime())
     })
     it('should retranspile if source was modified', function() {
       transpile()
-      const verified = path.resolve(target, '6-verify/com/eo2js/simple.xmir')
-      const content = fs.readFileSync(verified).toString()
-      fs.writeFileSync(verified, content)
-      const output = transpile()
-      assert.ok(output.includes('Skipping') === false)
+      const transpiled = path.resolve(target, '8-transpile/com/eo2js/simple.xmir')
+      const firstModified = fs.statSync(transpiled).mtime
+      transpile()
+      const secondModified = fs.statSync(transpiled).mtime
+      assert.notEqual(firstModified.getTime(), secondModified.getTime())
     })
   })
   describe('transformation packs', function() {
