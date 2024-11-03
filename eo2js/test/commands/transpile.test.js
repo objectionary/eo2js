@@ -84,9 +84,9 @@ describe('transpile', function() {
       const transpiled = path.resolve(target, '8-transpile/com/eo2js/simple.xmir')
       const firstModified = fs.statSync(transpiled).mtime
       const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
-      await wait(100);
+      await wait(1200);
       const source = path.resolve(target, '6-verify/com/eo2js/simple.xmir')
-      fs.utimesSync(source, new Date(), new Date()) // Touch source file to update mtime
+      fs.utimesSync(source, new Date(), new Date())
       transpile()
       const secondModified = fs.statSync(transpiled).mtime
       assert.notEqual(firstModified.getTime(), secondModified.getTime())
