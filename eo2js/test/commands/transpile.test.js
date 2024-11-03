@@ -38,6 +38,7 @@ describe('transpile', function() {
     /**
      * Call transpile command.
      * @param {String} name - Name of the object to transpile
+     * @param {boolean} copyVerifiedFile - Whether to copy the verified XMIR file
      * @return {String} - Stdout
      */
     const transpile = function(name = 'simple', copyVerifiedFile = true) {
