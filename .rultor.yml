@@ -1,5 +1,5 @@
 docker:
-  image: maxonfjvipon/rultor-image-js:0.0.1
+  image: yegor256/rultor-image:1.23.1
 assets:
   npmrc: maxonfjvipon/secrets#.npmrc
 install: |

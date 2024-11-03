@@ -1,13 +1,14 @@
 const assert = require('assert');
 const tr = require('../../../../temp/objects/org/eolang/try');
-const {data, STRING, BOOL} = require('../../../../temp/runtime/data');
+const {STRING, BOOL} = require('../../../../temp/runtime/types');
 const object = require('../../../../temp/runtime/object');
 const dataized = require('../../../../temp/runtime/dataized');
 const attr = require('../../../../temp/runtime/attribute/attr');
 const ErFailure = require('../../../../temp/runtime/error/ErFailure');
 const {PHI, LAMBDA} = require('../../../../temp/runtime/attribute/specials');
 const at_simple = require('../../../../temp/runtime/attribute/at-simple');
-const stdout = require('../../../../temp/objects/org/eolang/io/stdout');
+const data = require('../../../../temp/runtime/data')
+const at_void = require('../../../../temp/runtime/attribute/at-void');
 
 /**
  * Error message.
@@ -77,6 +78,21 @@ const tryObj = function(main, final) {
     'catch': catcher(),
     'finally': final || nop()
   })
+}
+
+/**
+ * Stdout.
+ * @param {Object} out - Output
+ * @return {Object} - Stdout object
+ */
+const stdout = function(out) {
+  const obj = object('stdout')
+  obj.attrs['x'] = at_void()
+  obj.assets[LAMBDA] = function(self) {
+    out.log(dataized(self.take('x'), STRING))
+    return data.toObject(true)
+  }
+  return obj
 }
 
 describe('try', function() {

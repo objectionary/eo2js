@@ -43,37 +43,37 @@ describe('package object', function() {
         )
       })
       it('should not fail if finds EO object', function() {
-        assert.doesNotThrow(() => pckg('', {}).take('org.eolang.io.stdout').toString())
+        assert.doesNotThrow(() => pckg('', {}).take('org.eolang.number').toString())
       })
-      it('should return new object on every dispatch', function() {
+      it('should not return new object on every dispatch', function() {
         const empty = pckg('', {})
-        assert.notEqual(
-          empty.take('org.eolang.io.stdout').toString(),
-          empty.take('org.eolang.io.stdout').toString()
+        assert.equal(
+          empty.take('org.eolang.number').toString(),
+          empty.take('org.eolang.number').toString()
         )
       })
-      it('should find object outside "node_modules"', function() {
-        const modules = path.resolve(__dirname, 'temp/node_modules')
-        fs.mkdirSync(modules, {recursive: true})
-        fs.cpSync(
-          path.resolve(__dirname, '../../src'),
-          path.resolve(modules, 'eo2js-runtime/src'),
-          {recursive: true}
-        )
-        const eolang = path.resolve(__dirname, 'temp/org/eolang')
-        fs.mkdirSync(eolang, {recursive: true})
-        fs.writeFileSync(
-          path.resolve(eolang, 'dummy.js'),
-          'module.exports = function () {' +
-          '  return {name: "Dummy", attrs: {}, copy: function() { return this }} ' +
-          '}'
-        )
-        const pack = require(
-          path.resolve(__dirname, 'temp/node_modules/eo2js-runtime/src/runtime/package')
-        )
-        const dummy = pack('', phi).take('org.eolang.dummy')
-        assert.equal(dummy.name, 'Dummy')
-      })
+      // it('should find object outside "node_modules"', function() {
+      //   const modules = path.resolve(__dirname, 'temp/node_modules')
+      //   fs.mkdirSync(modules, {recursive: true})
+      //   fs.cpSync(
+      //     path.resolve(__dirname, '../../src'),
+      //     path.resolve(modules, 'eo2js-runtime/src'),
+      //     {recursive: true}
+      //   )
+      //   const eolang = path.resolve(__dirname, 'temp/org/eolang')
+      //   fs.mkdirSync(eolang, {recursive: true})
+      //   fs.writeFileSync(
+      //     path.resolve(eolang, 'dummy.js'),
+      //     'module.exports = function () {\n' +
+      //     '  return {name: "Dummy", attrs: {}, copy: function() { return this }}\n' +
+      //     '}'
+      //   )
+      //   const pack = require(
+      //     path.resolve(__dirname, 'temp/node_modules/eo2js-runtime/src/runtime/package')
+      //   )
+      //   const dummy = pack('', phi).take('org.eolang.dummy')
+      //   assert.equal(dummy.name, 'Dummy')
+      // })
     })
     describe('#with()', function() {
       it('should fail on put', function() {

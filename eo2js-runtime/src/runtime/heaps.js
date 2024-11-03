@@ -92,6 +92,44 @@ const heaps = {
     return bytes.slice(offset, offset + length)
   },
   /**
+   * Get size of allocated block in memory.
+   * @param {Number} id - Identifier
+   * @return {Number} - Size of the block
+   */
+  size: function(id) {
+    if (!BLOCKS.hasOwnProperty(id)) {
+      throw new ErFailure(
+        `Block in memory by identifier '${id}' is not allocated, can't get size`
+      )
+    }
+    return BLOCKS[id].length
+  },
+  /**
+   * Change size of block in memory.
+   * @param {Number} id - Identifier
+   * @param {Number} size - New size
+   */
+  resize: function(id, size) {
+    if (size < 0) {
+      throw new ErFailure(
+        `Can't change size of block in memory by identifier '${id}' to negative: ${size}`
+      )
+    }
+    if (!BLOCKS.hasOwnProperty(id)) {
+      throw new ErFailure(
+        `Block in memory by identifier '${id}' is not allocated, can't resize`
+      )
+    }
+    const bytes = BLOCKS[id]
+    let res
+    if (size > bytes.length) {
+      res = [...bytes, ...Array(size - bytes.length).fill(0)]
+    } else {
+      res = bytes.slice(0, size)
+    }
+    BLOCKS[id] = res
+  },
+  /**
    * Free the block in memory by identifier.
    * @param {Number} id - Identifier of pointer
    */

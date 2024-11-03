@@ -1,8 +1,9 @@
 const object = require('../../../runtime/object')
 const {LAMBDA, RHO} = require('../../../runtime/attribute/specials');
 const dataized = require('../../../runtime/dataized');
-const {INT, data} = require('../../../runtime/data');
+const {NUMBER} = require('../../../runtime/types');
 const heaps = require('../../../runtime/heaps');
+const data = require('../../../runtime/data')
 
 /**
  * Malloc.of.φ.
@@ -12,18 +13,19 @@ const malloc$of$φ = function() {
   const obj = object('malloc$of$φ')
   obj.assets[LAMBDA] = function(self) {
     const rho = self.take(RHO);
-    const size = Number(dataized(rho.take('size'), INT))
-    const identifier = heaps.malloc(size)
+    const identifier = heaps.malloc(
+      Number(dataized(rho.take('size'), NUMBER))
+    )
     let res;
     try {
       dataized(
         rho.take('scope').with({
           0: rho.take('allocated').with({
-            id: data.toObject(BigInt(identifier))
+            id: data.toObject(identifier)
           })
         })
       )
-      res = data.toObject(heaps.read(identifier, 0, size))
+      res = data.toObject(heaps.read(identifier, 0, heaps.size(identifier)))
     } finally {
       heaps.free(identifier)
     }

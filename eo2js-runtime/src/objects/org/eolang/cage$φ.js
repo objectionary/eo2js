@@ -1,6 +1,6 @@
 const object = require('../../../runtime/object')
 const {LAMBDA, RHO} = require('../../../runtime/attribute/specials');
-const {data} = require('../../../runtime/data');
+const data = require('../../../runtime/data');
 const cages = require('../../../runtime/cages');
 
 /**
@@ -13,7 +13,7 @@ const cage$φ = function() {
     const rho = self.take(RHO)
     return rho.take('encaged').with({
       locator: data.toObject(
-        BigInt(cages.init(rho.take('object')))
+        cages.init(rho.take('object'))
       )
     })
   }

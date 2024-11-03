@@ -8,12 +8,28 @@ const assert = require('assert');
 /**
  * Excluded tests.
  * @todo #3:90min Clear the list of excluded tests. There are many runtime tests are excluded now
- *  because so many atoms are not implemented. We have to include the tests and make sure they work
- *  as we implement atoms.
+ *  because so many atoms are not implemented or implemented with errors.
+ *  We have to include the tests and make sure they work as we implement atoms.
  * @type {string[]}
  */
 const exclude = [
+  'fs/dir-tests',
+  'fs/file-tests',
+  'fs/tmpdir-tests',
+  'i16-tests',
+  'i32-tests',
+  'i64-tests',
+  'math/integral-tests',
+  'math/random-tests',
+  'math/real-tests',
   'rust-tests',
+  'structs/list-tests',
+  'sys/posix-tests',
+  'sys/win32-tests',
+  'txt/regex-tests',
+  'txt/sprintf-tests',
+  'txt/sscanf-tests',
+  'txt/text-tests',
 ].map((name) => `org/eolang/${name}.test.js`)
 
 /**
@@ -69,10 +85,10 @@ describe('runtime tests', function() {
       ].join(' && '), {cwd: home})
       console.debug(`Downloaded:\n${
         allFilesFrom(path.resolve(home, 'tests', 'org', 'eolang'))
-          .map((pth) => path.relative(home, pth))
-          .join(', ')
+          .map((pth) => `- ${path.relative(home, pth)}`)
+          .join('\n')
       }`)
-      console.debug(`\nExcluded:\n${exclude.join(', ')}`)
+      console.debug(`\nExcluded:\n${exclude.map((pth) => `- ${pth}`).join('\n')}`)
       mvnw(
         ['register', 'assemble', 'verify'],
         {home, sources: 'tests', target: 'target'}

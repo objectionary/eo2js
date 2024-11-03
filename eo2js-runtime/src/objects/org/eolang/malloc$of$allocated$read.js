@@ -2,8 +2,9 @@ const object = require('../../../runtime/object')
 const {LAMBDA, RHO} = require('../../../runtime/attribute/specials');
 const at_void = require('../../../runtime/attribute/at-void');
 const dataized = require('../../../runtime/dataized');
-const {INT, data} = require('../../../runtime/data');
+const {NUMBER} = require('../../../runtime/types');
 const heaps = require('../../../runtime/heaps');
+const data = require('../../../runtime/data')
 
 /**
  * Malloc.of.allocated.read.
@@ -16,9 +17,9 @@ const malloc$of$allocated$read = function() {
   obj.assets[LAMBDA] = function(self) {
     return data.toObject(
       heaps.read(
-        Number(dataized(self.take(RHO).take('id'), INT)),
-        Number(dataized(self.take('offset'), INT)),
-        Number(dataized(self.take('length'), INT))
+        dataized(self.take(RHO).take('id'), NUMBER),
+        dataized(self.take('offset'), NUMBER),
+        dataized(self.take('length'), NUMBER)
       )
     )
   }

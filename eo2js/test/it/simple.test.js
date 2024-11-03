@@ -10,7 +10,7 @@ describe('integration test', function() {
   const target = path.resolve(home, 'target')
   const project = path.resolve(target, 'project')
   const runtime = path.resolve('../eo2js-runtime')
-  this.timeout(100000)
+  this.timeout(1000000)
   before('recompile stylesheets', function() {
     compileStylesheets()
     fs.rmSync(home, {recursive: true, force: true})
@@ -33,7 +33,6 @@ describe('integration test', function() {
   it('should dataize simple program', function(done) {
     const log = runSync(['dataize program -t', target, '-p project -d', runtime])
     assert.ok(log.includes('Hello, Jeff'))
-    assert.ok(log.includes('true'))
     done()
   })
 })

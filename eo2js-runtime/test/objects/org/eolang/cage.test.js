@@ -1,10 +1,10 @@
 const phi = require('../../../../temp/runtime/phi');
-const {data} = require('../../../../temp/runtime/data');
+const data = require('../../../../temp/runtime/data');
 const dataized = require('../../../../temp/runtime/dataized');
 const attr = require('../../../../temp/runtime/attribute/attr');
 const object = require('../../../../temp/runtime/object');
 const assert = require('assert');
-const {FLOAT} = require('../../../../src/runtime/data');
+const {NUMBER} = require('../../../../src/runtime/types');
 const {LAMBDA} = require('../../../../src/runtime/attribute/specials');
 const {RECURSION_THRESHOLD} = require('../../../../src/runtime/traced');
 
@@ -63,30 +63,30 @@ const recursiveDummy = function(cage, depth) {
 describe('cage', function() {
   it('should encage via application', function() {
     const cage = encaged(data.toObject(1))
-    assert.equal(dataized(cage, FLOAT), 1)
+    assert.equal(dataized(cage, NUMBER), 1)
   })
   it('should encage and reencage', function() {
     const cage = encaged(data.toObject(1))
     encageTo(cage, data.toObject(2))
-    assert.equal(dataized(cage, FLOAT), 2)
+    assert.equal(dataized(cage, NUMBER), 2)
   })
   it('should overwrite caged object', function() {
     const cage = encaged(dummy(1))
-    assert.equal(dataized(cage.take('x'), FLOAT), 1)
+    assert.equal(dataized(cage.take('x'), NUMBER), 1)
     encageTo(cage, dummy(2))
-    assert.equal(dataized(cage.take('x'), FLOAT), 2)
+    assert.equal(dataized(cage.take('x'), NUMBER), 2)
   })
   it('should encage object on copying', function() {
     const first = encaged(data.toObject(1))
     const second = first.copy()
     encageTo(second, data.toObject(2))
-    assert.equal(dataized(first, FLOAT), 2)
+    assert.equal(dataized(first, NUMBER), 2)
   })
   it('should write and rewrite primitive', function() {
     const cage = encaged(data.toObject(1))
-    assert.equal(dataized(cage, FLOAT), 1)
+    assert.equal(dataized(cage, NUMBER), 1)
     encageTo(cage, data.toObject(5))
-    assert.equal(dataized(cage, FLOAT), 5)
+    assert.equal(dataized(cage, NUMBER), 5)
   })
   it('should no write primitive formed differently', function() {
     const cage = encaged(data.toObject(1))
