@@ -57,6 +57,21 @@ const hasMeta = function(xmir, name) {
 }
 
 /**
+ * Check if source needs to be retranspiled by comparing modification times.
+ * @param {String} source - Source file path
+ * @param {String} transpiled - Transpiled file path
+ * @return {boolean} - True if source needs to be retranspiled
+ */
+const needsRetranspile = function(source, transpiled) {
+  if (!fs.existsSync(transpiled)) {
+    return true
+  }
+  const sourceTime = fs.statSync(source).mtime
+  const transpiledTime = fs.statSync(transpiled).mtime
+  return sourceTime > transpiledTime
+}
+
+/**
  * Transform XMIR from given tojo and save.
  * @param {Object} tojo - Tojo.
  * @param {{target: String, project: String}} options - Program options
@@ -68,6 +83,15 @@ const transform = function(tojo, options, transformations, parser) {
   let xml = parser.parse(text)
   const pth = pathFromName(xml['program']['@_name'])
   const transpiled = path.resolve(options.target, dir, `${pth}.xmir`)
+  const dest = path.resolve(options.project, `${pth}${hasMeta(xml, 'tests') ? '.test' : ''}.js`)
+
+  if (!needsRetranspile(tojo[verified], transpiled)) {
+    if (options.verbose) {
+      console.log(`Skipping ${pth} - already transpiled`)
+    }
+    return
+  }
+
   makeDirIfNotExist(transpiled.substring(0, transpiled.lastIndexOf(path.sep)))
   fs.writeFileSync(transpiled, text)
   xml = text
@@ -89,7 +113,6 @@ const transform = function(tojo, options, transformations, parser) {
   const count = isTest ? 0 : 1
   if (filtered.length > count) {
     const first = filtered[0]
-    const dest = path.resolve(options.project, `${pth}${isTest ? '.test' : ''}.js`)
     makeDirIfNotExist(dest.substring(0, dest.lastIndexOf(path.sep)))
     fs.writeFileSync(dest, first['javascript'])
     filtered.slice(1).forEach((obj) => fs.appendFileSync(dest, `\n${obj['javascript']}`))
@@ -119,7 +142,7 @@ const transpile = function(options) {
     .filter((tojo) => tojo.hasOwnProperty(verified))
     .forEach((tojo) => transform(
       tojo,
-      {target: options['target'], project},
+      {target: options['target'], project, verbose: options.verbose},
       transformations,
       parser
     ))

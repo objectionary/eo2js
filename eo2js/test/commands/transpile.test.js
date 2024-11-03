@@ -68,6 +68,20 @@ describe('transpile', function() {
         assertFilesExist(transpile(name), target, [`project/com/eo2js/${name}.test.js`])
       })
     })
+    it('should skip transpilation if source was not modified', function() {
+      const output1 = transpile()
+      assert.ok(output1.includes('Skipping') === false)
+      const output2 = transpile() 
+      assert.ok(output2.includes('Skipping'))
+    })
+    it('should retranspile if source was modified', function() {
+      transpile()
+      const verified = path.resolve(target, '6-verify/com/eo2js/simple.xmir')
+      const content = fs.readFileSync(verified).toString()
+      fs.writeFileSync(verified, content)
+      const output = transpile()
+      assert.ok(output.includes('Skipping') === false)
+    })
   })
   describe('transformation packs', function() {
     this.timeout(0)
