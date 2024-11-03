@@ -83,7 +83,7 @@ describe('transpile', function() {
       transpile()
       const transpiled = path.resolve(target, '8-transpile/com/eo2js/simple.xmir')
       const firstModified = fs.statSync(transpiled).mtime
-      const wait = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+      const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
       wait(100);
       transpile()
       const secondModified = fs.statSync(transpiled).mtime
