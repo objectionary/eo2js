@@ -79,7 +79,7 @@ describe('transpile', function() {
       })
     })
     it('should skip transpilation if source was not modified', function() {
-      prepare('simple')
+      prepare()
       transpile()
       const transpiled = path.resolve(target, '8-transpile/com/eo2js/simple.xmir')
       const first = fs.statSync(transpiled).mtime
