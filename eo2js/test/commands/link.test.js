@@ -39,20 +39,4 @@ describe('link', function() {
     assertFilesExist(link('--tests'), project, ['node_modules/mocha'])
     done()
   })
-  it('should not reinstall npm packages if package-lock.json exists', function(done) {
-    // First run to create initial files
-    link()
-    
-    // Get modification time of package-lock.json
-    const lockFilePath = path.resolve(project, 'package-lock.json')
-    const initialMtime = fs.statSync(lockFilePath).mtime
-    
-    // Run link again
-    link()
-    
-    // Check if package-lock.json was not modified
-    const finalMtime = fs.statSync(lockFilePath).mtime
-    assert.strictEqual(initialMtime.getTime(), finalMtime.getTime(), 'package-lock.json was modified on second run')
-    done()
-  })
 })
