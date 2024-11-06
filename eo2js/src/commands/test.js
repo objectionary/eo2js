@@ -10,7 +10,6 @@ const test = function(options) {
   options = {...program.opts(), ...options}
   const dir = path.resolve(options.target, options.project)
   console.log(`Running tests in directory: ${dir}`)
-  
   const excludeGlobs = options.exclude ? options.exclude.split(',') : []
   if (excludeGlobs.length > 0) {
     console.log(`Excluding patterns: ${excludeGlobs.join(', ')}`)

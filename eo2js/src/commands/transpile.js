@@ -120,7 +120,6 @@ const transpile = function(options) {
   fs.mkdirSync(project, {recursive: true})
   const tojos = JSON.parse(fs.readFileSync(foreign).toString())
     .filter((tojo) => tojo.hasOwnProperty(verified))
-  
   console.log(`Found ${tojos.length} verified tojos to process`)
   let processed = 0
   tojos.forEach((tojo) => {
