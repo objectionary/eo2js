@@ -52,22 +52,33 @@ const pckg = function(options) {
 const link = function(options) {
   options = {...program.opts(), ...options}
   const project = path.resolve(options.target, options.project)
+  console.log(`Building npm project in: ${project}`)
+
+  console.log('Creating package.json...')
   fs.writeFileSync(
     path.resolve(project, 'package.json'),
     JSON.stringify(pckg(options))
   )
+
+  console.log('Installing dependencies...')
   execSync('npm install', {cwd: project})
+
+  console.log(`Copying ${main} file...`)
   fs.copyFileSync(
     path.resolve(options.resources, `js/${main}`),
     path.resolve(project, main)
   )
+
   if (options.dependency) {
+    console.log(`Copying local eo2js-runtime from: ${options.dependency}`)
     fs.cpSync(
       options.dependency,
       path.resolve(project, 'node_modules/eo2js-runtime'),
       {recursive: true}
     )
   }
+
+  console.log('Project build completed successfully')
 }
 
 module.exports = link
