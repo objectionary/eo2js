@@ -36,12 +36,11 @@ describe('transpile', function() {
       assert.throws(() => runSync(['transpile', '-t', target, '-f', foreign], false))
     })
     /**
-     * Call transpile command.
-     * @param {String} name - Name of the object to transpile
-     * @param {boolean} copyVerifiedFile - Whether to copy the verified XMIR file
-     * @return {String} - Stdout
+     * Prepare files for transpilation.
+     * Creates eo-foreign.json file and copies XMIR file from test resources.
+     * @param {String} name - Name of the object to transpile, defaults to 'simple'
      */
-    const transpile = function(name = 'simple', copyVerifiedFile = true) {
+    const prepare = function(name = 'simple') {
       const verified = path.resolve(target, `6-verify/com/eo2js/${name}.xmir`)
       const foreign = [{
         id: `com.eo2js.${name}`,
@@ -49,9 +48,14 @@ describe('transpile', function() {
       }]
       fs.writeFileSync(path.resolve(target, 'eo-foreign.json'), JSON.stringify(foreign))
       fs.mkdirSync(path.resolve(target, '6-verify/com/eo2js'), {recursive: true})
-      if (copyVerifiedFile) {
-        fs.copyFileSync(path.resolve(`test/resources/transpile/${name}.xmir`), verified)
-      }
+      fs.copyFileSync(path.resolve(`test/resources/transpile/${name}.xmir`), verified)
+    }
+    /**
+     * Run transpile command with verbose output.
+     * @param {String} name - Name of the object to transpile
+     * @return {String} - Command stdout
+     */
+    const transpile = function() {
       return runSync([
         'transpile',
         '--verbose',
@@ -60,36 +64,39 @@ describe('transpile', function() {
     }
     it('should create transpiled XMIRs', function() {
       const traspiled = '8-transpile/com/eo2js/simple.xmir'
+      prepare()
       assertFilesExist(transpile(), target, [traspiled])
       assert.ok(fs.readFileSync(path.resolve(target, traspiled)).toString().includes('<javascript'))
     })
     it('should generate JS files', function() {
+      prepare()
       assertFilesExist(transpile(), target, ['project/com/eo2js/simple.js'])
     });
     ['simple-test', 'alone-test'].forEach((name) => {
       it(`should generate test JS file for ${name}`, function() {
-        assertFilesExist(transpile(name), target, [`project/com/eo2js/${name}.test.js`])
+        prepare(name)
+        assertFilesExist(transpile(), target, [`project/com/eo2js/${name}.test.js`])
       })
     })
     it('should skip transpilation if source was not modified', function() {
-      transpile('simple', true)
+      prepare('simple')
+      transpile()
       const transpiled = path.resolve(target, '8-transpile/com/eo2js/simple.xmir')
-      const firstModifiedTime = fs.statSync(transpiled).mtime
-      transpile('simple', false)
-      const secondModifiedTime = fs.statSync(transpiled).mtime
-      assert.equal(firstModifiedTime.getTime(), secondModifiedTime.getTime())
+      const first = fs.statSync(transpiled).mtime
+      transpile()
+      const second = fs.statSync(transpiled).mtime
+      assert.equal(first.getTime(), second.getTime())
     })
     it('should retranspile if source was modified', async function() {
-      transpile()
+      prepare()
       const transpiled = path.resolve(target, '8-transpile/com/eo2js/simple.xmir')
-      const firstModified = fs.statSync(transpiled).mtime
-      const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
-      await wait(1200);
       const source = path.resolve(target, '6-verify/com/eo2js/simple.xmir')
+      transpile()
+      const first = fs.statSync(transpiled).mtime
       fs.writeFileSync(source, fs.readFileSync(source))
       transpile()
-      const secondModified = fs.statSync(transpiled).mtime
-      assert.notEqual(firstModified.getTime(), secondModified.getTime())
+      const second = fs.statSync(transpiled).mtime
+      assert.notEqual(first.getTime(), second.getTime())
     })
   })
   describe('transformation packs', function() {
