@@ -56,8 +56,8 @@ const link = function(options) {
     path.resolve(project, 'package.json'),
     JSON.stringify(pckg(options))
   )
-  const packageLockPath = path.resolve(project, 'package-lock.json')
-  if (!fs.existsSync(packageLockPath)) {
+  const lock = path.resolve(project, 'package-lock.json')
+  if (!fs.existsSync(lock)) {
     execSync('npm install', {cwd: project})
     if (options.dependency) {
       fs.cpSync(
