@@ -47,13 +47,11 @@ const makeDirIfNotExist = function(dir) {
  */
 const hasMeta = function(xmir, name) {
   const metas = xmir.program.metas.meta
-  let res = false
   if (Array.isArray(metas)) {
-    res = metas.findIndex((meta) => meta.head === name) !== -1
-  } else if (typeof metas === 'object' && metas.hasOwnProperty('head')) {
-    res = metas.head === name
+    return metas.some((meta) => meta.head === name);
   }
-  return res
+  return metas?.head === name;
+
 }
 
 /**
@@ -63,36 +61,40 @@ const hasMeta = function(xmir, name) {
  * @param {Array.<String>} transformations - List of transformations to apply to XMIR
  * @param {any} parser - XML parser
  */
-const transform = function(tojo, options, transformations, parser) {
-  const text = fs.readFileSync(tojo[verified]).toString()
-  let xml = parser.parse(text)
-  const pth = pathFromName(xml['program']['@_name'])
-  const transpiled = path.resolve(options.target, dir, `${pth}.xmir`)
-  makeDirIfNotExist(transpiled.substring(0, transpiled.lastIndexOf(path.sep)))
-  fs.writeFileSync(transpiled, text)
-  xml = text
-  transformations.forEach((transformation) => {
-    xml = saxon.transform({
-      stylesheetFileName: transformation,
-      sourceText: xml,
-      destination: 'serialized'
-    }).principalResult
-  })
-  fs.writeFileSync(transpiled, xml)
-  xml = parser.parse(xml)
-  let objects = xml.program.objects.object
-  if (!Array.isArray(objects)) {
-    objects = [objects]
-  }
-  const filtered = objects.filter((obj) => !!obj && obj.hasOwnProperty('javascript') && !obj.hasOwnProperty('@_atom'))
-  const isTest = hasMeta(xml, 'tests')
-  const count = isTest ? 0 : 1
-  if (filtered.length > count) {
-    const first = filtered[0]
-    const dest = path.resolve(options.project, `${pth}${isTest ? '.test' : ''}.js`)
-    makeDirIfNotExist(dest.substring(0, dest.lastIndexOf(path.sep)))
-    fs.writeFileSync(dest, first['javascript'])
-    filtered.slice(1).forEach((obj) => fs.appendFileSync(dest, `\n${obj['javascript']}`))
+const transform = function (tojo, options, transformations, parser) {
+  try {
+    const text = fs.readFileSync(tojo[verified]).toString()
+    let xml = parser.parse(text)
+    const pth = pathFromName(xml['program']['@_name'])
+    const transpiled = path.resolve(options.target, dir, `${pth}.xmir`)
+    makeDirIfNotExist(transpiled.substring(0, transpiled.lastIndexOf(path.sep)))
+    fs.writeFileSync(transpiled, text)
+    xml = text
+    transformations.forEach((transformation) => {
+      xml = saxon.transform({
+        stylesheetFileName: transformation,
+        sourceText: xml,
+        destination: 'serialized'
+      }).principalResult
+    })
+    fs.writeFileSync(transpiled, xml)
+    xml = parser.parse(xml)
+    let objects = xml.program.objects.object
+    if (!Array.isArray(objects)) {
+      objects = [objects]
+    }
+    const filtered = objects.filter((obj) => !!obj && obj.hasOwnProperty('javascript') && !obj.hasOwnProperty('@_atom'))
+    const isTest = hasMeta(xml, 'tests')
+    const count = isTest ? 0 : 1
+    if (filtered.length > count) {
+      const first = filtered[0]
+      const dest = path.resolve(options.project, `${pth}${isTest ? '.test' : ''}.js`)
+      makeDirIfNotExist(dest.substring(0, dest.lastIndexOf(path.sep)))
+      fs.writeFileSync(dest, first['javascript'])
+      filtered.slice(1).forEach((obj) => fs.appendFileSync(dest, `\n${obj['javascript']}`))
+    }
+  } catch (error) {
+  console.error(`Error in transform: ${error.message}`);
   }
 }
 
