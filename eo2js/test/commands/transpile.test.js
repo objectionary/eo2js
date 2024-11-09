@@ -26,7 +26,6 @@ describe('transpile', function() {
     beforeEach(function() {
       fs.rmSync(target, {recursive: true, force: true})
       fs.mkdirSync(target)
-      prepare()
     })
     it('should fail if eo-foreign is not found', function() {
       assert.throws(() => runSync(['transpile', '-t', target], false))
@@ -53,10 +52,22 @@ describe('transpile', function() {
     }
     /**
      * Run transpile command with verbose output.
-     * @param {String} name - Name of the object to transpile
-     * @return {String} - Command stdout
+     * @param {String} name - Name of the object to transpile, defaults to 'simple'
+     * @return {String} - Command stdout from transpilation
      */
-    const transpile = function() {
+    const transpile = function(name = 'simple') {
+      prepare(name)
+      return runSync([
+        'transpile',
+        '--verbose',
+        '-t', target,
+      ])
+    }
+    /**
+     * Run transpile command again with verbose output, without preparing files.
+     * @return {String} - Command stdout from retranspilation
+     */
+    const retranspile = function() {
       return runSync([
         'transpile',
         '--verbose',
@@ -73,15 +84,14 @@ describe('transpile', function() {
     });
     ['simple-test', 'alone-test'].forEach((name) => {
       it(`should generate test JS file for ${name}`, function() {
-        prepare(name)
-        assertFilesExist(transpile(), target, [`project/com/eo2js/${name}.test.js`])
+        assertFilesExist(transpile(name), target, [`project/com/eo2js/${name}.test.js`])
       })
     })
     it('should skip transpilation if source was not modified', function() {
       transpile()
       const transpiled = path.resolve(target, '8-transpile/com/eo2js/simple.xmir')
       const first = fs.statSync(transpiled).mtime
-      transpile()
+      retranspile()
       const second = fs.statSync(transpiled).mtime
       assert.equal(first.getTime(), second.getTime())
     })
@@ -91,7 +101,7 @@ describe('transpile', function() {
       transpile()
       const first = fs.statSync(transpiled).mtime
       fs.writeFileSync(source, fs.readFileSync(source))
-      transpile()
+      retranspile()
       const second = fs.statSync(transpiled).mtime
       assert.notEqual(first.getTime(), second.getTime())
     })
