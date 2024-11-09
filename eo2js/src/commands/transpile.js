@@ -117,6 +117,7 @@ const transform = function(tojo, options, transformations, parser) {
 const transpile = function(options) {
   options = {...program.opts(), ...options}
   const foreign = path.resolve(options['target'], options['foreign'])
+  console.log(`Reading foreign tojos from: ${foreign}`)
   if (!fs.existsSync(foreign)) {
     throw new Error(`File ${foreign} is not found`)
   }
@@ -126,17 +127,21 @@ const transpile = function(options) {
   const transformations = [
     'objects', 'package', 'tests', 'attrs', 'data', 'to-js'
   ].map((name) => path.resolve(options['resources'], `json/${name}.sef.json`))
+  console.log(`Using transformations from: ${options['resources']}/json/`)
   const parser = new XMLParser({ignoreAttributes: false})
   const project = path.resolve(options['target'], options['project'])
+  console.log(`Output directory: ${project}`)
   fs.mkdirSync(project, {recursive: true})
-  JSON.parse(fs.readFileSync(foreign).toString())
+  const tojos = JSON.parse(fs.readFileSync(foreign).toString())
     .filter((tojo) => tojo.hasOwnProperty(verified))
-    .forEach((tojo) => transform(
-      tojo,
-      {target: options['target'], project, verbose: options.verbose},
-      transformations,
-      parser
-    ))
+  console.log(`Found ${tojos.length} verified tojos to process`)
+  let processed = 0
+  tojos.forEach((tojo) => {
+    console.log(`Processing: ${tojo[verified]}`)
+    transform(tojo, {target: options['target'], project, verbose: options.verbose}, transformations, parser)
+    processed++
+  })
+  console.log(`Successfully processed ${processed} files`)
 }
 
 module.exports = transpile
