@@ -1,6 +1,7 @@
 const {runSync, assertFilesExist} = require('../helpers')
 const path = require('path');
 const fs = require('fs');
+const assert = require('assert');
 
 describe('link', function() {
   const home = path.resolve('temp/test-link')
@@ -37,6 +38,16 @@ describe('link', function() {
   it('should add test dependency', function(done) {
     this.timeout(10000)
     assertFilesExist(link('--tests'), project, ['node_modules/mocha'])
+    done()
+  })
+  it('should not reinstall npm packages if package-lock.json exists', function(done) {
+    this.timeout(10000)
+    link()
+    const lockFilePath = path.resolve(project, 'package-lock.json')
+    const initialMtime = fs.statSync(lockFilePath).mtime
+    link()
+    const finalMtime = fs.statSync(lockFilePath).mtime
+    assert.strictEqual(initialMtime.getTime(), finalMtime.getTime(), 'package-lock.json was modified on second run')
     done()
   })
 })

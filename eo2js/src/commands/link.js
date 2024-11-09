@@ -64,6 +64,17 @@ const link = function(options) {
   execSync('npm install', {cwd: project})
 
   console.log(`Copying ${main} file...`)
+  const lock = path.resolve(project, 'package-lock.json')
+  if (!fs.existsSync(lock)) {
+    execSync('npm install', {cwd: project})
+    if (options.dependency) {
+      fs.cpSync(
+        options.dependency,
+        path.resolve(project, 'node_modules/eo2js-runtime'),
+        {recursive: true}
+      )
+    }
+  }
   fs.copyFileSync(
     path.resolve(options.resources, `js/${main}`),
     path.resolve(project, main)
