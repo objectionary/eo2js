@@ -14,7 +14,6 @@ const test = function(options) {
   if (excludeGlobs.length > 0) {
     console.log(`Excluding patterns: ${excludeGlobs.join(', ')}`)
   }
-
   try {
     execSync(
       [
