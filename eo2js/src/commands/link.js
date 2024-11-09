@@ -1,7 +1,7 @@
-const {program} = require('commander');
-const path = require('path');
-const fs = require('fs');
-const {execSync} = require('child_process');
+const { program } = require('commander')
+const path = require('path')
+const fs = require('fs')
+const { execSync } = require('child_process')
 
 /**
  * Entry point JS file.
@@ -15,7 +15,7 @@ const main = '__main__.js'
  * @param {{dependency: string, tests: boolean, runtimeVersion: string}} options - Program options
  * @return {{author: string, name: string, version: string}} - The content for package.json file
  */
-const pckg = function(options) {
+const pckg = function (options) {
   const def = {
     name: 'project',
     version: '1.0.0',
@@ -32,7 +32,7 @@ const pckg = function(options) {
   if (!!options.tests) {
     def.dependencies = {
       ...def.dependencies,
-      'mocha': 'latest'
+      mocha: 'latest'
     }
   }
   return def
@@ -49,24 +49,27 @@ const pckg = function(options) {
  *  dependency: ?String,
  * }} options - Program options
  */
-const link = function(options) {
-  options = {...program.opts(), ...options}
+const link = function (options) {
+  options = { ...program.opts(), ...options }
   const project = path.resolve(options.target, options.project)
   fs.writeFileSync(
     path.resolve(project, 'package.json'),
     JSON.stringify(pckg(options))
   )
-  console.log(`Created package.json in: ${path.resolve(project, 'package.json')}`)
+  console.log(
+    `Created package.json in: ${path.resolve(project, 'package.json')}`
+  )
   const lock = path.resolve(project, 'package-lock.json')
   if (!fs.existsSync(lock)) {
     console.log('Installing dependencies...')
-    execSync('npm install', {cwd: project})
+    execSync('npm install', { cwd: project })
     if (options.dependency) {
       fs.cpSync(
         options.dependency,
         path.resolve(project, 'node_modules/eo2js-runtime'),
-        {recursive: true}
+        { recursive: true }
       )
+      console.log(`Copied eo2js-runtime from ${options.dependency} to ${path.resolve(project, 'node_modules/eo2js-runtime')}`)
     }
   }
   fs.copyFileSync(
@@ -74,14 +77,6 @@ const link = function(options) {
     path.resolve(project, main)
   )
   console.log(`Copied ${main} file to ${path.resolve(project)}`)
-  if (options.dependency) {
-    fs.cpSync(
-      options.dependency,
-      path.resolve(project, 'node_modules/eo2js-runtime'),
-      {recursive: true}
-    )
-    console.log(`Copied eo2js-runtime from ${options.dependency} to ${path.resolve(project, 'node_modules/eo2js-runtime')}`)
-  }
   console.log('Project build completed successfully')
 }
 
