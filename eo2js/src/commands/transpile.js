@@ -63,18 +63,13 @@ const hasMeta = function(xmir, name) {
  * @return {boolean} - True if source needs to be retranspiled
  */
 const needsRetranspile = function(source, transpiled) {
-  if (!fs.existsSync(transpiled)) {
-    return true
-  }
-  const sourceTime = fs.statSync(source).mtime
-  const transpiledTime = fs.statSync(transpiled).mtime
-  return sourceTime > transpiledTime
+  return !fs.existsSync(transpiled) || fs.statSync(source).mtime > fs.statSync(transpiled).mtime
 }
 
 /**
  * Transform XMIR from given tojo and save.
  * @param {Object} tojo - Tojo.
- * @param {{target: String, project: String}} options - Program options
+ * @param {{target: String, project: String, verbose: boolean}} options - Program options
  * @param {Array.<String>} transformations - List of transformations to apply to XMIR
  * @param {any} parser - XML parser
  */
@@ -82,40 +77,36 @@ const transform = function(tojo, options, transformations, parser) {
   const text = fs.readFileSync(tojo[verified]).toString()
   let xml = parser.parse(text)
   const pth = pathFromName(xml['program']['@_name'])
-  const transpiled = path.resolve(options.target, dir, `${pth}.xmir`)
-  const dest = path.resolve(options.project, `${pth}${hasMeta(xml, 'tests') ? '.test' : ''}.js`)
-
-  if (!needsRetranspile(tojo[verified], transpiled)) {
-    if (options.verbose) {
-      console.log(`Skipping ${pth} - already transpiled`)
-    }
-    return
-  }
-
-  makeDirIfNotExist(transpiled.substring(0, transpiled.lastIndexOf(path.sep)))
-  fs.writeFileSync(transpiled, text)
-  xml = text
-  transformations.forEach((transformation) => {
-    xml = saxon.transform({
-      stylesheetFileName: transformation,
-      sourceText: xml,
-      destination: 'serialized'
-    }).principalResult
-  })
-  fs.writeFileSync(transpiled, xml)
-  xml = parser.parse(xml)
-  let objects = xml.program.objects.object
-  if (!Array.isArray(objects)) {
-    objects = [objects]
-  }
-  const filtered = objects.filter((obj) => !!obj && obj.hasOwnProperty('javascript') && !obj.hasOwnProperty('@_atom'))
   const isTest = hasMeta(xml, 'tests')
-  const count = isTest ? 0 : 1
-  if (filtered.length > count) {
-    const first = filtered[0]
-    makeDirIfNotExist(dest.substring(0, dest.lastIndexOf(path.sep)))
-    fs.writeFileSync(dest, first['javascript'])
-    filtered.slice(1).forEach((obj) => fs.appendFileSync(dest, `\n${obj['javascript']}`))
+  const transpiled = path.resolve(options.target, dir, `${pth}.xmir`)
+  const dest = path.resolve(options.project, `${pth}${isTest ? '.test' : ''}.js`)
+  if (needsRetranspile(tojo[verified], transpiled)) {
+    makeDirIfNotExist(transpiled.substring(0, transpiled.lastIndexOf(path.sep)))
+    fs.writeFileSync(transpiled, text)
+    xml = text
+    transformations.forEach((transformation) => {
+      xml = saxon.transform({
+        stylesheetFileName: transformation,
+        sourceText: xml,
+        destination: 'serialized'
+      }).principalResult
+    })
+    fs.writeFileSync(transpiled, xml)
+    xml = parser.parse(xml)
+    let objects = xml.program.objects.object
+    if (!Array.isArray(objects)) {
+      objects = [objects]
+    }
+    const filtered = objects.filter((obj) => !!obj && obj.hasOwnProperty('javascript') && !obj.hasOwnProperty('@_atom'))
+    const count = isTest ? 0 : 1
+    if (filtered.length > count) {
+      const first = filtered[0]
+      makeDirIfNotExist(dest.substring(0, dest.lastIndexOf(path.sep)))
+      fs.writeFileSync(dest, first['javascript'])
+      filtered.slice(1).forEach((obj) => fs.appendFileSync(dest, `\n${obj['javascript']}`))
+    }
+  } else if (options.verbose) {
+    console.log(`Skipping ${pth} - already transpiled`)
   }
 }
 

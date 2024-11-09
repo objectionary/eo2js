@@ -26,6 +26,7 @@ describe('transpile', function() {
     beforeEach(function() {
       fs.rmSync(target, {recursive: true, force: true})
       fs.mkdirSync(target)
+      prepare()
     })
     it('should fail if eo-foreign is not found', function() {
       assert.throws(() => runSync(['transpile', '-t', target], false))
@@ -64,12 +65,10 @@ describe('transpile', function() {
     }
     it('should create transpiled XMIRs', function() {
       const traspiled = '8-transpile/com/eo2js/simple.xmir'
-      prepare()
       assertFilesExist(transpile(), target, [traspiled])
       assert.ok(fs.readFileSync(path.resolve(target, traspiled)).toString().includes('<javascript'))
     })
     it('should generate JS files', function() {
-      prepare()
       assertFilesExist(transpile(), target, ['project/com/eo2js/simple.js'])
     });
     ['simple-test', 'alone-test'].forEach((name) => {
@@ -79,7 +78,6 @@ describe('transpile', function() {
       })
     })
     it('should skip transpilation if source was not modified', function() {
-      prepare()
       transpile()
       const transpiled = path.resolve(target, '8-transpile/com/eo2js/simple.xmir')
       const first = fs.statSync(transpiled).mtime
@@ -88,7 +86,6 @@ describe('transpile', function() {
       assert.equal(first.getTime(), second.getTime())
     })
     it('should retranspile if source was modified', async function() {
-      prepare()
       const transpiled = path.resolve(target, '8-transpile/com/eo2js/simple.xmir')
       const source = path.resolve(target, '6-verify/com/eo2js/simple.xmir')
       transpile()
