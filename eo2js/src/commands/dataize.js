@@ -11,8 +11,7 @@ const {execSync} = require('child_process')
 const dataize = function(obj, args, options) {
   options = {...program.opts(), ...options}
   const main = path.resolve(options.target, options.project, '__main__.js')
-  console.log(`Dataizing object: ${obj}`)
-  console.log(`Using main file: ${main}`)
+  console.log(`Dataizing object: ${obj}\nUsing main file: ${main}`)
   if (args.length > 0) {
     console.log(`With arguments: ${args.join(' ')}`)
   }
