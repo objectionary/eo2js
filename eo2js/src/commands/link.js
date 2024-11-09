@@ -56,18 +56,21 @@ const link = function(options) {
     path.resolve(project, 'package.json'),
     JSON.stringify(pckg(options))
   )
-  execSync('npm install', {cwd: project})
+  const lock = path.resolve(project, 'package-lock.json')
+  if (!fs.existsSync(lock)) {
+    execSync('npm install', {cwd: project})
+    if (options.dependency) {
+      fs.cpSync(
+        options.dependency,
+        path.resolve(project, 'node_modules/eo2js-runtime'),
+        {recursive: true}
+      )
+    }
+  }
   fs.copyFileSync(
     path.resolve(options.resources, `js/${main}`),
     path.resolve(project, main)
   )
-  if (options.dependency) {
-    fs.cpSync(
-      options.dependency,
-      path.resolve(project, 'node_modules/eo2js-runtime'),
-      {recursive: true}
-    )
-  }
 }
 
 module.exports = link
