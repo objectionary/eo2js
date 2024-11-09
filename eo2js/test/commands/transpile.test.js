@@ -96,10 +96,11 @@ describe('transpile', function() {
       assert.equal(first.getTime(), second.getTime())
     })
     it('should retranspile if source was modified', async function() {
+      transpile()
       const transpiled = path.resolve(target, '8-transpile/com/eo2js/simple.xmir')
       const source = path.resolve(target, '6-verify/com/eo2js/simple.xmir')
-      transpile()
       const first = fs.statSync(transpiled).mtime
+      await new Promise(resolve => setTimeout(resolve, 1000))
       fs.writeFileSync(source, fs.readFileSync(source))
       retranspile()
       const second = fs.statSync(transpiled).mtime
