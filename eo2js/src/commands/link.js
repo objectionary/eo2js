@@ -69,12 +69,7 @@ const link = function(options) {
         path.resolve(project, 'node_modules/eo2js-runtime'),
         {recursive: true}
       )
-      console.log(
-        `Copied eo2js-runtime from ${options.dependency} to ${path.resolve(
-          project,
-          'node_modules/eo2js-runtime'
-        )}`
-      )
+      console.log(`Copied eo2js-runtime from ${options.dependency} to ${path.resolve(project, 'node_modules/eo2js-runtime')}`)
     }
   }
   fs.copyFileSync(

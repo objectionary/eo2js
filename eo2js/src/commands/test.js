@@ -27,7 +27,7 @@ const test = function(options) {
       {stdio: 'inherit', cwd: dir}
     )
   } catch (ex) {
-    console.error('Failed to execute mochajs:', ex.message)
+    console.error('Failed to execute mochajs', ex.message)
     throw ex
   }
 }
