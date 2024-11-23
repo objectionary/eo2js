@@ -26,13 +26,13 @@ describe('dir$walk', function() {
 
   it('should find files matching glob pattern', function() {
     const walk = dir$walk();
-    walk.attrs['glob'] = data.toObject(path.join(directory, '**/*.txt'));
+    walk.attrs['glob'] = data.toObject('**/*.txt');
     const result = dataized(walk, STRING).split('\n').sort();
     assert.deepEqual(
       result,
       [
-        path.join(directory, 'file1.txt'),
-        path.join(directory, 'subdir/file3.txt')
+        'file1.txt',
+        'subdir/file3.txt'
       ].sort()
     );
   });
