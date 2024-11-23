@@ -1,22 +1,22 @@
 const object = require('../../../../runtime/object')
 const {LAMBDA} = require('../../../../runtime/attribute/specials');
 const at_void = require('../../../../runtime/attribute/at-void');
-const ErFailure = require('../../../../runtime/error/ErFailure');
+const at_string = require('../../../../runtime/attribute/at-string');
+const fs = require('fs');
+const path = require('path');
+const glob = require('glob');
 
 /**
- * Dir.walk.
+ * Dir.walk recursively walks a directory and returns files matching a glob pattern.
  * @return {Object} - Dir.walk object
- * @todo #3:30min Implement dir$walk atom. We need to implement the atom and make sure it
- *  works. For the details of implementation check the Java analogue on
- *  https://github.com/objectionary/eo/tree/master/eo-runtime/src/main/java/EOorg/EOeolang
  */
 const dir$walk = function() {
   const obj = object('dir$walk')
   obj.attrs['glob'] = at_void('glob')
   obj.assets[LAMBDA] = function(_) {
-    throw new ErFailure(
-      `Atom dir$walk is not implemented yet`
-    )
+    const pattern = obj.attrs['glob'].data;
+    const files = glob.sync(pattern);
+    return at_string(files.join('\n'));
   }
   return obj
 }
