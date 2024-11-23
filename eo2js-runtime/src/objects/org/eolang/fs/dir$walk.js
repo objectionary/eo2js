@@ -1,9 +1,7 @@
 const object = require('../../../../runtime/object')
 const {LAMBDA} = require('../../../../runtime/attribute/specials');
 const at_void = require('../../../../runtime/attribute/at-void');
-const at_string = require('../../../../runtime/attribute/at-string');
-const fs = require('fs');
-const path = require('path');
+const data = require('../../../../runtime/data');
 const glob = require('glob');
 
 /**
@@ -16,7 +14,7 @@ const dir$walk = function() {
   obj.assets[LAMBDA] = function(_) {
     const pattern = obj.attrs['glob'].data;
     const files = glob.sync(pattern);
-    return at_string(files.join('\n'));
+    return data.toObject(files.join('\n'));
   }
   return obj
 }

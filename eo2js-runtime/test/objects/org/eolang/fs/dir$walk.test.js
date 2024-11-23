@@ -2,7 +2,7 @@ const assert = require('assert');
 const dir$walk = require('../../../../../temp/objects/org/eolang/fs/dir$walk');
 const {STRING} = require('../../../../../temp/runtime/types');
 const dataized = require('../../../../../temp/runtime/dataized');
-const at_string = require('../../../../runtime/attribute/at-string');
+const data = require('../../../../../temp/runtime/data');
 const fs = require('fs');
 const path = require('path');
 
@@ -26,7 +26,7 @@ describe('dir$walk', function() {
 
   it('should find files matching glob pattern', function() {
     const walk = dir$walk();
-    walk.attrs['glob'] = at_string(path.join(directory, '**/*.txt'));
+    walk.attrs['glob'] = data.toObject(path.join(directory, '**/*.txt'));
     const result = dataized(walk, STRING).split('\n').sort();
     assert.deepEqual(
       result,
