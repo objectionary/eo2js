@@ -1,13 +1,15 @@
 const assert = require('assert');
-const dir$walk = require('../../../../../temp/objects/org/eolang/fs/dir$walk');
-const {STRING} = require('../../../../../temp/runtime/types');
-const dataized = require('../../../../../temp/runtime/dataized');
-const data = require('../../../../../temp/runtime/data');
+const dir$walk = require('../../../../../src/objects/org/eolang/fs/dir$walk');
+const {STRING} = require('../../../../../src/runtime/types');
+const dataized = require('../../../../../src/runtime/dataized');
+const data = require('../../../../../src/runtime/data');
 const fs = require('fs');
 const path = require('path');
+const object = require('../../../../../src/runtime/object');
+const {RHO} = require('../../../../../src/runtime/attribute/specials');
 
 describe('dir$walk', function() {
-  const directory = path.resolve(__dirname, '../../../../../temp/test-dir');
+  const directory = path.resolve(__dirname, '../test-dir');
   
   beforeEach(function() {
     if (fs.existsSync(directory)) {
@@ -25,11 +27,16 @@ describe('dir$walk', function() {
   });
 
   it('should find files matching glob pattern', function() {
+    const dir = object('dir');
+    dir.attrs['file'] = object('file');
+    dir.attrs['file'].attrs['path'] = data.toObject(directory);
     const walk = dir$walk();
-    walk.attrs['glob'] = data.toObject('**/*.txt');
-    const result = dataized(walk, STRING).split('\n').sort();
+    walk.attrs[RHO] = dir;
+    walk.attrs['glob'] = data.toObject('**/*.txt'); 
+    const files = dataized(walk);
+    const paths = files.map(file => dataized(file.take('path'), STRING));
     assert.deepEqual(
-      result,
+      paths.sort(),
       [
         'file1.txt',
         'subdir/file3.txt'
