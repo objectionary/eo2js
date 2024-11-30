@@ -23,9 +23,11 @@
       "args": [
         [
           "        let ret = phi.take('org').take('eolang').take('number')",
-          "          let ret_1 = phi.take('org').take('eolang').take('bytes')",
-          "          ret_1 = ret_1.with({",
-          "            'Δ': ['0x40', '0x45', '0x00', '0x00', '0x00', '0x00', '0x00', '0x00']",
+          "          let ret_1 = phi.take('org').take('eolang').take('bytes').copy()",
+          "          ret_1 = applied(ret_1, {",
+          "            0: object().with({",
+          "              'Δ': ['0x40', '0x45', '0x00', '0x00', '0x00', '0x00', '0x00', '0x00']",
+          "            })",
           "          })",
           "        ret = applied(ret, {",
           "          0: ret_1",
@@ -41,9 +43,11 @@
         [
           "        let ret = phi.take('org').take('eolang').take('float')",
           "          let ret_1 = phi.take('org').take('eolang').take('number')",
-          "            let ret_1_1 = phi.take('org').take('eolang').take('bytes')",
-          "            ret_1_1 = ret_1_1.with({",
-          "              'Δ': ['0x40', '0x0C', '0x00', '0x00', '0x00', '0x00', '0x00', '0x00']",
+          "            let ret_1_1 = phi.take('org').take('eolang').take('bytes').copy()",
+          "            ret_1_1 = applied(ret_1_1, {",
+          "              0: object().with({",
+          "                'Δ': ['0x40', '0x0C', '0x00', '0x00', '0x00', '0x00', '0x00', '0x00']",
+          "              })",
           "            })",
           "          ret_1 = applied(ret_1, {",
           "            0: ret_1_1",
@@ -60,9 +64,11 @@
       "method": "includes",
       "args": [
         [
-          "        let ret = phi.take('org').take('eolang').take('bytes')",
-          "        ret = ret.with({",
-          "          'Δ': ['0x01', '0xAF']",
+          "        let ret = phi.take('org').take('eolang').take('bytes').copy()",
+          "        ret = applied(ret, {",
+          "          0: object().with({",
+          "            'Δ': ['0x01', '0xAF']",
+          "          })",
           "        })",
           "        return ret"
         ]

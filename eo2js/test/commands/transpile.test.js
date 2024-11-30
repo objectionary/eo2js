@@ -12,14 +12,14 @@ const compileStylesheets = require('../../src/compile-stylesheets');
  * Don't forget to clear the array before push!
  * @type {string[]}
  */
-const only = ['prepares-data']
+const only = []
 const home = path.resolve('temp/test-transpile')
 
 describe('transpile', function() {
   before('compile stylesheets', function() {
     compileStylesheets()
     fs.rmSync(home, {recursive: true, force: true})
-    fs.mkdirSync(home)
+    fs.mkdirSync(home, {recursive: true})
   })
   describe('command', function() {
     const target = path.resolve(home, 'target')

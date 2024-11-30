@@ -18,14 +18,15 @@ const malloc$of$φ = function() {
     )
     let res;
     try {
-      dataized(
-        rho.take('scope').with({
-          0: rho.take('allocated').with({
-            id: data.toObject(identifier)
+      res = data.toObject(
+        dataized(
+          rho.take('scope').with({
+            0: rho.take('allocated').with({
+              id: data.toObject(identifier)
+            })
           })
-        })
+        )
       )
-      res = data.toObject(heaps.read(identifier, 0, heaps.size(identifier)))
     } finally {
       heaps.free(identifier)
     }
