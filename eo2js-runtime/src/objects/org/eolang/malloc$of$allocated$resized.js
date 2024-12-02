@@ -7,10 +7,10 @@ const dataized = require('../../../runtime/dataized');
 const data = require('../../../runtime/data')
 
 /**
- * Malloc.of.allocated.resize.
- * @return {Object} - Malloc.of.allocated.resize object
+ * Malloc.of.allocated.resized.
+ * @return {Object} - Malloc.of.allocated.resized object
  */
-const malloc$of$allocated$resize = function() {
+const malloc$of$allocated$resized = function() {
   const obj = object('malloc$of$allocated$resize')
   obj.attrs['size'] = at_void('size')
   obj.assets[LAMBDA] = function(self) {
@@ -23,4 +23,4 @@ const malloc$of$allocated$resize = function() {
   return obj
 }
 
-module.exports = malloc$of$allocated$resize
+module.exports = malloc$of$allocated$resized

@@ -27,6 +27,31 @@ describe('transpile', function() {
       fs.rmSync(target, {recursive: true, force: true})
       fs.mkdirSync(target)
     })
+    /* eslint-disable valid-jsdoc */
+    /**
+     * Run transpile command with verbose output.
+     * @param {{[name]: String, [prepare]: Boolean}} opts - Options
+     * @return {String} - Output
+     */
+    const transpile = function(opts= {}) {
+      opts.name = opts.name || 'simple'
+      opts.prepare = opts.prepare !== undefined ? opts.prepare : true
+      if (opts.prepare) {
+        const verified = path.resolve(target, `6-verify/com/eo2js/${opts.name}.xmir`)
+        const foreign = [{
+          id: `com.eo2js.${opts.name}`,
+          verified: verified
+        }]
+        fs.writeFileSync(path.resolve(target, 'eo-foreign.json'), JSON.stringify(foreign))
+        fs.mkdirSync(path.resolve(target, '6-verify/com/eo2js'), {recursive: true})
+        fs.copyFileSync(path.resolve(`test/resources/transpile/${opts.name}.xmir`), verified)
+      }
+      return runSync([
+        'transpile',
+        '--verbose',
+        '-t', target,
+      ])
+    }
     it('should fail if eo-foreign is not found', function() {
       assert.throws(() => runSync(['transpile', '-t', target], false))
     })
@@ -35,45 +60,6 @@ describe('transpile', function() {
       fs.writeFileSync(path.resolve(target, foreign), 'some data')
       assert.throws(() => runSync(['transpile', '-t', target, '-f', foreign], false))
     })
-    /**
-     * Prepare files for transpilation.
-     * Creates eo-foreign.json file and copies XMIR file from test resources.
-     * @param {String} name - Name of the object to transpile, defaults to 'simple'
-     */
-    const prepare = function(name = 'simple') {
-      const verified = path.resolve(target, `6-verify/com/eo2js/${name}.xmir`)
-      const foreign = [{
-        id: `com.eo2js.${name}`,
-        verified: verified
-      }]
-      fs.writeFileSync(path.resolve(target, 'eo-foreign.json'), JSON.stringify(foreign))
-      fs.mkdirSync(path.resolve(target, '6-verify/com/eo2js'), {recursive: true})
-      fs.copyFileSync(path.resolve(`test/resources/transpile/${name}.xmir`), verified)
-    }
-    /**
-     * Run transpile command with verbose output.
-     * @param {String} name - Name of the object to transpile, defaults to 'simple'
-     * @return {String} - Command stdout from transpilation
-     */
-    const transpile = function(name = 'simple') {
-      prepare(name)
-      return runSync([
-        'transpile',
-        '--verbose',
-        '-t', target,
-      ])
-    }
-    /**
-     * Run transpile command again with verbose output, without preparing files.
-     * @return {String} - Command stdout from retranspilation
-     */
-    const retranspile = function() {
-      return runSync([
-        'transpile',
-        '--verbose',
-        '-t', target,
-      ])
-    }
     it('should create transpiled XMIRs', function() {
       const traspiled = '8-transpile/com/eo2js/simple.xmir'
       assertFilesExist(transpile(), target, [traspiled])
@@ -84,14 +70,14 @@ describe('transpile', function() {
     });
     ['simple-test', 'alone-test'].forEach((name) => {
       it(`should generate test JS file for ${name}`, function() {
-        assertFilesExist(transpile(name), target, [`project/com/eo2js/${name}.test.js`])
+        assertFilesExist(transpile({name}), target, [`project/com/eo2js/${name}.test.js`])
       })
     })
     it('should skip transpilation if source was not modified', function() {
       transpile()
       const transpiled = path.resolve(target, '8-transpile/com/eo2js/simple.xmir')
       const first = fs.statSync(transpiled).mtime
-      retranspile()
+      transpile({prepare: false})
       const second = fs.statSync(transpiled).mtime
       assert.equal(first.getTime(), second.getTime())
     })
@@ -102,7 +88,7 @@ describe('transpile', function() {
       const first = fs.statSync(transpiled).mtime
       await new Promise((resolve) => setTimeout(resolve, 1000))
       fs.writeFileSync(source, fs.readFileSync(source))
-      retranspile()
+      transpile({prepare: false})
       const second = fs.statSync(transpiled).mtime
       assert.notEqual(first.getTime(), second.getTime())
     })
@@ -119,17 +105,18 @@ describe('transpile', function() {
             fs.rmSync(folder, {recursive: true})
           }
           const json = JSON.parse(fs.readFileSync(path.resolve(packs, test)).toString())
-          const res = pack({home: folder, sources: 'src', target: 'target', json})
-          if (res.skip) {
-            this.skip()
-          } else {
-            assert.equal(
-              res.failures.length,
-              0,
-              `Result XMIR:\n ${res.xmir}\nJSON: ${JSON.stringify(res.json, null, 2)}\nFailed tests: ${res.failures.join(';\n')}`
-            )
-            done()
-          }
+          pack({home: folder, sources: 'src', target: 'target', json}).then((res) => {
+            if (res.skip) {
+              this.skip()
+            } else {
+              assert.equal(
+                res.failures.length,
+                0,
+                `Result XMIR:\n ${res.xmir}\nJSON: ${JSON.stringify(res.json, null, 2)}\nFailed tests: ${res.failures.join(';\n')}`
+              )
+              done()
+            }
+          })
         })
       })
   })

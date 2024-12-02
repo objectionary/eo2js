@@ -73,6 +73,36 @@
           "        return ret"
         ]
       ]
+    },
+    {
+      "node": ".program.objects.object{.\"@_name\" == 'one-byte'}.javascript",
+      "method": "includes",
+      "args": [
+        [
+          "        let ret = phi.take('org').take('eolang').take('bytes').copy()",
+          "        ret = applied(ret, {",
+          "          0: object().with({",
+          "            'Δ': ['0x01']",
+          "          })",
+          "        })",
+          "        return ret"
+        ]
+      ]
+    },
+    {
+      "node": ".program.objects.object{.\"@_name\" == 'empty'}.javascript",
+      "method": "includes",
+      "args": [
+        [
+          "        let ret = phi.take('org').take('eolang').take('bytes').copy()",
+          "        ret = applied(ret, {",
+          "          0: object().with({",
+          "            'Δ': []",
+          "          })",
+          "        })",
+          "        return ret"
+        ]
+      ]
     }
   ],
   "eo": [
@@ -87,6 +117,12 @@
     "  float 3.5 > @",
     "# This is the default 64+ symbols comment in front of named abstract object.",
     "[] > b",
-    "  01-AF > @"
+    "  01-AF > @",
+    "# This is the default 64+ symbols comment in front of named abstract object.",
+    "[] > one-byte",
+    "  01- > @",
+    "# This is the default 64+ symbols comment in front of named abstract object.",
+    "[] > empty",
+    "  -- > @"
   ]
 }

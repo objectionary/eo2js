@@ -33,12 +33,14 @@ SOFTWARE.
       <xsl:element name="value">
           <xsl:text>[</xsl:text>
           <xsl:for-each select="tokenize(text(), '-')">
-            <xsl:if test="position() &gt; 1">
-              <xsl:text>, </xsl:text>
+            <xsl:if test=".!=''">
+              <xsl:if test="position() &gt; 1">
+                <xsl:text>, </xsl:text>
+              </xsl:if>
+              <xsl:text>'0x</xsl:text>
+              <xsl:value-of select="."/>
+              <xsl:text>'</xsl:text>
             </xsl:if>
-            <xsl:text>'0x</xsl:text>
-            <xsl:value-of select="."/>
-            <xsl:text>'</xsl:text>
           </xsl:for-each>
           <xsl:text>]</xsl:text>
       </xsl:element>

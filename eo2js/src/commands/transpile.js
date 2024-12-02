@@ -46,12 +46,15 @@ const makeDirIfNotExist = function(dir) {
  * @return {boolean} - If given XMIR has tests meta or not
  */
 const hasMeta = function(xmir, name) {
-  const metas = xmir.program.metas.meta
+  const metas = xmir.program.metas
   let res = false
-  if (Array.isArray(metas)) {
-    res = metas.findIndex((meta) => meta.head === name) !== -1
-  } else if (typeof metas === 'object' && metas.hasOwnProperty('head')) {
-    res = metas.head === name
+  if (metas != null) {
+    const metas = xmir.program.metas.meta
+    if (Array.isArray(metas)) {
+      res = metas.findIndex((meta) => meta.head === name) !== -1
+    } else if (typeof metas === 'object' && metas.hasOwnProperty('head')) {
+      res = metas.head === name
+    }
   }
   return res
 }

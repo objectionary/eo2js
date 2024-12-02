@@ -5,13 +5,25 @@ const {runSync} = require('../helpers');
 const compileStylesheets = require('../../src/compile-stylesheets');
 const assert = require('assert');
 
+/**
+ * Prepare sources.
+ * @param {String} home - Home directory
+ * @return {Promise<Array<String>|String>} - Maven promise
+ */
+const prepare = function(home) {
+  return mvnw(
+    ['register', 'assemble', 'verify'],
+    {home, sources: 'src/eo', target: 'target'}
+  )
+}
+
 describe('integration test', function() {
   const home = path.resolve('temp/it-test')
   const target = path.resolve(home, 'target')
   const project = path.resolve(target, 'project')
   const runtime = path.resolve('../eo2js-runtime')
   this.timeout(1000000)
-  before('recompile stylesheets', function() {
+  before('recompile stylesheets', async function() {
     compileStylesheets()
     fs.rmSync(home, {recursive: true, force: true})
     fs.mkdirSync(project, {recursive: true})
@@ -20,10 +32,7 @@ describe('integration test', function() {
       path.resolve(home, 'src/eo'),
       {recursive: true}
     )
-    mvnw(
-      ['register', 'assemble', 'verify'],
-      {home, sources: 'src/eo', target: 'target'}
-    )
+    await prepare(home)
   })
   it('should execute simple unit test', function(done) {
     const log = runSync(['test', '-t', target, '-p project -d', runtime])
