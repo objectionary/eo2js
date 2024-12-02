@@ -395,6 +395,7 @@ SOFTWARE.
     <xsl:choose>
       <xsl:when test="@primitive and @base">
         <xsl:value-of select="eo:fetch(@base)"/>
+        <xsl:text>.copy()</xsl:text>
       </xsl:when>
       <xsl:when test="@base='$'">
         <xsl:text>rho</xsl:text>
@@ -577,14 +578,18 @@ SOFTWARE.
     <xsl:param name="name"/>
     <xsl:value-of select="eo:eol($indent)"/>
     <xsl:value-of select="$name"/>
-    <xsl:text> = </xsl:text>
+    <xsl:text> = applied(</xsl:text>
     <xsl:value-of select="$name"/>
-    <xsl:text>.with({</xsl:text>
+    <xsl:text>, {</xsl:text>
     <xsl:value-of select="eo:eol($indent + 1)"/>
+    <xsl:text>0: object().with({</xsl:text>
+    <xsl:value-of select="eo:eol($indent + 2)"/>
     <xsl:text>'</xsl:text>
     <xsl:value-of select="$DELTA"/>
     <xsl:text>': </xsl:text>
     <xsl:value-of select="text()"/>
+    <xsl:value-of select="eo:eol($indent + 1)"/>
+    <xsl:text>})</xsl:text>
     <xsl:value-of select="eo:eol($indent)"/>
     <xsl:text>})</xsl:text>
   </xsl:template>

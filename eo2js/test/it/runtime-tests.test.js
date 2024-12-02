@@ -1,9 +1,9 @@
-const path = require('path');
-const fs = require('fs');
-const mvnw = require('../mvnw/mvnw.js');
+const path = require('path')
+const fs = require('fs')
+const mvnw = require('../mvnw/mvnw.js')
 const {execSync} = require('child_process')
-const {runSync} = require('../helpers');
-const assert = require('assert');
+const {runSync} = require('../helpers')
+const assert = require('assert')
 
 /**
  * Excluded tests.
@@ -38,7 +38,7 @@ const exclude = [
  * @return {Array.<String>} - Files from the directory
  */
 const allFilesFrom = function(dir) {
-  const files = fs.readdirSync(dir, {withFileTypes: true});
+  const files = fs.readdirSync(dir, {withFileTypes: true})
   const res = []
   for (const file of files) {
     if (file.isDirectory()) {
@@ -63,19 +63,15 @@ const COMPILE = true
  * eo-maven-plugin, transpiles and executes using eo2js.
  */
 describe('runtime tests', function() {
+  this.timeout(0)
   const home = path.resolve('temp/runtime-tests')
   const target = path.resolve(home, 'target')
   const project = path.resolve(target, 'project')
   const runtime = path.resolve('../eo2js-runtime')
-  before('prepare environment', function() {
+  before('prepare environment', async function() {
     if (COMPILE) {
       fs.rmSync(home, {recursive: true, force: true})
       fs.mkdirSync(project, {recursive: true})
-    }
-  })
-  it('should execute all eo-runtime tests', function(done) {
-    this.timeout(0)
-    if (COMPILE) {
       execSync([
         'git init',
         'git remote add origin https://github.com/objectionary/home.git',
@@ -89,11 +85,13 @@ describe('runtime tests', function() {
           .join('\n')
       }`)
       console.debug(`\nExcluded:\n${exclude.map((pth) => `- ${pth}`).join('\n')}`)
-      mvnw(
-        ['register', 'assemble', 'verify'],
-        {home, sources: 'tests', target: 'target'}
-      )
+      const opts = {home, sources: 'tests', target: 'target'}
+      await mvnw('register', opts)
+      await mvnw('assemble', opts)
+      await mvnw('verify', opts)
     }
+  })
+  it('should execute all eo-runtime tests', function(done) {
     if (!COMPILE) {
       runSync(['link -t', target, '-p project --tests --alone -d', runtime])
     }

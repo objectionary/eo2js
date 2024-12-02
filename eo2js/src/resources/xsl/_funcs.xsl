@@ -22,33 +22,9 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 -->
-<xsl:stylesheet xmlns:eo="https://www.eolang.org" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" id="data" version="2.0">
-  <!-- Prepare bytes -->
-  <xsl:import href="_funcs.xsl"/>
-  <xsl:output encoding="UTF-8" method="xml"/>
-  <xsl:template match="o[eo:has-data(.)]">
-    <xsl:copy>
-      <xsl:apply-templates select="@*"/>
-      <xsl:attribute name="primitive"/>
-      <xsl:element name="value">
-        <xsl:text>[</xsl:text>
-        <xsl:for-each select="tokenize(text(), '-')">
-          <xsl:if test=".!=''">
-            <xsl:if test="position() &gt; 1">
-              <xsl:text>, </xsl:text>
-            </xsl:if>
-            <xsl:text>'0x</xsl:text>
-            <xsl:value-of select="."/>
-            <xsl:text>'</xsl:text>
-          </xsl:if>
-        </xsl:for-each>
-        <xsl:text>]</xsl:text>
-      </xsl:element>
-    </xsl:copy>
-  </xsl:template>
-  <xsl:template match="node()|@*">
-    <xsl:copy>
-      <xsl:apply-templates select="node()|@*"/>
-    </xsl:copy>
-  </xsl:template>
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:eo="https://www.eolang.org" xmlns:xs="http://www.w3.org/2001/XMLSchema" id="_funcs" version="2.0">
+  <xsl:function name="eo:has-data" as="xs:boolean">
+    <xsl:param name="o" as="element()"/>
+    <xsl:sequence select="normalize-space(string-join($o/text(), '')) != ''"/>
+  </xsl:function>
 </xsl:stylesheet>

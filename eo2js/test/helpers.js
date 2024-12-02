@@ -68,9 +68,9 @@ const parser = new XMLParser({ignoreAttributes: false})
 /**
  * Transformations test pack.
  * @param {{home: String, sources: String, target: String, json: Object}} params - Pack params
- * @return {{skip: boolean, failures: array.<String>, xmir: String, json: Object}} - Output
+ * @return {Promise<{skip: boolean, failures: array.<String>, xmir: String, json: Object}>}
  */
-const pack = function(params) {
+const pack = async function(params) {
   const res = {
     skip: false,
     failures: [],
@@ -78,60 +78,64 @@ const pack = function(params) {
     json: ''
   }
   if (params.json['skip'] || !params.json['xsls'] || params.json['xsls'].length === 0) {
-    res.skip = true
+    return new Promise((resolve) => {
+      res.skip = true
+      resolve(res)
+    })
   } else {
     const sources = path.resolve(params.home, params.sources)
     const target = path.resolve(params.home, params.target)
     fs.mkdirSync(sources, {recursive: true})
     fs.mkdirSync(target, {recursive: true})
     fs.writeFileSync(path.resolve(sources, `test.eo`), `${params.json['eo'].join('\n')}\n`)
-    mvnw(['register', 'parse', 'optimize', 'shake'], params)
-    const shaken = JSON.parse(
-      fs.readFileSync(path.resolve(target, 'eo-foreign.json')).toString()
-    )[0]['shaken']
-    let xml = fs.readFileSync(shaken).toString()
-    const transformations = path.resolve(__dirname, '../src/resources/json')
-    params.json['xsls']
-      .map((name) => path.resolve(transformations, `${name}.sef.json`))
-      .forEach((transformation) => {
-        xml = saxon.transform({
-          stylesheetFileName: transformation,
-          sourceText: xml,
-          destination: 'serialized'
-        }).principalResult
-      })
-    res.xmir = xml
-    const saved = path.resolve(target, '3-transpiled')
-    fs.mkdirSync(saved, {recursive: true})
-    fs.writeFileSync(path.resolve(saved, 'test.xmir'), res.xmir)
-    xml = parser.parse(xml, {})
-    res.json = xml
-    params.json['tests'].forEach((test) => {
-      if (typeof test === 'object') {
-        const node = test.node
-        const method = test.method
-        const args = test.args
-        const applied = jp.apply(node, xml)
-        if (applied.length === 0) {
-          res.failures.push(node)
+    return mvnw(['register', 'parse', 'optimize', 'shake'], params).then((r) => {
+      const shaken = JSON.parse(
+        fs.readFileSync(path.resolve(target, 'eo-foreign.json')).toString()
+      )[0]['shaken']
+      let xml = fs.readFileSync(shaken).toString()
+      const transformations = path.resolve(__dirname, '../src/resources/json')
+      params.json['xsls']
+        .map((name) => path.resolve(transformations, `${name}.sef.json`))
+        .forEach((transformation) => {
+          xml = saxon.transform({
+            stylesheetFileName: transformation,
+            sourceText: xml,
+            destination: 'serialized'
+          }).principalResult
+        })
+      res.xmir = xml
+      const saved = path.resolve(target, '3-transpiled')
+      fs.mkdirSync(saved, {recursive: true})
+      fs.writeFileSync(path.resolve(saved, 'test.xmir'), res.xmir)
+      xml = parser.parse(xml, {})
+      res.json = xml
+      params.json['tests'].forEach((test) => {
+        if (typeof test === 'object') {
+          const node = test.node
+          const method = test.method
+          const args = test.args
+          const applied = jp.apply(node, xml)
+          if (applied.length === 0) {
+            res.failures.push(node)
+          } else {
+            args.forEach((arg) => {
+              if (Array.isArray(arg)) {
+                arg = arg.join('\n')
+              }
+              if (!applied[0][method](arg)) {
+                res.failures.push(`NODE: ${node}, METHOD: ${method}, ARG: ${arg}`)
+              }
+            })
+          }
         } else {
-          args.forEach((arg) => {
-            if (Array.isArray(arg)) {
-              arg = arg.join('\n')
-            }
-            if (!applied[0][method](arg)) {
-              res.failures.push(`NODE: ${node}, METHOD: ${method}, ARG: ${arg}`)
-            }
-          })
+          if (jp.apply(test, xml).length === 0) {
+            res.failures.push(test)
+          }
         }
-      } else {
-        if (jp.apply(test, xml).length === 0) {
-          res.failures.push(test)
-        }
-      }
+      })
+      return res
     })
   }
-  return res
 }
 
 /**

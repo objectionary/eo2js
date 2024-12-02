@@ -29,7 +29,7 @@ jobs:
   build:
     strategy:
       matrix:
-        os: [windows-latest, ubuntu-latest, macos-latest]
+        os: [ubuntu-24.04, windows-2022, macos-13]
         node: [16]
     runs-on: ${{ matrix.os }}
     steps:
@@ -37,6 +37,10 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node }}
+      - uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: 21
       - run: npm install
       - run: npm install --force -g grunt-cli
       - run: npm test
