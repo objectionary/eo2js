@@ -1,6 +1,6 @@
 {
   "name": "eo2js-runtime",
-  "version": "0.0.0",
+  "version": "0.0.8",
   "description": "JavaScript runtime for EOLANG",
   "keywords": [],
   "author": "Max Trunnikov <mtrunnikov@gmail.com>",

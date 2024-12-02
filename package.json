@@ -18,5 +18,8 @@
     "test": "npm run test-eo2js-runtime && npm run test-eo2js"
   },
   "author": "maxonfjvipon",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "mocha": "^11.0.1"
+  }
 }
