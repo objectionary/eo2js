@@ -78,7 +78,12 @@ const needsRetranspile = function(source, transpiled) {
  */
 const transform = function(tojo, options, transformations, parser) {
   const text = fs.readFileSync(tojo[verified]).toString()
-  let xml = parser.parse(text)
+  let xml;
+  try {
+    xml = parser.parse(text);
+  } catch (e) {
+    throw new Error(`Failed to parse XML for ${tojo[verified]}: ${e.message}`);
+  }
   const pth = pathFromName(xml['program']['@_name'])
   const isTest = hasMeta(xml, 'tests')
   const transpiled = path.resolve(options.target, dir, `${pth}.xmir`)
