@@ -88,7 +88,13 @@ const transform = function(tojo, options, transformations, parser) {
   const isTest = hasMeta(xml, 'tests')
   const transpiled = path.resolve(options.target, dir, `${pth}.xmir`)
   const dest = path.resolve(options.project, `${pth}${isTest ? '.test' : ''}.js`)
-  if (needsRetranspile(tojo[verified], transpiled)) {
+  if (!needsRetranspile(tojo[verified], transpiled)) {
+    if (options.verbose) {
+      console.log(`Skipping ${pth} - already transpiled`);
+    }
+    return;
+  }
+  try {
     makeDirIfNotExist(transpiled.substring(0, transpiled.lastIndexOf(path.sep)))
     fs.writeFileSync(transpiled, text)
     xml = text
@@ -113,8 +119,8 @@ const transform = function(tojo, options, transformations, parser) {
       fs.writeFileSync(dest, first['javascript'])
       filtered.slice(1).forEach((obj) => fs.appendFileSync(dest, `\n${obj['javascript']}`))
     }
-  } else if (options.verbose) {
-    console.log(`Skipping ${pth} - already transpiled`)
+  } catch (e) {
+    throw new Error(`Error transforming ${tojo[verified]}: ${e.message}`);
   }
 }
 
