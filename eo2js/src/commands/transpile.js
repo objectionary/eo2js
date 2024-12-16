@@ -133,10 +133,10 @@ const transpile = function(options) {
   const foreign = path.resolve(options['target'], options['foreign'])
   console.log(`Reading foreign tojos from: ${foreign}`)
   if (!fs.existsSync(foreign)) {
-    throw new Error(`File ${foreign} is not found`)
+    throw new Error(`File not found: ${foreign}. Ensure the file exists and is accessible.`)
   }
   if (!foreign.endsWith('.json')) {
-    throw new Error(`Only .json foreign tojos file is supported, given ${foreign.substring(foreign.lastIndexOf(path.sep))}`)
+    throw new Error(`Invalid foreign tojo file format: ${foreign.substring(foreign.lastIndexOf(path.sep))}. Only .json files are supported.`);
   }
   const transformations = [
     'objects', 'package', 'tests', 'attrs', 'data', 'to-js'
