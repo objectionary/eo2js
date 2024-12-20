@@ -88,7 +88,7 @@ describe('runtime tests', function() {
       const opts = {home, sources: 'tests', target: 'target'}
       await mvnw('register', opts)
       await mvnw('assemble', opts)
-      await mvnw('verify', opts)
+      await mvnw('lint', opts)
     }
   })
   it('should execute all eo-runtime tests', function(done) {
