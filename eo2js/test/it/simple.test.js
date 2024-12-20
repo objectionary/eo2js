@@ -12,7 +12,7 @@ const assert = require('assert');
  */
 const prepare = function(home) {
   return mvnw(
-    ['register', 'assemble', 'verify'],
+    ['register', 'assemble', 'lint'],
     {home, sources: 'src/eo', target: 'target'}
   )
 }
