@@ -21,7 +21,7 @@
 # SOFTWARE.
 ---
 name: test
-on:
+'on':
   pull_request:
     branches:
       - master
