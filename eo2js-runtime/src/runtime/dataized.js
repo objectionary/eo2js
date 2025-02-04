@@ -26,7 +26,7 @@ const dataized = function(object, type= BYTES) {
   } else if (type === BYTES) {
     data = bytes.asBytes()
   } else {
-    throw new ErFailure(`Can't dataize to the given type (${type}), 
+    throw new ErFailure(`Can't dataize to the given type (${type}),
     only ${NUMBER}, ${LONG}, ${INT}, ${SHORT} ${BOOL}, ${STRING}, ${BYTES} are allowed`)
   }
   return data

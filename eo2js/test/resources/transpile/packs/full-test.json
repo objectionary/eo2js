@@ -1,17 +1,15 @@
 {
-  "xsls": [
-    "objects",
-    "package",
-    "tests",
-    "attrs",
-    "data",
-    "to-js"
+  "eo": [
+    "+tests\n",
+    "# This is the default 64+ symbols comment in front of named abstract object.",
+    "[] > my-test",
+    "  eq. > @",
+    "    5.plus 5",
+    "    10"
   ],
   "tests": [
     ".program.objects.object{.\"@_js-name\" == 'my_test'}",
     {
-      "node": ".program.objects.object{.\"@_name\" == 'my-test'}.javascript",
-      "method": "includes",
       "args": [
         "const dataized = require('eo2js-runtime/src/runtime/dataized')",
         "const assert = require('assert')",
@@ -24,15 +22,17 @@
           "  done()",
           "})"
         ]
-      ]
+      ],
+      "method": "includes",
+      "node": ".program.objects.object{.\"@_name\" == 'my-test'}.javascript"
     }
   ],
-  "eo": [
-    "+tests\n",
-    "# This is the default 64+ symbols comment in front of named abstract object.",
-    "[] > my-test",
-    "  eq. > @",
-    "    5.plus 5",
-    "    10"
+  "xsls": [
+    "objects",
+    "package",
+    "tests",
+    "attrs",
+    "data",
+    "to-js"
   ]
 }

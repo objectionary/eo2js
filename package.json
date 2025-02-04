@@ -1,6 +1,5 @@
 {
-  "name": "eo2js",
-  "version": "0.0.0",
+  "author": "maxonfjvipon",
   "description": "EOLANG to JavaScript transpiler and runtime",
   "keywords": [
     "eo",
@@ -9,14 +8,15 @@
     "transpiler",
     "runtime"
   ],
+  "license": "MIT",
+  "name": "eo2js",
   "scripts": {
     "install-eo2js": "cd eo2js && npm i",
     "install-eo2js-runtime": "cd eo2js-runtime && npm i",
     "postinstall": "npm run install-eo2js && npm run install-eo2js-runtime",
+    "test": "npm run test-eo2js-runtime && npm run test-eo2js",
     "test-eo2js": "cd eo2js && grunt",
-    "test-eo2js-runtime": "cd eo2js-runtime && grunt",
-    "test": "npm run test-eo2js-runtime && npm run test-eo2js"
+    "test-eo2js-runtime": "cd eo2js-runtime && grunt"
   },
-  "author": "maxonfjvipon",
-  "license": "MIT"
+  "version": "0.0.0"
 }

@@ -1,16 +1,16 @@
 {
-  "xsls": [
-    "data"
-  ],
-  "tests": [
-    ".program.objects.o.o{.\"@_base\" == 'org.eolang.number'}{.o{.\"@_base\" == 'org.eolang.bytes'}{.value == \"['0x40', '0x14', '0x00', '0x00', '0x00', '0x00', '0x00', '0x00']\"}}",
-    ".program.objects.o.o{.\"@_base\" == 'org.eolang.string'}{.o{.\"@_base\" == 'org.eolang.bytes'}{.value == \"['0x48', '0x65', '0x6C', '0x6C', '0x6F']\"}}"
-  ],
   "eo": [
     "+package com.eo2js\n",
     "# This is the default 64+ symbols comment in front of named abstract object.",
     "[] > simple",
     "  5 > five",
     "  \"Hello\" > str"
+  ],
+  "tests": [
+    ".program.objects.o.o{.\"@_base\" == 'org.eolang.number'}{.o{.\"@_base\" == 'org.eolang.bytes'}{.value == \"['0x40', '0x14', '0x00', '0x00', '0x00', '0x00', '0x00', '0x00']\"}}",
+    ".program.objects.o.o{.\"@_base\" == 'org.eolang.string'}{.o{.\"@_base\" == 'org.eolang.bytes'}{.value == \"['0x48', '0x65', '0x6C', '0x6C', '0x6F']\"}}"
+  ],
+  "xsls": [
+    "data"
   ]
 }

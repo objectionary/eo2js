@@ -1,15 +1,12 @@
 {
-  "xsls": [
-    "objects",
-    "package",
-    "attrs",
-    "data",
-    "to-js"
+  "eo": [
+    "# Simple.",
+    "[] > simple",
+    "  stdout x:0 > print1",
+    "  stdout x:text > print2"
   ],
   "tests": [
     {
-      "node": ".program.objects.object{.\"@_name\" == 'simple'}.javascript",
-      "method": "includes",
       "args": [
         [
           "        ret = applied(ret, {",
@@ -21,20 +18,23 @@
           "          'text': ret_1",
           "        })"
         ]
-      ]
+      ],
+      "method": "includes",
+      "node": ".program.objects.object{.\"@_name\" == 'simple'}.javascript"
     },
     {
-      "node": ".program.objects.object[-1].javascript",
-      "method": "includes",
       "args": [
         "module.exports = simple"
-      ]
+      ],
+      "method": "includes",
+      "node": ".program.objects.object[-1].javascript"
     }
   ],
-  "eo": [
-    "# Simple.",
-    "[] > simple",
-    "  stdout x:0 > print1",
-    "  stdout x:text > print2"
+  "xsls": [
+    "objects",
+    "package",
+    "attrs",
+    "data",
+    "to-js"
   ]
 }

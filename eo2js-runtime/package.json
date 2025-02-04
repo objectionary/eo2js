@@ -1,14 +1,6 @@
 {
-  "name": "eo2js-runtime",
-  "version": "0.0.0",
-  "description": "JavaScript runtime for EOLANG",
-  "keywords": [],
   "author": "Max Trunnikov <mtrunnikov@gmail.com>",
-  "license": "MIT",
-  "type": "commonjs",
-  "scripts": {
-    "test": "grunt"
-  },
+  "description": "JavaScript runtime for EOLANG",
   "devDependencies": {
     "eslint": "9.6.0",
     "eslint-config-google": "0.14.0",
@@ -17,5 +9,13 @@
     "grunt-eslint": "24.3.0",
     "grunt-mocha-cli": "^7.0.0",
     "mocha": "^11.0.0"
-  }
+  },
+  "keywords": [],
+  "license": "MIT",
+  "name": "eo2js-runtime",
+  "scripts": {
+    "test": "grunt"
+  },
+  "type": "commonjs",
+  "version": "0.0.0"
 }

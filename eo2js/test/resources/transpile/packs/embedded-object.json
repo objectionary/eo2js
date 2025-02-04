@@ -1,15 +1,16 @@
 {
-  "xsls": [
-    "objects",
-    "package",
-    "attrs",
-    "data",
-    "to-js"
+  "eo": [
+    "# This is the default 64+ symbols comment in front of named abstract object.",
+    "[x] > foo",
+    "  $ > this",
+    "  # This is the default 64+ symbols comment in front of named abstract object.",
+    "  [] > xyz",
+    "    # This is the default 64+ symbols comment in front of named abstract object.",
+    "    [] > bar",
+    "      this.x > @"
   ],
   "tests": [
     {
-      "node": ".program.objects.object{.\"@_name\" == 'foo'}.javascript",
-      "method": "includes",
       "args": [
         [
           "  obj.attrs['this'] = attr.once(",
@@ -31,11 +32,11 @@
           "    )",
           "  )"
         ]
-      ]
+      ],
+      "method": "includes",
+      "node": ".program.objects.object{.\"@_name\" == 'foo'}.javascript"
     },
     {
-      "node": ".program.objects.object{.\"@_name\" == 'foo$xyz'}.javascript",
-      "method": "includes",
       "args": [
         [
           "  obj.attrs['bar'] = attr.once(",
@@ -47,41 +48,40 @@
           "    )",
           "  )"
         ]
-      ]
+      ],
+      "method": "includes",
+      "node": ".program.objects.object{.\"@_name\" == 'foo$xyz'}.javascript"
     },
     {
-      "node": ".program.objects.object{.\"@_name\" == 'foo$xyz$bar'}.javascript",
-      "method": "includes",
       "args": [
         [
-          "  obj.attrs['φ'] = attr.once(",
+          "  obj.attrs['\u03c6'] = attr.once(",
           "    attr.lambda(",
           "      obj, function(rho) {",
-          "        let ret_base = taken(taken(taken(rho, 'ρ'), 'ρ'), 'this')",
+          "        let ret_base = taken(taken(taken(rho, '\u03c1'), '\u03c1'), 'this')",
           "        let ret = taken(ret_base, 'x')",
           "        return ret",
           "      }",
           "    )",
           "  )"
         ]
-      ]
+      ],
+      "method": "includes",
+      "node": ".program.objects.object{.\"@_name\" == 'foo$xyz$bar'}.javascript"
     },
     {
-      "node": ".program.objects.object[-1].javascript",
-      "method": "includes",
       "args": [
         "module.exports = foo"
-      ]
+      ],
+      "method": "includes",
+      "node": ".program.objects.object[-1].javascript"
     }
   ],
-  "eo": [
-    "# This is the default 64+ symbols comment in front of named abstract object.",
-    "[x] > foo",
-    "  $ > this",
-    "  # This is the default 64+ symbols comment in front of named abstract object.",
-    "  [] > xyz",
-    "    # This is the default 64+ symbols comment in front of named abstract object.",
-    "    [] > bar",
-    "      this.x > @"
+  "xsls": [
+    "objects",
+    "package",
+    "attrs",
+    "data",
+    "to-js"
   ]
 }

@@ -1,110 +1,4 @@
 {
-  "xsls": [
-    "objects",
-    "package",
-    "attrs",
-    "data",
-    "to-js"
-  ],
-  "tests": [
-    {
-      "node": ".program.objects.object{.\"@_name\" == 't'}.javascript",
-      "method": "includes",
-      "args": [
-        [
-          "        let ret = phi.take('org').take('eolang').take('true')",
-          "        return ret"
-        ]
-      ]
-    },
-    {
-      "node": ".program.objects.object{.\"@_name\" == 'i'}.javascript",
-      "method": "includes",
-      "args": [
-        [
-          "        let ret = phi.take('org').take('eolang').take('number')",
-          "          let ret_1 = phi.take('org').take('eolang').take('bytes').copy()",
-          "          ret_1 = applied(ret_1, {",
-          "            0: object().with({",
-          "              'Δ': ['0x40', '0x45', '0x00', '0x00', '0x00', '0x00', '0x00', '0x00']",
-          "            })",
-          "          })",
-          "        ret = applied(ret, {",
-          "          0: ret_1",
-          "        })",
-          "        return ret"
-        ]
-      ]
-    },
-    {
-      "node": ".program.objects.object{.\"@_name\" == 'fl'}.javascript",
-      "method": "includes",
-      "args": [
-        [
-          "        let ret = phi.take('org').take('eolang').take('float')",
-          "          let ret_1 = phi.take('org').take('eolang').take('number')",
-          "            let ret_1_1 = phi.take('org').take('eolang').take('bytes').copy()",
-          "            ret_1_1 = applied(ret_1_1, {",
-          "              0: object().with({",
-          "                'Δ': ['0x40', '0x0C', '0x00', '0x00', '0x00', '0x00', '0x00', '0x00']",
-          "              })",
-          "            })",
-          "          ret_1 = applied(ret_1, {",
-          "            0: ret_1_1",
-          "          })",
-          "        ret = applied(ret, {",
-          "          0: ret_1",
-          "        })",
-          "        return ret"
-        ]
-      ]
-    },
-    {
-      "node": ".program.objects.object{.\"@_name\" == 'b'}.javascript",
-      "method": "includes",
-      "args": [
-        [
-          "        let ret = phi.take('org').take('eolang').take('bytes').copy()",
-          "        ret = applied(ret, {",
-          "          0: object().with({",
-          "            'Δ': ['0x01', '0xAF']",
-          "          })",
-          "        })",
-          "        return ret"
-        ]
-      ]
-    },
-    {
-      "node": ".program.objects.object{.\"@_name\" == 'one-byte'}.javascript",
-      "method": "includes",
-      "args": [
-        [
-          "        let ret = phi.take('org').take('eolang').take('bytes').copy()",
-          "        ret = applied(ret, {",
-          "          0: object().with({",
-          "            'Δ': ['0x01']",
-          "          })",
-          "        })",
-          "        return ret"
-        ]
-      ]
-    },
-    {
-      "node": ".program.objects.object{.\"@_name\" == 'empty'}.javascript",
-      "method": "includes",
-      "args": [
-        [
-          "        let ret = phi.take('org').take('eolang').take('bytes').copy()",
-          "        ret = applied(ret, {",
-          "          0: object().with({",
-          "            'Δ': []",
-          "          })",
-          "        })",
-          "        return ret"
-        ]
-      ]
-    }
-  ],
   "eo": [
     "# This is the default 64+ symbols comment in front of named abstract object.",
     "[] > t",
@@ -124,5 +18,111 @@
     "# This is the default 64+ symbols comment in front of named abstract object.",
     "[] > empty",
     "  -- > @"
+  ],
+  "tests": [
+    {
+      "args": [
+        [
+          "        let ret = phi.take('org').take('eolang').take('true')",
+          "        return ret"
+        ]
+      ],
+      "method": "includes",
+      "node": ".program.objects.object{.\"@_name\" == 't'}.javascript"
+    },
+    {
+      "args": [
+        [
+          "        let ret = phi.take('org').take('eolang').take('number')",
+          "          let ret_1 = phi.take('org').take('eolang').take('bytes').copy()",
+          "          ret_1 = applied(ret_1, {",
+          "            0: object().with({",
+          "              '\u0394': ['0x40', '0x45', '0x00', '0x00', '0x00', '0x00', '0x00', '0x00']",
+          "            })",
+          "          })",
+          "        ret = applied(ret, {",
+          "          0: ret_1",
+          "        })",
+          "        return ret"
+        ]
+      ],
+      "method": "includes",
+      "node": ".program.objects.object{.\"@_name\" == 'i'}.javascript"
+    },
+    {
+      "args": [
+        [
+          "        let ret = phi.take('org').take('eolang').take('float')",
+          "          let ret_1 = phi.take('org').take('eolang').take('number')",
+          "            let ret_1_1 = phi.take('org').take('eolang').take('bytes').copy()",
+          "            ret_1_1 = applied(ret_1_1, {",
+          "              0: object().with({",
+          "                '\u0394': ['0x40', '0x0C', '0x00', '0x00', '0x00', '0x00', '0x00', '0x00']",
+          "              })",
+          "            })",
+          "          ret_1 = applied(ret_1, {",
+          "            0: ret_1_1",
+          "          })",
+          "        ret = applied(ret, {",
+          "          0: ret_1",
+          "        })",
+          "        return ret"
+        ]
+      ],
+      "method": "includes",
+      "node": ".program.objects.object{.\"@_name\" == 'fl'}.javascript"
+    },
+    {
+      "args": [
+        [
+          "        let ret = phi.take('org').take('eolang').take('bytes').copy()",
+          "        ret = applied(ret, {",
+          "          0: object().with({",
+          "            '\u0394': ['0x01', '0xAF']",
+          "          })",
+          "        })",
+          "        return ret"
+        ]
+      ],
+      "method": "includes",
+      "node": ".program.objects.object{.\"@_name\" == 'b'}.javascript"
+    },
+    {
+      "args": [
+        [
+          "        let ret = phi.take('org').take('eolang').take('bytes').copy()",
+          "        ret = applied(ret, {",
+          "          0: object().with({",
+          "            '\u0394': ['0x01']",
+          "          })",
+          "        })",
+          "        return ret"
+        ]
+      ],
+      "method": "includes",
+      "node": ".program.objects.object{.\"@_name\" == 'one-byte'}.javascript"
+    },
+    {
+      "args": [
+        [
+          "        let ret = phi.take('org').take('eolang').take('bytes').copy()",
+          "        ret = applied(ret, {",
+          "          0: object().with({",
+          "            '\u0394': []",
+          "          })",
+          "        })",
+          "        return ret"
+        ]
+      ],
+      "method": "includes",
+      "node": ".program.objects.object{.\"@_name\" == 'empty'}.javascript"
+    }
+  ],
+  "xsls": [
+    "objects",
+    "package",
+    "attrs",
+    "data",
+    "to-js"
   ]
 }
