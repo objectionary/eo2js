@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
  * The MIT License (MIT)
  * 
@@ -22,7 +22,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
 -->
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <program dob="2024-02-13T11:50:46"
          ms="49"
          name="com.eo2js.simple"
