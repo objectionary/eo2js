@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: Copyright (c) 2024 Objectionary.com
+// SPDX-License-Identifier: MIT
+
 const {RHO, LAMBDA, PHI, DELTA} = require('../../temp/runtime/attribute/specials.js')
 const assert = require('assert')
 const object = require('../../temp/runtime/object')

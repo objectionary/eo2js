@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: Copyright (c) 2024 Objectionary.com
+// SPDX-License-Identifier: MIT
+
 const {DELTA, PHI, LAMBDA} = require('../../temp/runtime/attribute/specials')
 const assert = require('assert')
 const dataized = require('../../temp/runtime/dataized')

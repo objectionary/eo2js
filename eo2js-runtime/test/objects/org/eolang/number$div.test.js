@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: Copyright (c) 2024 Objectionary.com
+// SPDX-License-Identifier: MIT
+
 const assert = require('assert');
 const number$div = require('../../../../temp/objects/org/eolang/number$div');
 const {NUMBER} = require('../../../../temp/runtime/types');

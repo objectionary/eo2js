@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: Copyright (c) 2024 Objectionary.com
+// SPDX-License-Identifier: MIT
+
 const phi = require('eo2js-runtime/src/runtime/phi')
 const dataized = require('eo2js-runtime/src/runtime/dataized')
 const bytesOf = require('eo2js-runtime/src/runtime/bytes-of')

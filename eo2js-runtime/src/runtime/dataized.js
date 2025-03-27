@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: Copyright (c) 2024 Objectionary.com
+// SPDX-License-Identifier: MIT
+
 const {NUMBER, BOOL, BYTES, STRING, INT, LONG, SHORT} = require('./types')
 const bytesOf = require('./bytes-of');
 const ErFailure = require('./error/ErFailure');

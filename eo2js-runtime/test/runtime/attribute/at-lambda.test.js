@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: Copyright (c) 2024 Objectionary.com
+// SPDX-License-Identifier: MIT
+
 const assert = require('assert');
 const at_lambda = require('../../../temp/runtime/attribute/at-lambda');
 const object = require('../../../temp/runtime/object');

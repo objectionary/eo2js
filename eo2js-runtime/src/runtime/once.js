@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: Copyright (c) 2024 Objectionary.com
+// SPDX-License-Identifier: MIT
+
 /**
  * Evaluate object lazily only once.
  * @param {function(): object} callback - Function to evaluate

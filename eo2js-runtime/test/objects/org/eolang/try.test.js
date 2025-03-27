@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: Copyright (c) 2024 Objectionary.com
+// SPDX-License-Identifier: MIT
+
 const assert = require('assert');
 const tr = require('../../../../temp/objects/org/eolang/try');
 const {STRING, BOOL} = require('../../../../temp/runtime/types');

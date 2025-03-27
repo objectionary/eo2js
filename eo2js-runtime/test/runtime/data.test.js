@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: Copyright (c) 2024 Objectionary.com
+// SPDX-License-Identifier: MIT
+
 const assert = require('assert')
 const {STRING, NUMBER, BOOL} = require('../../temp/runtime/types')
 const data = require('../../temp/runtime/data')

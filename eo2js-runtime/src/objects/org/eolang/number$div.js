@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: Copyright (c) 2024 Objectionary.com
+// SPDX-License-Identifier: MIT
+
 const dataized = require('../../../runtime/dataized')
 const object = require('../../../runtime/object')
 const {NUMBER} = require('../../../runtime/types')

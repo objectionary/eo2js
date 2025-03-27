@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: Copyright (c) 2024 Objectionary.com
+// SPDX-License-Identifier: MIT
+
 /**
  * Fake bytes EO object that is used for the test purposes.
  * Don't change the file until you definitely know what you're doing.

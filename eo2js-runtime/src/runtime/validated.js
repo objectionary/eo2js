@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: Copyright (c) 2024 Objectionary.com
+// SPDX-License-Identifier: MIT
+
 const ErFailure = require('./error/ErFailure');
 const ErError = require('./error/ErError');
 const data = require('./data');

@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: Copyright (c) 2024 Objectionary.com
+// SPDX-License-Identifier: MIT
+
 const object = require('../../../runtime/object')
 const {LAMBDA, RHO} = require('../../../runtime/attribute/specials');
 const {NUMBER} = require('../../../runtime/types');

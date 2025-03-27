@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: Copyright (c) 2024 Objectionary.com
+// SPDX-License-Identifier: MIT
+
 const assert = require('assert')
 const bytesOf = require('../../temp/runtime/bytes-of')
 const {LONG, INT, SHORT} = require('../../temp/runtime/types');

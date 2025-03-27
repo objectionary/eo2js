@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: Copyright (c) 2024 Objectionary.com
+// SPDX-License-Identifier: MIT
+
 const at_void = require('../../../temp/runtime/attribute/at-void')
 const object = require('../../../temp/runtime/object')
 const assert = require('assert')

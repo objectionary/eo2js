@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: Copyright (c) 2024 Objectionary.com
+// SPDX-License-Identifier: MIT
+
 const assert = require('assert');
 const validated = require('../../temp/runtime/validated');
 const ErFailure = require('../../temp/runtime/error/ErFailure');

@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: Copyright (c) 2024 Objectionary.com
+// SPDX-License-Identifier: MIT
+
 const ErFailure = require('../error/ErFailure');
 const {RHO} = require('./specials');
 const at_term = require('./at-term');

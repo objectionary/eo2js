@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: Copyright (c) 2024 Objectionary.com
+// SPDX-License-Identifier: MIT
+
 const applied = require('../../temp/runtime/applied')
 const taken = require('../../temp/runtime/taken')
 const object = require('../../temp/runtime/object')

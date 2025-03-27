@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: Copyright (c) 2024 Objectionary.com
+// SPDX-License-Identifier: MIT
+
 const {RHO, LAMBDA, PHI} = require('./attribute/specials.js')
 const ErFailure = require('./error/ErFailure');
 const validated = require('./validated');

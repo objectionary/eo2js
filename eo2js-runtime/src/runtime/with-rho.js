@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: Copyright (c) 2024 Objectionary.com
+// SPDX-License-Identifier: MIT
+
 const {RHO} = require('./attribute/specials');
 const at_rho = require('./attribute/at-rho');
 

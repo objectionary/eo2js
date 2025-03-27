@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: Copyright (c) 2024 Objectionary.com
+// SPDX-License-Identifier: MIT
+
 const validated = require('../validated');
 const safe = require('../safe');
 const at_term = require('./at-term');

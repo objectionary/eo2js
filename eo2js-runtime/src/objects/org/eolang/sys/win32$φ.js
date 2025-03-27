@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: Copyright (c) 2024 Objectionary.com
+// SPDX-License-Identifier: MIT
+
 const object = require('../../../../runtime/object')
 const {LAMBDA} = require('../../../../runtime/attribute/specials');
 const ErFailure = require('../../../../runtime/error/ErFailure');

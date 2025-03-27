@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: Copyright (c) 2024 Objectionary.com
+// SPDX-License-Identifier: MIT
+
 const {runSync} = require('./helpers');
 const assert = require('assert');
 const version = require('../src/version');

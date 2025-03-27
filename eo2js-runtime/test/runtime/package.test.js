@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: Copyright (c) 2024 Objectionary.com
+// SPDX-License-Identifier: MIT
+
 const phi = require('../../temp/runtime/phi')
 const {RHO} = require('../../temp/runtime/attribute/specials')
 const assert = require('assert')

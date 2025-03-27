@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: Copyright (c) 2024 Objectionary.com
+// SPDX-License-Identifier: MIT
+
 const heaps = require('../../temp/runtime/heaps');
 const assert = require('assert')
 

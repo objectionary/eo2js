@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: Copyright (c) 2024 Objectionary.com
+// SPDX-License-Identifier: MIT
+
 const path = require('path')
 const fs = require('fs')
 const mvnw = require('../mvnw/mvnw.js')

@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: Copyright (c) 2024 Objectionary.com
+// SPDX-License-Identifier: MIT
+
 const once = require('./at-once')
 const simple = require('./at-simple')
 const free = require('./at-void')
