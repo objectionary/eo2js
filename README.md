@@ -8,7 +8,7 @@
 EOLANG to JavaScript transpiler and runtime
 
 [![grunt](https://github.com/maxonfjvipon/eo2js/actions/workflows/test.yml/badge.svg)](https://github.com/maxonfjvipon/eo2js/actions/workflows/test.yml)
-[![PDD status](http://www.0pdd.com/svg?name=maxonfjvipon/eo2js)](http://www.0pdd.com/p?name=maxonfjvipon/eo2js)
+[![PDD status](https://www.0pdd.com/svg?name=maxonfjvipon/eo2js)](https://www.0pdd.com/p?name=maxonfjvipon/eo2js)
 [![Hits-of-Code](https://hitsofcode.com/github/maxonfjvipon/eo2js)](https://hitsofcode.com/view/github/maxonfjvipon/eo2js)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/maxonfjvipon/eo2js/blob/master/LICENSE.txt)
 
