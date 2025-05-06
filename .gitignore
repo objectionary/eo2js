@@ -1,8 +1,8 @@
-*.tgz
 .DS_Store
 .idea
 .idea/
 .nyc_output
+*.tgz
 coverage.html
 eo2js-runtime/atom.js
 eo2js-runtime/atoms.js
