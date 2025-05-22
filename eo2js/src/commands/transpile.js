@@ -81,12 +81,23 @@ const needsRetranspile = function(source, transpiled) {
  */
 const transform = function(tojo, options, transformations, parser) {
   const text = fs.readFileSync(tojo[verified]).toString()
-  let xml = parser.parse(text)
+  let xml;
+  try {
+    xml = parser.parse(text);
+  } catch (e) {
+    throw new Error(`Failed to parse XML for ${tojo[verified]}: ${e.message}`);
+  }
   const pth = pathFromName(xml['program']['@_name'])
   const isTest = hasMeta(xml, 'tests')
   const transpiled = path.resolve(options.target, dir, `${pth}.xmir`)
   const dest = path.resolve(options.project, `${pth}${isTest ? '.test' : ''}.js`)
-  if (needsRetranspile(tojo[verified], transpiled)) {
+  if (!needsRetranspile(tojo[verified], transpiled)) {
+    if (options.verbose) {
+      console.log(`Skipping ${pth} - already transpiled`);
+    }
+    return;
+  }
+  try {
     makeDirIfNotExist(transpiled.substring(0, transpiled.lastIndexOf(path.sep)))
     fs.writeFileSync(transpiled, text)
     xml = text
@@ -111,8 +122,8 @@ const transform = function(tojo, options, transformations, parser) {
       fs.writeFileSync(dest, first['javascript'])
       filtered.slice(1).forEach((obj) => fs.appendFileSync(dest, `\n${obj['javascript']}`))
     }
-  } else if (options.verbose) {
-    console.log(`Skipping ${pth} - already transpiled`)
+  } catch (e) {
+    throw new Error(`Error transforming ${tojo[verified]}: ${e.message}`);
   }
 }
 
@@ -125,10 +136,10 @@ const transpile = function(options) {
   const foreign = path.resolve(options['target'], options['foreign'])
   console.log(`Reading foreign tojos from: ${foreign}`)
   if (!fs.existsSync(foreign)) {
-    throw new Error(`File ${foreign} is not found`)
+    throw new Error(`File not found: ${foreign}. Ensure the file exists and is accessible.`)
   }
   if (!foreign.endsWith('.json')) {
-    throw new Error(`Only .json foreign tojos file is supported, given ${foreign.substring(foreign.lastIndexOf(path.sep))}`)
+    throw new Error(`Invalid foreign tojo file format: ${foreign.substring(foreign.lastIndexOf(path.sep))}. Only .json files are supported.`);
   }
   const transformations = [
     'objects', 'package', 'tests', 'attrs', 'data', 'to-js'
