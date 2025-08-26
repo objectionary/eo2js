@@ -15,8 +15,8 @@
     "install-eo2js-runtime": "cd eo2js-runtime && npm i",
     "postinstall": "npm run install-eo2js && npm run install-eo2js-runtime",
     "test": "npm run test-eo2js-runtime && npm run test-eo2js",
-    "test-eo2js": "cd eo2js && grunt",
-    "test-eo2js-runtime": "cd eo2js-runtime && grunt"
+    "test-eo2js": "cd eo2js && node gruntRunner",
+    "test-eo2js-runtime": "cd eo2js-runtime && node gruntRunner"
   },
   "version": "0.0.0"
 }

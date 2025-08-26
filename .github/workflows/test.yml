@@ -24,5 +24,4 @@ jobs:
           distribution: 'temurin'
           java-version: 21
       - run: npm install
-      - run: npm install --force -g grunt-cli
       - run: npm test
