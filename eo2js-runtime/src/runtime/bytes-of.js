@@ -72,37 +72,6 @@ const hexToInt = function(bytes) {
 }
 
 /**
- * Adjust byte array for numbers.
- * This is temporary solution that may fail at any moment. Should be removed as soon as possible.
- * @param {Array.<Number>} bytes - Byte array
- * @return {Array.<Number>} - Adjusted byte array
- * @todo #3:30min Fix bytes converting for integers. There are some differences between how Java
- *  generate byte array from integers and JS. For example we get the number -18 in XMIR as
- *  ['0xFF', '0xFF', '0xFF', '0xFF', '0xFF', '0xFF', '0xFF', '0xEE'] byte array. After it cast from
- *  hex to int it looks like: [255, 255, 255, 255, 255, 255, 255, 238]. But when we do
- *  {@code bytesOf.long(-18).asBytes()} we get [-1, -1, -1,  -1, -1, -1, -1, -72].
- *  Technically - these arrays are the same because they'll converted to the same integer value -18.
- *  But at the level of bytes they are different. So we need to adapt the logic of bytes converting
- *  to Java so generated arrays are the same. For now we use some kind of hack {@link adjustNumber}
- *  which just allows EO tests to pass but obviously it's wrong.
- */
-const adjustNumber = function(bytes) {
-  if (bytes.length === 8) {
-    const number = bytesOf.long(
-      new DataView(new Int8Array(bytes).buffer).getBigInt64(0),
-      false
-    ).asBytes()
-    return bytes.map((byte, index) => {
-      if (Math.abs(byte - number[index]) === 256) {
-        return byte - 256
-      }
-      return byte
-    })
-  }
-  return bytes
-}
-
-/**
  * Bytes of
  */
 const bytesOf = {
@@ -115,7 +84,7 @@ const bytesOf = {
     if (!Array.isArray(bytes)) {
       throw new Error(`Can't take byte array bytes from non byte array (${bytes})`)
     }
-    return conversion(adjustNumber(hexToInt(bytes)))
+    return conversion(hexToInt(bytes))
   },
   /**
    * Bytes of short.
@@ -129,10 +98,10 @@ const bytesOf = {
     if (num > SHORT_MAX_VALUE || num < SHORT_MIN_VALUE) {
       throw new Error(`Can't take 2 bytes from out of short bounds number (${num})`)
     }
-    const buffer = new ArrayBuffer(8);
+    const buffer = new ArrayBuffer(2);
     const view = new DataView(buffer)
-    view.setBigInt64(0, num)
-    return conversion(Array.from(new Int8Array(buffer)).slice(6))
+    view.setInt16(0, Number(num))
+    return conversion(Array.from(new Int8Array(buffer)))
   },
   /**
    * Bytes of int.
@@ -146,10 +115,10 @@ const bytesOf = {
     if (num > INT_MAX_VALUE || num < INT_MIN_VALUE) {
       throw new Error(`Can't take 4 bytes from out of integer bounds number (${num})`)
     }
-    const buffer = new ArrayBuffer(8);
+    const buffer = new ArrayBuffer(4);
     const view = new DataView(buffer)
-    view.setBigInt64(0, num)
-    return conversion(Array.from(new Int8Array(buffer)).slice(4))
+    view.setInt32(0, Number(num))
+    return conversion(Array.from(new Int8Array(buffer)))
   },
   /**
    * Bytes of long.
