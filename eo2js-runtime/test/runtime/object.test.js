@@ -72,7 +72,7 @@ describe('object', function() {
       obj.attrs[PHI] = at_simple(phi)
       assert.throws(() => obj.take('attr'))
     })
-    it(`should throw an error if no attribute in ${LAMBDA} wih given name`, function() {
+    it(`should throw an error if no attribute in ${LAMBDA} with given name`, function() {
       const obj = object()
       obj.assets[LAMBDA] = function(_) {
         return object()
