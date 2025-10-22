@@ -24,4 +24,4 @@ jobs:
             eo2js/test/mvnw/.mvn/wrapper/maven-wrapper.jar
             eo2js/test/mvnw/.mvn/wrapper/maven-wrapper.properties
             eo2js/test/mvnw/mvnw
-            eo2js/test/mvnw/mvnw.cmd",pper.properties
+            eo2js/test/mvnw/mvnw.cmd
