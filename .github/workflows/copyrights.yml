@@ -17,3 +17,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: yegor256/copyrights-action@0.0.8
+        with:
+          ignore: >-
+            target/**
+            node_modules/**
+            eo2js/test/mvnw/.mvn/wrapper/maven-wrapper.jar
+            eo2js/test/mvnw/.mvn/wrapper/maven-wrapper.properties
+            eo2js/test/mvnw/mvnw
+            eo2js/test/mvnw/mvnw.cmd",pper.properties
