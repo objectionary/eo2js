@@ -1,4 +1,6 @@
+<!-- markdownlint-disable MD033 MD041 -->
 <img alt="logo" src="https://www.objectionary.com/cactus.svg" height="92px" />
+<!-- markdownlint-enable MD033 MD041 -->
 
 [![EO principles respected here](https://www.elegantobjects.org/badge.svg)](https://www.elegantobjects.org)
 [![We recommend IntelliJ IDEA](https://www.elegantobjects.org/intellij-idea.svg)](https://www.jetbrains.com/idea/)
@@ -16,4 +18,6 @@ EOLANG to JavaScript transpiler and runtime
 
 First, run `npm install`. Then, run `npm test`. All tests should pass.
 
-Make your changes and then [make](https://www.yegor256.com/2014/04/15/github-guidelines.html) a pull request.
+Make your changes and then
+[make](https://www.yegor256.com/2014/04/15/github-guidelines.html)
+a pull request.
