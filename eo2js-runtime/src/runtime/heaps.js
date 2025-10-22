@@ -44,7 +44,7 @@ const heaps = {
    * Write given data to the block in memory by given identifier.
    * @param {Number} id - Identifier
    * @param {Number} offset - Offset
-   * @param {Array.<Number>} data - Data tto write
+   * @param {Array.<Number>} data - Data to write
    */
   write: function(id, offset, data) {
     if (!BLOCKS.hasOwnProperty(id)) {
