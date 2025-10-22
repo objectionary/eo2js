@@ -6,7 +6,7 @@ const at_once = require('./at-once');
 
 /**
  * Simple attribute.
- * @param {object} object - Object ot return
+ * @param {object} object - Object to return
  * @return {Object} - Simple attribute
  */
 const at_simple = function(object) {
