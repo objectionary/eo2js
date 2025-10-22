@@ -1,4 +1,7 @@
 #! /usr/bin/env node
+// SPDX-FileCopyrightText: Copyright (c) 2024 Objectionary.com
+// SPDX-License-Identifier: MIT
+
 const {program} = require('commander')
 const transpile = require('./commands/transpile');
 const link = require('./commands/link');

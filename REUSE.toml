@@ -30,3 +30,14 @@ path = [
 precedence = "override"
 SPDX-FileCopyrightText = "Copyright (c) 2025 Yegor Bugayenko"
 SPDX-License-Identifier = "MIT"
+
+[[annotations]]
+path = [
+    "eo2js/test/mvnw/.mvn/wrapper/maven-wrapper.jar",
+    "eo2js/test/mvnw/.mvn/wrapper/maven-wrapper.properties",
+    "eo2js/test/mvnw/mvnw",
+    "eo2js/test/mvnw/mvnw.cmd",
+]
+precedence = "override"
+SPDX-FileCopyrightText = "Copyright (c) 2014-2025 The Apache Software Foundation"
+SPDX-License-Identifier = "Apache-2.0"

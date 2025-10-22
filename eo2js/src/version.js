@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: Copyright (c) 2024 Objectionary.com
+// SPDX-License-Identifier: MIT
+
 // The values here are replaced automatically by the .rultor.yml script,
 // at the "release" pipeline:
 module.exports = {
