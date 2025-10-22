@@ -66,7 +66,7 @@ describe('object', function() {
     it('should throw an error if no attribute with given name', function() {
       assert.throws(() => object().take('attr'))
     })
-    it(`should throw an error if no attribute in ${PHI} wih given name`, function() {
+    it(`should throw an error if no attribute in ${PHI} with given name`, function() {
       const obj = object()
       const phi = object()
       obj.attrs[PHI] = at_simple(phi)
