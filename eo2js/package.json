@@ -6,7 +6,7 @@
   "dependencies": {
     "colors": "1.4.0",
     "commander": "^14.0.0",
-    "fast-xml-parser": "^4.5.1",
+    "fast-xml-parser": "^5.0.0",
     "saxon-js": "^2.7.0"
   },
   "description": "EOLANG to JavaScript translator",
