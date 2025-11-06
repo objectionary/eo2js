@@ -27,6 +27,12 @@ const compile = function(source, dest) {
       ].join(' ')
     ).toString()
   } catch (e) {
+    const details =
+      (e && e.stderr && typeof e.stderr.toString === 'function' && e.stderr.toString()) ||
+      (e && e.message) ||
+      String(e);
+    console.error(`xslt3 failed for ${source} -> ${dest}: ${details}`);
+    throw e;
   }
 }
 
