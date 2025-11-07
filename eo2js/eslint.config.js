@@ -1,27 +1,31 @@
-const { FlatCompat } = require('@eslint/eslintrc');
+/* eslint.config.js */
+const {FlatCompat} = require('@eslint/eslintrc');
 const globals = require('globals');
 
-const compat = new FlatCompat({ baseDirectory: __dirname });
+const compat = new FlatCompat({baseDirectory: __dirname});
 
 const google = compat.extends('google').map((cfg) => {
   if (!cfg || !cfg.rules) return cfg;
-  const { ['valid-jsdoc']: _drop1, ['require-jsdoc']: _drop2, ...rules } = cfg.rules;
-  return { ...cfg, rules };
+  const rules = Object.fromEntries(
+    Object.entries(cfg.rules).filter(
+      ([name]) => name !== 'valid-jsdoc' && name !== 'require-jsdoc'
+    )
+  );
+  return {...cfg, rules};
 });
 
 module.exports = [
   ...google,
+  {ignores: ['node_modules/']},
   {
-    languageOptions: {
-      ecmaVersion: 2019,
-      globals: { ...globals.es2015 },
-    },
+    files: ['**/*.js'],
+    languageOptions: {ecmaVersion: 2019, globals: {...globals.es2015}},
     rules: {
-      camelcase: 'off',
+      'camelcase': 'off',
       'comma-dangle': 'off',
-      indent: ['error', 2],
-      'max-len': ['error', { code: 300 }],
-      semi: 'off',
-    },
-  },
+      'indent': ['error', 2],
+      'max-len': ['error', {code: 300}],
+      'semi': 'off'
+    }
+  }
 ];
