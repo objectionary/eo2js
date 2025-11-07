@@ -1,4 +1,6 @@
-/* eslint.config.js */
+// SPDX-FileCopyrightText: Copyright (c) 2025 Objectionary.com
+// SPDX-License-Identifier: MIT
+
 const {FlatCompat} = require('@eslint/eslintrc');
 const globals = require('globals');
 
