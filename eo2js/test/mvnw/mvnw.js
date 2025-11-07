@@ -66,7 +66,6 @@ const flags = function(opts) {
   ]
 }
 
-/* eslint-disable valid-jsdoc */
 /**
  * Execute given goals of eo-maven-plugin.
  * @param {Array.<String>|String} goals - Goals to execute in right order

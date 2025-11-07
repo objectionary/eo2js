@@ -27,7 +27,8 @@ module.exports = [
       'comma-dangle': 'off',
       'indent': ['error', 2],
       'max-len': ['error', {code: 300}],
-      'semi': 'off'
+      'semi': 'off',
+      'no-invalid-this': 'off',
     }
   }
 ];

@@ -18,6 +18,7 @@ const google = compat.extends('google').map((cfg) => {
 
 module.exports = [
   ...google,
+  {ignores: ['node_modules/']},
   {
     files: ['**/*.js'],
     languageOptions: {
@@ -30,7 +31,7 @@ module.exports = [
       'indent': ['error', 2, {SwitchCase: 1}],
       'max-len': ['error', {code: 300}],
       'semi': 'off',
-      'no-invalid-this': 'off'
+      'no-invalid-this': 'off',
     },
   },
 ];

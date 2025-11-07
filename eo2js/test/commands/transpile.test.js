@@ -30,7 +30,6 @@ describe('transpile', function() {
       fs.rmSync(target, {recursive: true, force: true})
       fs.mkdirSync(target)
     })
-    /* eslint-disable valid-jsdoc */
     /**
      * Run transpile command with verbose output.
      * @param {{[name]: String, [prepare]: Boolean}} opts - Options
