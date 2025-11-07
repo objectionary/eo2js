@@ -82,11 +82,14 @@ describe('runtime tests', function() {
         'echo tests/org/eolang > .git/info/sparse-checkout',
         'git pull origin master'
       ].join(' && '), {cwd: home})
-      console.debug(`Downloaded:\n${
-        allFilesFrom(path.resolve(home, 'tests', 'org', 'eolang'))
-          .map((pth) => `- ${path.relative(home, pth)}`)
-          .join('\n')
-      }`)
+      const testsDir = path.resolve(home, 'tests', 'org', 'eolang')
+      if (fs.existsSync(testsDir)) {
+        console.debug(`Downloaded:\n${
+          allFilesFrom(testsDir)
+            .map((pth) => `- ${path.relative(home, pth)}`)
+            .join('\n')
+        }`)
+      }
       console.debug(`\nExcluded:\n${exclude.map((pth) => `- ${pth}`).join('\n')}`)
       const opts = {home, sources: 'tests', target: 'target'}
       await mvnw('register', opts)
