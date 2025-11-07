@@ -1,0 +1,25 @@
+# SPDX-FileCopyrightText: Copyright (c) 2025 Objectionary.com
+# SPDX-License-Identifier: MIT
+diff --git a/node_modules/grunt-mocha-cli/lib/index.js b/node_modules/grunt-mocha-cli/lib/index.js
+index 59f7a07..440cf86 100644
+--- a/node_modules/grunt-mocha-cli/lib/index.js
++++ b/node_modules/grunt-mocha-cli/lib/index.js
+@@ -2,6 +2,7 @@
+ const fs = require('fs')
+ const path = require('path')
+ const grunt = require('grunt')
++const os = require('os')
+ 
+ const BOOL_OPTIONS = [
+   'allow-uncaught',
+@@ -59,6 +60,10 @@ module.exports = function(options) {
+       spawnOptions.cmd += '.cmd'
+     }
+ 
++    if (os.platform() === 'win32') {
++      spawnOptions.opts.shell = true
++    }
++
+     if (!options.quiet && !options.save) {
+       // Redirect the Mocha output directly to the terminal to maintain colors
+       spawnOptions.opts.stdio = 'inherit'

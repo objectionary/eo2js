@@ -9,13 +9,15 @@
     "grunt-contrib-clean": "2.0.1",
     "grunt-eslint": "26.0.0",
     "grunt-mocha-cli": "^7.0.0",
-    "mocha": "^11.0.0"
+    "mocha": "^11.0.0",
+    "patch-package": "^8.0.0"
   },
   "keywords": [],
   "license": "MIT",
   "name": "eo2js-runtime",
   "scripts": {
-    "test": "npx grunt"
+    "test": "npx grunt",
+    "postinstall": "patch-package"
   },
   "type": "commonjs",
   "version": "0.0.0"
