@@ -31,7 +31,13 @@ module.exports = [
       'indent': ['error', 2, {SwitchCase: 1}],
       'max-len': ['error', {code: 300}],
       'semi': 'off',
-      'no-invalid-this': 'off',
+      'no-invalid-this': 'off', // @todo #152:45min Re-enable or formalize the no-invalid-this rule by deciding whether runtime should keep this as rho-context pattern with documentation or refactor to use explicit rho parameter, then apply consistently across runtime and remove suppressions.
+      //  Background: runtime factories use `this` as ρ-context (e.g. at_lambda/attributes, package resolution),
+      //  which ESLint flags in non-method functions. Temporary suppression keeps current behavior.
+      //  Do:
+      //   1) Decide convention: (A) keep `this` as ρ and document/tests; or (B) pass explicit `rho/self`.
+      //   2) Apply consistently across runtime (e.g., src/runtime/attribute/*, src/runtime/package.js).
+      //   3) Remove local suppressions and set this rule to 'error' here.
     },
   },
 ];
