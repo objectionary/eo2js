@@ -50,14 +50,14 @@ program.command('link')
 /**
  * Dataize.
  */
-program.command('dataize')
+program.command('dataize <obj> [args...]')
   .description('Dataize program')
-  .action((opts) => {
+  .action((obj, args, opts) => {
     if (program.opts().alone === undefined) {
       transpile(opts)
       link(opts)
     }
-    dataize(program.args[1], program.args.slice(2), opts)
+    dataize(obj, args || [], opts)
   })
 
 /**

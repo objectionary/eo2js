@@ -29,7 +29,7 @@ class ErError extends ErAbstract {
     let result
     try {
       result = `${enclosure.toString()}(${DELTA} = ${bytesOf.bytes(dataized(enclosure)).verbose()})`
-    } catch (ex) {
+    } catch {
       result = enclosure.toString();
     }
     return result

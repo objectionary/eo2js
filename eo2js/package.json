@@ -14,11 +14,13 @@
     "eslint": "9.6.0",
     "eslint-config-google": "0.14.0",
     "grunt": "^1.6.1",
+    "grunt-cli": "^1.5.0",
     "grunt-contrib-clean": "2.0.1",
-    "grunt-eslint": "24.3.0",
+    "grunt-eslint": "26.0.0",
     "grunt-mocha-cli": "^7.0.0",
     "jspath": "0.4.0",
     "mocha": "^11.0.0",
+    "patch-package": "^8.0.0",
     "xslt3": "^2.7.0"
   },
   "keywords": [
@@ -30,6 +32,7 @@
   "main": "eo2js",
   "name": "eo2js",
   "scripts": {
+    "postinstall": "patch-package",
     "test": "./node_modules/mocha/bin/mocha.js test/**/*.test.js --exclude test/resources",
     "test-easy": "./node_modules/mocha/bin/mocha.js test/**/*.test.js --exclude test/resources --exclude test/it/runtime-tests.test.js"
   },

@@ -26,7 +26,7 @@ function randomChars(amount) {
   let rnd
   try {
     rnd = crypto.randomBytes(amount);
-  } catch (e) {
+  } catch {
     rnd = crypto.pseudoRandomBytes(amount);
   }
   for (let idx = 0; idx < amount; idx++) {
