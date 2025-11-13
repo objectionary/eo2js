@@ -38,7 +38,7 @@ const inet_addr = function(win, args, getArg, length) {
     }
   }
   // Return IP as integer (standard inet_addr behavior)
-  const octets = [match[1], match[2], match[3], match[4]].map(x => parseInt(x, 10))
+  const octets = [match[1], match[2], match[3], match[4]].map((x) => parseInt(x, 10))
   const ipInt = (octets[0] << 24) + (octets[1] << 16) + (octets[2] << 8) + octets[3]
   return data.toObject(ipInt)
 }
