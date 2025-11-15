@@ -25,7 +25,6 @@ const exclude = [
   'math/integral-tests',
   'math/random-tests',
   'math/real-tests',
-  'rust-tests',
   'structs/list-tests',
   'sys/posix-tests',
   'sys/win32-tests',
