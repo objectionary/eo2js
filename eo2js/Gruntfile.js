@@ -8,8 +8,10 @@ module.exports = function(grunt) {
     mochacli: {
       test: {
         options: {
-          timeout: '1200000',
-          files: ['test/**/*.test.js', '!test/resources/**'],
+          'timeout': '1200000',
+          'node-option': ['unhandled-rejections=strict'],
+          'abort-on-uncaught-exception': true,
+          'files': ['test/**/*.test.js', '!test/resources/**'],
         },
       },
     },

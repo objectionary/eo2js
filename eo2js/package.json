@@ -33,8 +33,8 @@
   "name": "eo2js",
   "scripts": {
     "postinstall": "patch-package",
-    "test": "./node_modules/mocha/bin/mocha.js test/**/*.test.js --exclude test/resources",
-    "test-easy": "./node_modules/mocha/bin/mocha.js test/**/*.test.js --exclude test/resources --exclude test/it/runtime-tests.test.js"
+    "test": "node --unhandled-rejections=strict ./node_modules/mocha/bin/mocha.js test/**/*.test.js --exclude test/resources",
+    "test-easy": "node --unhandled-rejections=strict ./node_modules/mocha/bin/mocha.js test/**/*.test.js --exclude test/resources --exclude test/it/runtime-tests.test.js"
   },
   "version": "0.0.0"
 }
