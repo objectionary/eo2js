@@ -9,6 +9,7 @@
     "grunt-contrib-clean": "2.0.1",
     "grunt-eslint": "26.0.0",
     "grunt-mocha-cli": "^7.0.0",
+    "load-grunt-tasks": "^5.1.0",
     "mocha": "^11.0.0",
     "patch-package": "^8.0.0"
   },

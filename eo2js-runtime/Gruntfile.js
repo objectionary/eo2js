@@ -2,13 +2,19 @@
 // SPDX-License-Identifier: MIT
 
 module.exports = function(grunt) {
+  require('load-grunt-tasks')(grunt);
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
     clean: ['temp'],
+    options: {
+      timeout: 10000,
+      recursive: true,
+      force: true,
+      bail: false,
+    },
     mochacli: {
       test: {
         options: {
-          timeout: '1200000',
           require: ['test/global.js'],
           files: ['test/**/*.test.js'],
         },
@@ -21,8 +27,5 @@ module.exports = function(grunt) {
       target: ['Gruntfile.js', 'src/**/*.js', 'test/**/*.js'],
     },
   })
-  grunt.loadNpmTasks('grunt-eslint')
-  grunt.loadNpmTasks('grunt-mocha-cli')
-  grunt.loadNpmTasks('grunt-contrib-clean')
-  grunt.registerTask('default', ['mochacli', 'eslint'])
+  grunt.registerTask('default', ['mochacli:test', 'eslint'])
 }
