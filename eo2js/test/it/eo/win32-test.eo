@@ -43,3 +43,7 @@
       "WriteFile"
       * "/tmp/win32-test-output.txt" "test data"
     true
+
+# DEBUG: This test should always fail to check if win32-test.eo is executed
+[] > debug-this-should-fail
+  FALSE > @
