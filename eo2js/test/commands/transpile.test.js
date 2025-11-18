@@ -96,7 +96,6 @@ describe('transpile', function() {
     })
   })
   describe('transformation packs', async function() {
-    this.timeout(0)
     const packs = path.resolve(__dirname, '../resources/transpile/packs')
     await Promise.all(fs.readdirSync(packs)
       .filter((test) => only.length === 0 || only.includes(test.substring(0, test.lastIndexOf('.json'))))

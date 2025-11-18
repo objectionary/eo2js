@@ -39,12 +39,10 @@ describe('link', function() {
     done()
   })
   it('should add test dependency', function(done) {
-    this.timeout(10000)
     assertFilesExist(link('--tests'), project, ['node_modules/mocha'])
     done()
   })
   it('should not reinstall npm packages if package-lock.json exists', function(done) {
-    this.timeout(10000)
     link()
     const lockFilePath = path.resolve(project, 'package-lock.json')
     const initialMtime = fs.statSync(lockFilePath).mtime

@@ -12,7 +12,6 @@ describe('test', function() {
   const project = path.resolve(target, 'project')
   const runtime = path.resolve('../eo2js-runtime')
   before('prepare-environment', function(done) {
-    this.timeout(0)
     fs.rmSync(home, {recursive: true, force: true})
     fs.mkdirSync(project, {recursive: true})
     runSync(['link', '-t', target, '-p project', '--alone', '-d', runtime, '--tests'])
