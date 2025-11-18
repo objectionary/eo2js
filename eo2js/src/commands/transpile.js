@@ -11,7 +11,7 @@ const {XMLParser} = require('fast-xml-parser');
  * Verified key.
  * @type {string}
  */
-const verified = 'verified'
+const verified = 'linted'
 
 /**
  * Result directory for transpiled XMIRs.
