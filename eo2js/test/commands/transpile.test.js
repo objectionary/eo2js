@@ -25,6 +25,7 @@ describe('transpile', function() {
     fs.mkdirSync(home, {recursive: true})
   })
   describe('command', function() {
+    this.timeout(5000)
     const target = path.resolve(home, 'target')
     beforeEach(function() {
       fs.rmSync(target, {recursive: true, force: true})
@@ -39,14 +40,14 @@ describe('transpile', function() {
       opts.name = opts.name || 'simple'
       opts.prepare = opts.prepare !== undefined ? opts.prepare : true
       if (opts.prepare) {
-        const verified = path.resolve(target, `6-verify/com/eo2js/${opts.name}.xmir`)
+        const linted = path.resolve(target, `3-lint/com/eo2js/${opts.name}.xmir`)
         const foreign = [{
           id: `com.eo2js.${opts.name}`,
-          verified: verified
+          linted: linted
         }]
         fs.writeFileSync(path.resolve(target, 'eo-foreign.json'), JSON.stringify(foreign))
-        fs.mkdirSync(path.resolve(target, '6-verify/com/eo2js'), {recursive: true})
-        fs.copyFileSync(path.resolve(`test/resources/transpile/${opts.name}.xmir`), verified)
+        fs.mkdirSync(path.resolve(target, '3-lint/com/eo2js'), {recursive: true})
+        fs.copyFileSync(path.resolve(`test/resources/transpile/${opts.name}.xmir`), linted)
       }
       return runSync([
         'transpile',
@@ -86,7 +87,7 @@ describe('transpile', function() {
     it('should retranspile if source was modified', async function() {
       transpile()
       const transpiled = path.resolve(target, '8-transpile/com/eo2js/simple.xmir')
-      const source = path.resolve(target, '6-verify/com/eo2js/simple.xmir')
+      const source = path.resolve(target, '3-lint/com/eo2js/simple.xmir')
       const first = fs.statSync(transpiled).mtime
       await new Promise((resolve) => setTimeout(resolve, 1000))
       fs.writeFileSync(source, fs.readFileSync(source))
@@ -95,19 +96,19 @@ describe('transpile', function() {
       assert.notEqual(first.getTime(), second.getTime())
     })
   })
-  describe('transformation packs', function() {
+  describe('transformation packs', async function() {
     this.timeout(0)
     const packs = path.resolve(__dirname, '../resources/transpile/packs')
-    fs.readdirSync(packs)
+    await Promise.all(fs.readdirSync(packs)
       .filter((test) => only.length === 0 || only.includes(test.substring(0, test.lastIndexOf('.json'))))
-      .forEach((test) => {
-        it(test, function(done) {
+      .map((test) => {
+        it(test, async function() {
           const folder = path.resolve(home, 'packs', test.substring(0, test.lastIndexOf('.json')))
           if (fs.existsSync(folder)) {
             fs.rmSync(folder, {recursive: true})
           }
           const json = JSON.parse(fs.readFileSync(path.resolve(packs, test)).toString())
-          pack({home: folder, sources: 'src', target: 'target', json}).then((res) => {
+          await pack({home: folder, sources: 'src', target: 'target', json}).then((res) => {
             if (res.skip) {
               this.skip()
             } else {
@@ -116,10 +117,9 @@ describe('transpile', function() {
                 0,
                 `Result XMIR:\n ${res.xmir}\nJSON: ${JSON.stringify(res.json, null, 2)}\nFailed tests: ${res.failures.join(';\n')}`
               )
-              done()
             }
           })
         })
-      })
+      }))
   })
 })

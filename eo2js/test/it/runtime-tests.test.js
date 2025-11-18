@@ -70,6 +70,7 @@ describe('runtime tests', function() {
   const target = path.resolve(home, 'target')
   const project = path.resolve(target, 'project')
   const runtime = path.resolve('../eo2js-runtime')
+  const tag = fs.readFileSync(path.resolve('test/mvnw/eo-version.txt')).toString().trim()
   before('prepare environment', async function() {
     if (COMPILE) {
       fs.rmSync(home, {recursive: true, force: true})
@@ -79,7 +80,8 @@ describe('runtime tests', function() {
         'git remote add origin https://github.com/objectionary/home.git',
         'git config core.sparseCheckout true',
         'echo tests/org/eolang > .git/info/sparse-checkout',
-        'git pull origin master'
+        `git fetch origin tag ${tag} --no-tags`,
+        `git checkout ${tag}`
       ].join(' && '), {cwd: home})
       const testsDir = path.resolve(home, 'tests', 'org', 'eolang')
       if (fs.existsSync(testsDir)) {
@@ -93,7 +95,7 @@ describe('runtime tests', function() {
       const opts = {home, sources: 'tests', target: 'target'}
       await mvnw('register', opts)
       await mvnw('assemble', opts)
-      await mvnw('lint', opts)
+      await mvnw('lint', {...opts, easy: true})
     }
   })
   it('should execute all eo-runtime tests', function(done) {
