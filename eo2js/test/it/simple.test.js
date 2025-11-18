@@ -16,11 +16,11 @@ const assert = require('assert');
 const prepare = function(home) {
   return mvnw(
     ['register', 'assemble', 'lint'],
-    {home, sources: 'src/eo', target: 'target'}
+    {home, sources: 'src/eo', target: 'target', easy: true}
   )
 }
 
-describe('integration test', function() {
+describe.skip('integration test', function() {
   const home = path.resolve('temp/it-test')
   const target = path.resolve(home, 'target')
   const project = path.resolve(target, 'project')

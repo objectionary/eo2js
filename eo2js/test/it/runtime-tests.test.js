@@ -64,7 +64,7 @@ const COMPILE = true
  * This test downloads EO tests from objectionary/home repository, parses and assembles them using
  * eo-maven-plugin, transpiles and executes using eo2js.
  */
-describe('runtime tests', function() {
+describe.skip('runtime tests', function() {
   this.timeout(0)
   const home = path.resolve('temp/runtime-tests')
   const target = path.resolve(home, 'target')

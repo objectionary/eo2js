@@ -36,5 +36,5 @@ module.exports = function(grunt) {
   grunt.registerTask('test', ['mochacli:unit', 'mochacli:integration']);
   grunt.registerTask('test:unit', ['mochacli:unit']);
   grunt.registerTask('test:integration', ['mochacli:integration']);
-  grunt.registerTask('default', ['test:unit', 'eslint']);
+  grunt.registerTask('default', ['test', 'eslint']);
 }
