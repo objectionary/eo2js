@@ -6,23 +6,19 @@ module.exports = function(grunt) {
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
     clean: ['temp'],
-    options: {
-      timeout: 120000,
-      recursive: true,
-      force: true,
-      bail: false,
-    },
     mochacli: {
+      options: {
+        timeout: 120000,
+        recursive: true,
+        reporter: 'spec',
+      },
+      all: {
+        src: ['test/commands/*.test.js', 'test/it/*.test.js', '!test/resources/**'],
+      },
       unit: {
-        options: {
-          reporter: 'spec',
-        },
         src: ['test/commands/*.test.js', '!test/resources/**'],
       },
       integration: {
-        options: {
-          reporter: 'spec',
-        },
         src: ['test/it/*.test.js', '!test/resources/**'],
       },
     },
@@ -33,7 +29,7 @@ module.exports = function(grunt) {
       target: ['Gruntfile.js', 'src/**/*.js', 'test/**/*.js'],
     },
   })
-  grunt.registerTask('test', ['mochacli:unit', 'mochacli:integration']);
+  grunt.registerTask('test', ['mochacli:all']);
   grunt.registerTask('test:unit', ['mochacli:unit']);
   grunt.registerTask('test:integration', ['mochacli:integration']);
   grunt.registerTask('default', ['test', 'eslint']);

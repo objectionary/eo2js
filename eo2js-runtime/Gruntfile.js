@@ -6,13 +6,12 @@ module.exports = function(grunt) {
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
     clean: ['temp'],
-    options: {
-      timeout: 120000,
-      recursive: true,
-      force: true,
-      bail: false,
-    },
     mochacli: {
+      options: {
+        timeout: 120000,
+        recursive: true,
+        reporter: 'spec',
+      },
       test: {
         options: {
           require: ['test/global.js'],
