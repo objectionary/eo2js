@@ -1,7 +1,7 @@
 # SPDX-FileCopyrightText: Copyright (c) 2025 Objectionary.com
 # SPDX-License-Identifier: MIT
 diff --git a/node_modules/grunt-mocha-cli/lib/index.js b/node_modules/grunt-mocha-cli/lib/index.js
-index 59f7a07..2262b80 100644
+index 59f7a07..3ceaf4c 100644
 --- a/node_modules/grunt-mocha-cli/lib/index.js
 +++ b/node_modules/grunt-mocha-cli/lib/index.js
 @@ -2,6 +2,7 @@
@@ -21,18 +21,33 @@ index 59f7a07..2262b80 100644
  
  module.exports = function(options) {
    return new Promise((resolve, reject) => {
-@@ -59,6 +60,14 @@ module.exports = function(options) {
-       spawnOptions.cmd += '.cmd'
+@@ -51,12 +52,25 @@ module.exports = function(options) {
+       }
      }
  
+-    spawnOptions.cmd = require.resolve('mocha')
+-    spawnOptions.cmd = path.dirname(spawnOptions.cmd)
+-    spawnOptions.cmd += '/../.bin/mocha'
++    const mochaBinPath = require.resolve('mocha')
++    const mochaBinDir = path.dirname(mochaBinPath)
++    let mochaBin = mochaBinDir + '/../.bin/mocha'
+ 
+     if (process.platform === 'win32') {
+-      spawnOptions.cmd += '.cmd'
++      mochaBin += '.cmd'
++    }
++
 +    if (os.platform() === 'win32') {
 +      spawnOptions.opts.shell = true
 +    }
 +
++    // If node-option is provided, use node directly to run mocha
 +    if (options['node-option'] && options['node-option'].length > 0) {
-+      spawnOptions.opts.execArgv = options['node-option']
-+    }
-+
++      spawnOptions.cmd = process.execPath
++      args.unshift(mochaBin)
++      args.unshift(...options['node-option'])
++    } else {
++      spawnOptions.cmd = mochaBin
+     }
+ 
      if (!options.quiet && !options.save) {
-       // Redirect the Mocha output directly to the terminal to maintain colors
-       spawnOptions.opts.stdio = 'inherit'
