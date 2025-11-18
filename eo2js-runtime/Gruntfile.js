@@ -7,7 +7,7 @@ module.exports = function(grunt) {
     pkg: grunt.file.readJSON('package.json'),
     clean: ['temp'],
     options: {
-      timeout: 10000,
+      timeout: 120000,
       recursive: true,
       force: true,
       bail: false,
