@@ -1,7 +1,7 @@
 # SPDX-FileCopyrightText: Copyright (c) 2025 Objectionary.com
 # SPDX-License-Identifier: MIT
 diff --git a/node_modules/grunt-mocha-cli/lib/index.js b/node_modules/grunt-mocha-cli/lib/index.js
-index 59f7a07..2f3cc63 100644
+index 59f7a07..7e52d6b 100644
 --- a/node_modules/grunt-mocha-cli/lib/index.js
 +++ b/node_modules/grunt-mocha-cli/lib/index.js
 @@ -2,6 +2,7 @@
@@ -21,7 +21,7 @@ index 59f7a07..2f3cc63 100644
  
  module.exports = function(options) {
    return new Promise((resolve, reject) => {
-@@ -51,12 +52,26 @@ module.exports = function(options) {
+@@ -51,12 +52,28 @@ module.exports = function(options) {
        }
      }
  
@@ -43,8 +43,10 @@ index 59f7a07..2f3cc63 100644
 +
 +    // If node-option is provided, use node directly to run mocha
 +    if (options['node-option'] && options['node-option'].length > 0) {
++      // Use the _mocha executable (JavaScript file) for node direct execution
++      const mochaJs = require.resolve('mocha/bin/_mocha')
 +      spawnOptions.cmd = process.execPath
-+      args.unshift(mochaBin)
++      args.unshift(mochaJs)
 +      const nodeOptions = options['node-option'].map(opt => opt.startsWith('--') ? opt : '--' + opt)
 +      args.unshift(...nodeOptions)
 +    } else {
