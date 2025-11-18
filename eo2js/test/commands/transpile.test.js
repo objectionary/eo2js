@@ -25,7 +25,6 @@ describe('transpile', function() {
     fs.mkdirSync(home, {recursive: true})
   })
   describe('command', function() {
-    this.timeout(5000)
     const target = path.resolve(home, 'target')
     beforeEach(function() {
       fs.rmSync(target, {recursive: true, force: true})

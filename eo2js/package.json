@@ -34,8 +34,8 @@
   "name": "eo2js",
   "scripts": {
     "postinstall": "patch-package",
-    "test": "./node_modules/mocha/bin/mocha.js test/**/*.test.js --exclude test/resources",
-    "test-easy": "./node_modules/mocha/bin/mocha.js test/**/*.test.js --exclude test/resources --exclude test/it/runtime-tests.test.js"
+    "test": "npx grunt",
+    "test-easy": "npx grunt test:unit"
   },
   "version": "0.0.0"
 }
