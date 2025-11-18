@@ -61,8 +61,10 @@ function shell() {
 const flags = function(opts) {
   return [
     '-Deo.version=' + version(),
+    '-Deo.tag=' + version(),
     `-Deo.sourcesDir=${path.resolve(opts.home, opts.sources)}`,
     `-Deo.targetDir=${path.resolve(opts.home, opts.target)}`,
+    `-Deo.failOnWarning=${opts.easy ? false : true}`
   ]
 }
 
