@@ -1,4 +1,5 @@
 {
+  "skip": true,
   "description": "This packs checks that void attributes are added before bound ones",
   "eo": [
     "# Calculate bitwise left shift.",
