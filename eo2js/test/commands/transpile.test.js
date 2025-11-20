@@ -100,24 +100,24 @@ describe('transpile', function() {
    * Tests transformation packs from '../resources/transpile/packs' directory
    *
    * @todo #162:30min Re-enable skipped transformation pack tests
-   * Current Status: MULTIPLE TESTS SKIPPED - EO version compatibility issues
-   * - The following tests are disabled via "skip": true flag:
-   *   - abstracts-to-objects.json
-   *   - adds-attrs.json
-   *   - adds-package.json
-   *   - attributes-order.json
-   *   - bindings-to-js.json
-   * - Tests passed successfully with previous EO version: 0.44.0
-   * - Tests fail with current EO version: 0.49.0
-   * Context:
-   * - EO version when tests were disabled: 0.49.0
-   * - Current EO version: see test/mvnw/eo-version.txt
-   * Investigation Needed:
-   * 1. Verify EO syntax correctness in test programs
-   * 2. Validate test assertions and expectations
-   * 3. Check XSL transformations for compatibility
-   * Prerequisites for Fix:
-   * - All skipped tests must pass with current EO version
+   *  Current Status: MULTIPLE TESTS SKIPPED - EO version compatibility issues
+   *  - The following tests are disabled via "skip": true flag:
+   *    - abstracts-to-objects.json
+   *    - adds-attrs.json
+   *    - adds-package.json
+   *    - attributes-order.json
+   *    - bindings-to-js.json
+   *  - Tests passed successfully with previous EO version: 0.44.0
+   *  - Tests fail with current EO version: 0.49.0
+   *  Context:
+   *  - EO version when tests were disabled: 0.49.0
+   *  - Current EO version: see test/mvnw/eo-version.txt
+   *  Investigation Needed:
+   *  1. Verify EO syntax correctness in test programs
+   *  2. Validate test assertions and expectations
+   *  3. Check XSL transformations for compatibility
+   *  Prerequisites for Fix:
+   *  - All skipped tests must pass with current EO version
    */
   describe('transformation packs', async function() {
     const packs = path.resolve(__dirname, '../resources/transpile/packs')
