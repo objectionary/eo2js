@@ -89,10 +89,10 @@ const pack = async function(params) {
   fs.mkdirSync(sources, {recursive: true})
   fs.mkdirSync(target, {recursive: true})
   fs.writeFileSync(path.resolve(sources, `test.eo`), `${params.json.eo.join('\n')}\n`)
-  const r = await mvnw(['register', 'parse', 'optimize', 'shake'], params)
+  const r = await mvnw(['register', 'assemble'], params)
   const shaken = JSON.parse(
     fs.readFileSync(path.resolve(target, 'eo-foreign.json')).toString()
-  )[0].shaken
+  )[0].assembled
   let xml = fs.readFileSync(shaken).toString()
   const transformations = path.resolve(__dirname, '../src/resources/json')
   params.json.xsls
