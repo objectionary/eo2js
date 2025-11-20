@@ -23,7 +23,8 @@ const compile = function(source, dest) {
       [
         'node node_modules/xslt3/xslt3.js',
         `-xsl:${source}`,
-        `-export:${dest}`
+        `-export:${dest}`,
+        '-nogo'
       ].join(' ')
     ).toString()
   } catch (e) {
