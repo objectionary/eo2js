@@ -12,7 +12,7 @@ const data = require('../../../runtime/data');
  */
 const as_phi = function() {
   const obj = object('as_phi')
-  obj.attrs['x'] = at_void('x')
+  obj.attrs.x = at_void('x')
   obj.assets[LAMBDA] = function(self) {
     return data.toObject(
       self.take('x').φTerm()

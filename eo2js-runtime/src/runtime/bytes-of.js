@@ -13,37 +13,37 @@ const BYTE_SIZE = 8
  * Integer min value.
  * @type {bigint}
  */
-const INT_MIN_VALUE = -0x80000000n;
+const INT_MIN_VALUE = -BigInt('0x80000000');
 
 /**
  * Integer max value.
  * @type {BigInt}
  */
-const INT_MAX_VALUE = 0x7fffffffn;
+const INT_MAX_VALUE = BigInt('0x7fffffff');
 
 /**
  * Long min value.
  * @type {bigint}
  */
-const LONG_MIN_VALUE = -0x8000000000000000n;
+const LONG_MIN_VALUE = -BigInt('0x8000000000000000');
 
 /**
  * Long max value.
  * @type {bigint}
  */
-const LONG_MAX_VALUE = 0x7fffffffffffffffn;
+const LONG_MAX_VALUE = BigInt('0x7fffffffffffffff');
 
 /**
  * Short min value.
  * @type {bigint}
  */
-const SHORT_MIN_VALUE = -32768n;
+const SHORT_MIN_VALUE = -BigInt('32768');
 
 /**
  * Short max value.
  * @type {bigint}
  */
-const SHORT_MAX_VALUE = 32767n;
+const SHORT_MAX_VALUE = BigInt('32767');
 
 /**
  * Hex byte array to int byte array.
@@ -80,7 +80,7 @@ const bytesOf = {
    * @param {Array.<Number|String>} bytes - Byte array
    * @return {Object} - Bytes conversion
    */
-  bytes: function(bytes) {
+  bytes(bytes) {
     if (!Array.isArray(bytes)) {
       throw new Error(`Can't take byte array bytes from non byte array (${bytes})`)
     }
@@ -91,7 +91,7 @@ const bytesOf = {
    * @param {BigInt} num - 2 bytes integer number
    * @return {Object} - Bytes conversion
    */
-  short: function(num) {
+  short(num) {
     if (typeof num !== 'bigint') {
       throw new Error(`Can't take 2 bytes from not BigInt number (${num})`)
     }
@@ -108,7 +108,7 @@ const bytesOf = {
    * @param {BigInt} num - 4 bytes integer number
    * @return {Object} - Bytes conversion
    */
-  int: function(num) {
+  int(num) {
     if (typeof num !== 'bigint') {
       throw new Error(`Can't take 4 bytes from not BigInt number (${num})`)
     }
@@ -126,7 +126,7 @@ const bytesOf = {
    * @param {Boolean} bounds - Skip bounds checking
    * @return {Object} - Bytes conversion
    */
-  long: function(num, bounds = true) {
+  long(num, bounds = true) {
     if (typeof num !== 'bigint') {
       throw new Error(`Can't take 8 bytes from non BigInt number (${num})`)
     }
@@ -143,7 +143,7 @@ const bytesOf = {
    * @param {Number} num - 8 byte float number
    * @return {Object} - Bytes conversion
    */
-  number: function(num) {
+  number(num) {
     if (typeof num !== 'number') {
       throw new Error(`Can't take number bytes from not a number (${num})`)
     }
@@ -157,7 +157,7 @@ const bytesOf = {
    * @param {String} str - String
    * @return {Object} - Bytes conversion
    */
-  string: function(str) {
+  string(str) {
     if (typeof str !== 'string') {
       throw new Error(`Can't take string bytes from non string (${str})`)
     }
@@ -168,7 +168,7 @@ const bytesOf = {
    * @param {Boolean} bool - Boolean value
    * @return {Object} - Bytes conversion
    */
-  bool: function(bool) {
+  bool(bool) {
     if (typeof bool !== 'boolean') {
       throw new Error(`Can't take boolean bytes from non boolean (${bool})`)
     }
@@ -200,7 +200,7 @@ const conversion = function(bytes) {
      * Get byte array.
      * @return {Array.<Number>} - Byte array
      */
-    asBytes: function() {
+    asBytes() {
       return bytes
     },
     /**
@@ -208,7 +208,7 @@ const conversion = function(bytes) {
      * @param {String} [type] - Number type
      * @return {number} - Number
      */
-    asNumber: function(type = NUMBER) {
+    asNumber(type = NUMBER) {
       let res
       if (type === NUMBER && bytes.length === 8) {
         res = new DataView(new Int8Array(bytes).buffer).getFloat64(0)
@@ -227,14 +227,14 @@ const conversion = function(bytes) {
      * Convert bytes to string
      * @return {string} - String number
      */
-    asString: function() {
+    asString() {
       return Buffer.from(bytes).toString('utf-8')
     },
     /**
      * Convert bytes to bool.
      * @return {boolean} - Boolean
      */
-    asBool: function() {
+    asBool() {
       if (bytes.length !== 1) {
         throw new Error(`Byte array must be 1 byte long to convert to bool (${bytes})`)
       }
@@ -244,7 +244,7 @@ const conversion = function(bytes) {
      * Get verbose bytes string representation depends on its length
      * @return {string} - Verbose string representation of bytes
      */
-    verbose: function() {
+    verbose() {
       let str
       if (bytes.length === 0) {
         str = '--'
@@ -283,9 +283,11 @@ const conversion = function(bytes) {
      *  shift: (function(Number): *)}
      * }}
      */
-    and: function(other) {
+     
+    and(other) {
       const copy = bytes
       for (let i = 0; i < Math.min(copy.length, other.length); ++i) {
+        // eslint-disable-next-line no-bitwise, operator-assignment
         copy[i] = copy[i] & other[i]
       }
       return bytesOf.bytes(copy)
@@ -306,9 +308,11 @@ const conversion = function(bytes) {
      *  shift: (function(Number): *)}
      * }}
      */
-    or: function(other) {
+     
+    or(other) {
       const copy = bytes
       for (let i = 0; i < Math.min(copy.length, other.length); ++i) {
+        // eslint-disable-next-line no-bitwise, operator-assignment
         copy[i] = copy[i] | other[i]
       }
       return bytesOf.bytes(copy)
@@ -329,9 +333,11 @@ const conversion = function(bytes) {
      *  shift: (function(Number): *)}
      * }}
      */
-    xor: function(other) {
+     
+    xor(other) {
       const copy = bytes
       for (let i = 0; i < Math.min(copy.length, other.length); ++i) {
+        // eslint-disable-next-line no-bitwise, operator-assignment
         copy[i] = copy[i] ^ other[i]
       }
       return bytesOf.bytes(copy)
@@ -351,9 +357,11 @@ const conversion = function(bytes) {
      *  shift: (function(Number): *)}
      * }}
      */
-    not: function() {
+     
+    not() {
       const copy = bytes
       for (let i = 0; i < copy.length; ++i) {
+        // eslint-disable-next-line no-bitwise
         copy[i] = ~copy[i]
       }
       return bytesOf.bytes(copy)
@@ -376,34 +384,41 @@ const conversion = function(bytes) {
      *  shift: (function(Number): *)}
      * }}
      */
-    shift: function(bits) {
+     
+    shift(bits) {
       bits = Number(bits)
       const bts = bytes
       const mod = Math.abs(bits) % BYTE_SIZE;
       const offset = Math.floor(Math.abs(bits) / BYTE_SIZE);
       if (bits < 0) {
+        // eslint-disable-next-line no-bitwise
         const carry = (0x01 << mod) - 1
         for (let index = 0; index < bts.length; ++index) {
           const source = index + offset;
           if (source >= bts.length) {
             bts[index] = 0;
           } else {
+            // eslint-disable-next-line no-bitwise
             let dst = bts[source] << mod
             if (source + 1 < bts.length) {
+              // eslint-disable-next-line no-bitwise
               dst |= bts[source + 1] >>> (BYTE_SIZE - mod) & (carry & 0xFF);
             }
             bts[index] = dst;
           }
         }
       } else {
+        // eslint-disable-next-line no-bitwise
         const carry = 0xFF << (BYTE_SIZE - mod)
         for (let index = bts.length - 1; index >= 0; --index) {
           const source = index - offset;
           if (source < 0) {
             bts[index] = 0;
           } else {
+            // eslint-disable-next-line no-bitwise
             let dst = (0xFF & bts[source]) >>> mod;
             if (source - 1 >= 0) {
+              // eslint-disable-next-line no-bitwise
               dst |= bts[source - 1] << (BYTE_SIZE - mod) & (carry & 0xFF);
             }
             bts[index] = dst;

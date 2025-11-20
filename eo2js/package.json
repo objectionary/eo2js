@@ -6,6 +6,7 @@
   "dependencies": {
     "colors": "1.4.0",
     "commander": "^14.0.0",
+    "eslint-plugin-promise": "^7.2.1",
     "fast-xml-parser": "^5.0.0",
     "saxon-js": "^2.7.0"
   },

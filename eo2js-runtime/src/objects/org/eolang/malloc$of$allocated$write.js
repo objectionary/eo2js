@@ -15,8 +15,8 @@ const data = require('../../../runtime/data')
  */
 const malloc$of$allocated$write = function() {
   const obj = object('malloc$of$allocated$write')
-  obj.attrs['offset'] = at_void('offset')
-  obj.attrs['data'] = at_void('data')
+  obj.attrs.offset = at_void('offset')
+  obj.attrs.data = at_void('data')
   obj.assets[LAMBDA] = function(self) {
     heaps.write(
       dataized(self.take(RHO).take('id'), NUMBER),

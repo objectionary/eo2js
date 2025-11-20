@@ -6,11 +6,11 @@ const path = require('path');
 const fs = require('fs');
 const assert = require('assert');
 
-describe('link', function() {
+describe('link', () => {
   const home = path.resolve('temp/test-link')
   const target = path.resolve(home, 'target')
   const project = path.resolve(target, 'project')
-  beforeEach('clear home', function() {
+  beforeEach('clear home', () => {
     fs.rmSync(home, {recursive: true, force: true})
     fs.mkdirSync(project, {recursive: true})
   })
@@ -29,7 +29,7 @@ describe('link', function() {
       ...args
     ])
   }
-  it('should create all necessary files and install npm project', function(done) {
+  it('should create all necessary files and install npm project', (done) => {
     assertFilesExist(link(), project, [
       'package.json',
       'package-lock.json',

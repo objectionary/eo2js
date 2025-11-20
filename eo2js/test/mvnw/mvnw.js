@@ -37,7 +37,7 @@ let phase = null
  * @return {String} - EO version
  */
 const version = function() {
-  if (ver == null) {
+  if (ver === null) {
     ver = fs.readFileSync(path.resolve(__dirname, 'eo-version.txt')).toString().trim()
   }
   return ver
@@ -60,7 +60,7 @@ function shell() {
  */
 const flags = function(opts) {
   return [
-    '-Deo.version=' + version(),
+    `-Deo.version=${  version()}`,
     `-Deo.sourcesDir=${path.resolve(opts.home, opts.sources)}`,
     `-Deo.targetDir=${path.resolve(opts.home, opts.target)}`,
   ]

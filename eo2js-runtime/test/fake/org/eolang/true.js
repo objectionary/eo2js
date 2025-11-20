@@ -7,7 +7,7 @@
  * For more information please read README.md in test/fake folder
  * @return {Object} - Object
  */
-const _true = function() {
+const trueObj = function() {
   const object = require('../../../runtime/object')
   const attr = require('../../../runtime/attribute/attr')
   const phi = require('../../../runtime/phi')
@@ -22,4 +22,4 @@ const _true = function() {
   return obj
 }
 
-module.exports = _true
+module.exports = trueObj

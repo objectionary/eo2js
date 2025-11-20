@@ -18,15 +18,15 @@ const compileStylesheets = require('../../src/compile-stylesheets');
 const only = []
 const home = path.resolve('temp/test-transpile')
 
-describe('transpile', function() {
-  before('compile stylesheets', function() {
+describe('transpile', () => {
+  before('compile stylesheets', () => {
     compileStylesheets()
     fs.rmSync(home, {recursive: true, force: true})
     fs.mkdirSync(home, {recursive: true})
   })
-  describe('command', function() {
+  describe('command', () => {
     const target = path.resolve(home, 'target')
-    beforeEach(function() {
+    beforeEach(() => {
       fs.rmSync(target, {recursive: true, force: true})
       fs.mkdirSync(target)
     })
@@ -36,13 +36,15 @@ describe('transpile', function() {
      * @return {String} - Output
      */
     const transpile = function(opts= {}) {
-      opts.name = opts.name || 'simple'
-      opts.prepare = opts.prepare !== undefined ? opts.prepare : true
+      opts.name ||= 'simple'
+      if (opts.prepare === undefined) {
+        opts.prepare = true
+      }
       if (opts.prepare) {
         const verified = path.resolve(target, `6-verify/com/eo2js/${opts.name}.xmir`)
         const foreign = [{
           id: `com.eo2js.${opts.name}`,
-          verified: verified
+          verified
         }]
         fs.writeFileSync(path.resolve(target, 'eo-foreign.json'), JSON.stringify(foreign))
         fs.mkdirSync(path.resolve(target, '6-verify/com/eo2js'), {recursive: true})
@@ -54,28 +56,28 @@ describe('transpile', function() {
         '-t', target,
       ])
     }
-    it('should fail if eo-foreign is not found', function() {
+    it('should fail if eo-foreign is not found', () => {
       assert.throws(() => runSync(['transpile', '-t', target], false))
     })
-    it('should fail if eo-foreign file is not .json', function() {
+    it('should fail if eo-foreign file is not .json', () => {
       const foreign = 'eo-foreign.csv'
       fs.writeFileSync(path.resolve(target, foreign), 'some data')
       assert.throws(() => runSync(['transpile', '-t', target, '-f', foreign], false))
     })
-    it('should create transpiled XMIRs', function() {
+    it('should create transpiled XMIRs', () => {
       const traspiled = '8-transpile/com/eo2js/simple.xmir'
       assertFilesExist(transpile(), target, [traspiled])
       assert.ok(fs.readFileSync(path.resolve(target, traspiled)).toString().includes('<javascript'))
     })
-    it('should generate JS files', function() {
+    it('should generate JS files', () => {
       assertFilesExist(transpile(), target, ['project/com/eo2js/simple.js'])
     });
     ['simple-test', 'alone-test'].forEach((name) => {
-      it(`should generate test JS file for ${name}`, function() {
+      it(`should generate test JS file for ${name}`, () => {
         assertFilesExist(transpile({name}), target, [`project/com/eo2js/${name}.test.js`])
       })
     })
-    it('should skip transpilation if source was not modified', function() {
+    it('should skip transpilation if source was not modified', () => {
       transpile()
       const transpiled = path.resolve(target, '8-transpile/com/eo2js/simple.xmir')
       const first = fs.statSync(transpiled).mtime
@@ -83,7 +85,7 @@ describe('transpile', function() {
       const second = fs.statSync(transpiled).mtime
       assert.equal(first.getTime(), second.getTime())
     })
-    it('should retranspile if source was modified', async function() {
+    it('should retranspile if source was modified', async () => {
       transpile()
       const transpiled = path.resolve(target, '8-transpile/com/eo2js/simple.xmir')
       const source = path.resolve(target, '6-verify/com/eo2js/simple.xmir')
@@ -101,24 +103,22 @@ describe('transpile', function() {
     fs.readdirSync(packs)
       .filter((test) => only.length === 0 || only.includes(test.substring(0, test.lastIndexOf('.json'))))
       .forEach((test) => {
-        it(test, function(done) {
+        it(test, async function() {
           const folder = path.resolve(home, 'packs', test.substring(0, test.lastIndexOf('.json')))
           if (fs.existsSync(folder)) {
             fs.rmSync(folder, {recursive: true})
           }
           const json = JSON.parse(fs.readFileSync(path.resolve(packs, test)).toString())
-          pack({home: folder, sources: 'src', target: 'target', json}).then((res) => {
-            if (res.skip) {
-              this.skip()
-            } else {
-              assert.equal(
-                res.failures.length,
-                0,
-                `Result XMIR:\n ${res.xmir}\nJSON: ${JSON.stringify(res.json, null, 2)}\nFailed tests: ${res.failures.join(';\n')}`
-              )
-              done()
-            }
-          })
+          const res = await pack({home: folder, sources: 'src', target: 'target', json})
+          if (res.skip) {
+            this.skip()
+          } else {
+            assert.equal(
+              res.failures.length,
+              0,
+              `Result XMIR:\n ${res.xmir}\nJSON: ${JSON.stringify(res.json, null, 2)}\nFailed tests: ${res.failures.join(';\n')}`
+            )
+          }
         })
       })
   })

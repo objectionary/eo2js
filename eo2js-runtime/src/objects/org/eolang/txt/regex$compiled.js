@@ -20,12 +20,12 @@ const regex$compiled = function() {
     const expression = dataized(regex.take('expression'), STRING)
     if (!expression.startsWith('/')) {
       throw new ErFailure(
-        'Wrong regex syntax: \"/\" is missing'
+        'Wrong regex syntax: "/" is missing'
       )
     }
     const last = expression.lastIndexOf('/')
     if (!expression.endsWith('/')) {
-      pattern += '(?' + expression.substring(last + 1) + ')'
+      pattern += `(?${  expression.substring(last + 1)  })`
     }
     pattern += expression.substring(1, last)
     return regex.take('pattern').with({

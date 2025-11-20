@@ -70,7 +70,7 @@ describe('runtime tests', function() {
   const target = path.resolve(home, 'target')
   const project = path.resolve(target, 'project')
   const runtime = path.resolve('../eo2js-runtime')
-  before('prepare environment', async function() {
+  before('prepare environment', async () => {
     if (COMPILE) {
       fs.rmSync(home, {recursive: true, force: true})
       fs.mkdirSync(project, {recursive: true})
@@ -96,7 +96,7 @@ describe('runtime tests', function() {
       await mvnw('lint', opts)
     }
   })
-  it('should execute all eo-runtime tests', function(done) {
+  it('should execute all eo-runtime tests', (done) => {
     if (!COMPILE) {
       runSync(['link -t', target, '-p project --tests --alone -d', runtime])
     }
@@ -104,7 +104,7 @@ describe('runtime tests', function() {
       'test',
       '-t', target,
       '-p project -d', runtime,
-      !COMPILE ? '--alone' : '',
+      COMPILE ? '' : '--alone',
       '--exclude', exclude.join(',')
     ])
     console.debug(log)

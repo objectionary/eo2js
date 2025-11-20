@@ -11,13 +11,13 @@ const trapped = function(object, apply) {
   return new Proxy(
     object,
     {
-      get: function(target, property, _) {
+      get(target, property, _) {
         let got = target[property]
         if (typeof got === 'function') {
           got = new Proxy(
             got,
             {
-              apply: function(target, thisArg, args) {
+              apply(target, thisArg, args) {
                 return apply(property, target, thisArg, args)
               }
             }

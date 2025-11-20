@@ -20,5 +20,8 @@
     "postinstall": "patch-package"
   },
   "type": "commonjs",
-  "version": "0.0.0"
+  "version": "0.0.0",
+  "dependencies": {
+    "eslint-plugin-promise": "^7.2.1"
+  }
 }

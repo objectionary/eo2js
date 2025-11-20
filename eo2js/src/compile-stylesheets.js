@@ -42,7 +42,9 @@ const compile = function(source, dest) {
 const compileStylesheets = function(names) {
   console.log('Recompiling stylesheets...')
   let recompiled = 0
-  names = names || all
+  if (!names) {
+    names = all
+  }
   fs.readdirSync(xsls)
     .filter((xsl) => names.includes(xsl.substring(0, xsl.lastIndexOf('.xsl'))))
     .forEach((file) => {

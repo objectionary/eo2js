@@ -30,7 +30,7 @@ const heaps = {
    * @param {Number} size - Size of the block to allocate
    * @return {Number} - Identifier of allocated block
    */
-  malloc: function(size) {
+  malloc(size) {
     const id = ++identifier
     if (BLOCKS.hasOwnProperty(id)) {
       throw new ErFailure(
@@ -46,7 +46,7 @@ const heaps = {
    * @param {Number} offset - Offset
    * @param {Array.<Number>} data - Data to write
    */
-  write: function(id, offset, data) {
+  write(id, offset, data) {
     if (!BLOCKS.hasOwnProperty(id)) {
       throw new ErFailure(
         `Can't read a block in memory with identifier ${id} because it's not allocated`,
@@ -80,7 +80,7 @@ const heaps = {
    * @param {Number} length - Length
    * @return {Array.<Number>} - Data from the block in memory
    */
-  read: function(id, offset, length) {
+  read(id, offset, length) {
     if (!BLOCKS.hasOwnProperty(id)) {
       throw new ErFailure(
         `Block in memory by identifier ${id} is not allocated, can't read`,
@@ -99,7 +99,7 @@ const heaps = {
    * @param {Number} id - Identifier
    * @return {Number} - Size of the block
    */
-  size: function(id) {
+  size(id) {
     if (!BLOCKS.hasOwnProperty(id)) {
       throw new ErFailure(
         `Block in memory by identifier '${id}' is not allocated, can't get size`
@@ -112,7 +112,7 @@ const heaps = {
    * @param {Number} id - Identifier
    * @param {Number} size - New size
    */
-  resize: function(id, size) {
+  resize(id, size) {
     if (size < 0) {
       throw new ErFailure(
         `Can't change size of block in memory by identifier '${id}' to negative: ${size}`
@@ -136,7 +136,7 @@ const heaps = {
    * Free the block in memory by identifier.
    * @param {Number} id - Identifier of pointer
    */
-  free: function(id) {
+  free(id) {
     if (!BLOCKS.hasOwnProperty(id)) {
       throw new ErFailure(
         `Can't free a block in memory with identifier ${id} because it's not allocated`,
