@@ -1,6 +1,11 @@
 // SPDX-FileCopyrightText: Copyright (c) 2024 Objectionary.com
 // SPDX-License-Identifier: MIT
 
+/* eslint-disable no-bitwise, operator-assignment */
+// Rationale: this module implements low-level byte arithmetic (AND/OR/XOR/NOT/shift).
+// Rewriting to avoid bitwise operators would change behavior and inflate code;
+// keeping the original bit-manipulation logic explicit is safer here.
+
 const {LONG, INT, SHORT, NUMBER} = require('./types')
 
 /**
