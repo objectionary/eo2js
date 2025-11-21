@@ -19,9 +19,7 @@ const regex$compiled = function() {
     let pattern = ''
     const expression = dataized(regex.take('expression'), STRING)
     if (!expression.startsWith('/')) {
-      throw new ErFailure(
-        'Wrong regex syntax: \"/\" is missing'
-      )
+      throw new ErFailure('Wrong regex syntax: "/" is missing')
     }
     const last = expression.lastIndexOf('/')
     if (!expression.endsWith('/')) {

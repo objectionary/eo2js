@@ -14,7 +14,7 @@ const at_rho = function(object = null) {
   let rho = object
   return at_term({
     put(obj) {
-      if (rho == null) {
+      if (rho === null) {
         rho = obj
       }
     },

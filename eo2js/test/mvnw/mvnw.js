@@ -37,7 +37,7 @@ let phase = null
  * @return {String} - EO version
  */
 const version = function() {
-  if (ver == null) {
+  if (ver === null) {
     ver = fs.readFileSync(path.resolve(__dirname, 'eo-version.txt')).toString().trim()
   }
   return ver

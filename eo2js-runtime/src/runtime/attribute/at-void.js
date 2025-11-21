@@ -14,13 +14,13 @@ const at_void = function(name, object = null) {
   let obj = object
   return {
     put(object) {
-      if (obj != null) {
+      if (obj !== null) {
         throw new ErFailure(`Void attribute '${name}' is already set, can't reset`)
       }
       obj = object
     },
     get() {
-      if (obj == null) {
+      if (obj === null) {
         throw new ErFailure(`Void attribute '${name}' is not set, can't take`)
       }
       return obj

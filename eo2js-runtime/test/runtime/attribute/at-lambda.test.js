@@ -10,7 +10,7 @@ const ErError = require('../../../temp/runtime/error/ErError');
 describe('at_lambda', () => {
   describe('#put()', () => {
     it('should fail', () => {
-      assert.throws(() => at_lambda({}, () => {}).put({}))
+      assert.throws(() => at_lambda({}, () => null).put({}))
     })
   })
   describe('#get()', () => {

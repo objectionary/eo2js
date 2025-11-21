@@ -27,20 +27,19 @@ const regex$pattern$match$matched_from_index = function() {
     let matched
     let result
     while ((matched = regex.exec(text)) !== null) {
-      if (current !== from) {
-        ++current
-        continue
+      if (current === from) {
+        result = match.take('matched').with({
+          position,
+          start,
+          'from': data.toObject(matched.index),
+          'to': data.toObject(regex.lastIndex),
+          'groups': data.toTuple(
+            matched.map((group) => data.toObject(group))
+          )
+        })
+        break
       }
-      result = match.take('matched').with({
-        position,
-        start,
-        'from': data.toObject(matched.index),
-        'to': data.toObject(regex.lastIndex),
-        'groups': data.toTuple(
-          matched.map((group) => data.toObject(group))
-        )
-      })
-      break
+      ++current
     }
     if (result === undefined) {
       result = match.take('not-matched').with({

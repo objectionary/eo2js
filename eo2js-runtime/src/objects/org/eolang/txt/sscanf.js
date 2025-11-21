@@ -96,7 +96,7 @@ const sscanf = function() {
     let next
     let idx
     const matched = pattern.exec(read)
-    if (matched != null) {
+    if (matched !== null) {
       let index = 1
       while (true) {
         idx = format.indexOf(PERCENT)

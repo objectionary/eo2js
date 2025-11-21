@@ -121,13 +121,16 @@ describe.skip('runtime tests', function() {
     if (!COMPILE) {
       runSync(['link -t', target, '-p project --tests --alone -d', runtime])
     }
-    const log = runSync([
+    const args = [
       'test',
       '-t', target,
       '-p project -d', runtime,
-      !COMPILE ? '--alone' : '',
       '--exclude', exclude.join(',')
-    ])
+    ]
+    if (!COMPILE) {
+      args.push('--alone')
+    }
+    const log = runSync(args)
     console.debug(log)
     assert.ok(!log.includes('failing'))
     done()

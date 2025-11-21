@@ -20,8 +20,13 @@ const PERCENT = '%'
  * @param {array.<number>} bts - Byte array
  * @return {string} - Byte array as string
  */
+const normalizeByte = function(byte) {
+  const normalized = byte % 256
+  return normalized >= 0 ? normalized : normalized + 256
+}
+
 const bytesToHex = function(bts) {
-  return Array.from(bts, (byte) => (`0${  (byte & 0xFF).toString(16)}`).slice(-2)).join('-').toUpperCase()
+  return Array.from(bts, (byte) => (`0${normalizeByte(byte).toString(16)}`).slice(-2)).join('-').toUpperCase()
 }
 
 /**
@@ -114,7 +119,10 @@ const sprintf = function() {
         )
       }
       next = pattern.charAt(idx + 1)
-      if (next !== PERCENT) {
+      if (next === PERCENT) {
+        printed += pattern.substring(0, idx + 1)
+        pattern = pattern.substring(idx + 1)
+      } else {
         printed += pattern.substring(0, idx) + formatted(
           next,
           retriever.with({
@@ -123,9 +131,6 @@ const sprintf = function() {
         )
         ++index
         pattern = pattern.substring(idx + 2)
-      } else {
-        printed += pattern.substring(0, idx + 1)
-        pattern = pattern.substring(idx + 1)
       }
     }
     return data.toObject(printed)

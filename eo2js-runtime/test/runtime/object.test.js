@@ -209,7 +209,7 @@ describe('object', () => {
       obj.attrs.y = at_void('y')
       obj.attrs.s = at_simple(somebody)
       obj.assets[DELTA] = [1, 2, 3]
-      obj.assets[LAMBDA] = () => {}
+      obj.assets[LAMBDA] = () => object()
       const term = obj.φTerm()
       console.debug(term)
       assert.ok(term.includes('·x⟦'))

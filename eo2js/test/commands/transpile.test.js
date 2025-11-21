@@ -36,8 +36,10 @@ describe('transpile', () => {
      * @return {String} - Output
      */
     const transpile = function(opts= {}) {
-      opts.name = opts.name || 'simple'
-      opts.prepare = opts.prepare !== undefined ? opts.prepare : true
+      opts.name ||= 'simple'
+      if (opts.prepare === undefined) {
+        opts.prepare = true
+      }
       if (opts.prepare) {
         const linted = path.resolve(target, `3-lint/com/eo2js/${opts.name}.xmir`)
         const foreign = [{
@@ -119,29 +121,28 @@ describe('transpile', () => {
    *  Prerequisites for Fix:
    *  - All skipped tests must pass with current EO version
    */
-  describe('transformation packs', async () => {
+  describe('transformation packs', () => {
     const packs = path.resolve(__dirname, '../resources/transpile/packs')
-    await Promise.all(fs.readdirSync(packs)
+    fs.readdirSync(packs)
       .filter((test) => only.length === 0 || only.includes(test.substring(0, test.lastIndexOf('.json'))))
-      .map((test) => {
+      .forEach((test) => {
         it(test, async function() {
           const folder = path.resolve(home, 'packs', test.substring(0, test.lastIndexOf('.json')))
           if (fs.existsSync(folder)) {
             fs.rmSync(folder, {recursive: true})
           }
           const json = JSON.parse(fs.readFileSync(path.resolve(packs, test)).toString())
-          await pack({home: folder, sources: 'src', target: 'target', json}).then((res) => {
-            if (res.skip) {
-              this.skip()
-            } else {
-              assert.equal(
-                res.failures.length,
-                0,
-                `Result XMIR:\n ${res.xmir}\nJSON: ${JSON.stringify(res.json, null, 2)}\nFailed tests: ${res.failures.join(';\n')}`
-              )
-            }
-          })
+          const res = await pack({home: folder, sources: 'src', target: 'target', json})
+          if (res.skip) {
+            this.skip()
+            return
+          }
+          assert.equal(
+            res.failures.length,
+            0,
+            `Result XMIR:\n ${res.xmir}\nJSON: ${JSON.stringify(res.json, null, 2)}\nFailed tests: ${res.failures.join(';\n')}`
+          )
         })
-      }))
+      })
   })
 })
