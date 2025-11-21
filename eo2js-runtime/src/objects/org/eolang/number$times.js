@@ -14,7 +14,7 @@ const data = require('../../../runtime/data')
  */
 const number$times = function() {
   const obj = object('number$times')
-  obj.attrs['x'] = at_void('x')
+  obj.attrs.x = at_void('x')
   obj.assets[LAMBDA] = function(self) {
     return data.toObject(
       dataized(self.take(RHO), NUMBER) * dataized(self.take('x'), NUMBER)

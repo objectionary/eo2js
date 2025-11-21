@@ -32,7 +32,7 @@ const pckg = function(options) {
       'eo2js-runtime': options.runtimeVersion || 'latest'
     }
   }
-  if (!!options.tests) {
+  if (options.tests) {
     def.dependencies = {
       ...def.dependencies,
       'mocha': 'latest'

@@ -14,13 +14,10 @@ const at_void = require('../../../../runtime/attribute/at-void');
  */
 const real$pow = function() {
   const obj = object('real$pow')
-  obj.attrs['x'] = at_void('x')
+  obj.attrs.x = at_void('x')
   obj.assets[LAMBDA] = function(self) {
     return data.toObject(
-      Math.pow(
-        dataized(self.take(RHO), NUMBER),
-        dataized(self.take('x'), NUMBER)
-      )
+      dataized(self.take(RHO), NUMBER)**dataized(self.take('x'), NUMBER)
     )
   }
   return obj

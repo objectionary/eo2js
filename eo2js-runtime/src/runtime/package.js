@@ -47,10 +47,10 @@ const tryFind = function(dir, name, fqn) {
 const found = function(name, full) {
   const split = full.split('.')
   let obj = tryFind.call(this, '../objects', name, split)
-  if (obj == null && __dirname.includes('node_modules')) {
+  if (obj === null && __dirname.includes('node_modules')) {
     obj = tryFind.call(this, '../../../..', name, split)
   }
-  if (obj == null) {
+  if (obj === null) {
     throw new Error(`Couldn't find object '${name}' from '${full}'`)
   }
   return obj
@@ -79,17 +79,17 @@ const pckg = function(fqn, rho) {
     let obj
     if (this.attrs.hasOwnProperty(name)) {
       obj = this.attrs[name].get()
-    } else if (!name.includes('.')) {
-      const before = this.assets[LAMBDA](this)
-      const full = before === '' ? name : `${before.substring(1)}.${name}`
-      obj = found.call(this, name, full)
-    } else {
+    } else if (name.includes('.')) {
       const split = name.split('.')
       let next = this.take(split[0])
       for (let i = 1; i < split.length; ++i) {
         next = next.take(split[i])
       }
       obj = next
+    } else {
+      const before = this.assets[LAMBDA](this)
+      const full = before === '' ? name : `${before.substring(1)}.${name}`
+      obj = found.call(this, name, full)
     }
     return obj
   }

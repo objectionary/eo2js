@@ -4,11 +4,12 @@
 const once = require('../../temp/runtime/once')
 const assert = require('assert');
 
-describe('once', function() {
-  it('should execute callback only once', function() {
+describe('once', () => {
+  it('should execute callback only once', () => {
     let count = 0
     const obj = once(() => ({x: ++count}))
-    obj.x
+    const first = obj.x
+    assert.equal(first, 1)
     assert.equal(obj.x, 1)
   })
 })

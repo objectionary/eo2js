@@ -12,13 +12,13 @@ const at_term = require('./at-term');
  */
 const at_safe = function(origin) {
   return at_term({
-    put: function(object) {
+    put(object) {
       origin.put(object)
     },
-    get: function() {
+    get() {
       return validated(() => safe(origin.get()))
     },
-    copy: function(rho) {
+    copy(rho) {
       return at_safe(origin.copy(rho))
     }
   })

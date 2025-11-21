@@ -9,8 +9,8 @@ const {RHO} = require('../../../../temp/runtime/attribute/specials');
 const at_rho = require('../../../../temp/runtime/attribute/at-rho');
 const data = require('../../../../temp/runtime/data')
 
-describe('number$div', function() {
-  it('should divide two floats', function() {
+describe('number$div', () => {
+  it('should divide two floats', () => {
     const div = number$div()
     div.attrs[RHO] = at_rho(data.toObject(13.2))
     assert.equal(

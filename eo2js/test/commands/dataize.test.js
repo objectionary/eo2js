@@ -6,16 +6,16 @@ const fs = require('fs');
 const {runSync} = require('../helpers');
 const assert = require('assert');
 
-describe('dataize', function() {
+describe('dataize', () => {
   const home = path.resolve('temp/test-dataize')
   const target = path.resolve(home, 'target')
   const project = path.resolve(target, 'project')
   const runtime = path.resolve('../eo2js-runtime')
-  beforeEach('clear home', function() {
+  beforeEach('clear home', () => {
     fs.rmSync(home, {recursive: true, force: true})
     fs.mkdirSync(project, {recursive: true})
   })
-  it('should dataize app object', function() {
+  it('should dataize app object', () => {
     runSync(['link', '-t', target, '-p project', '--alone', '-d', runtime])
     fs.copyFileSync(
       path.resolve('test/resources/dataize/app.js'),

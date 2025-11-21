@@ -14,8 +14,8 @@ const data = require('../../../../runtime/data')
  */
 const regex$pattern$match$matched_from_index = function() {
   const obj = object('regex$pattern$match$matched-from-index')
-  obj.attrs['position'] = at_void('position')
-  obj.attrs['start'] = at_void('start')
+  obj.attrs.position = at_void('position')
+  obj.attrs.start = at_void('start')
   obj.assets[LAMBDA] = function(self) {
     const position = self.take('position')
     const match = self.take(RHO)
@@ -25,26 +25,25 @@ const regex$pattern$match$matched_from_index = function() {
     const from = dataized(start, NUMBER)
     let current = 1
     let matched
-    let result = undefined
+    let result
     while ((matched = regex.exec(text)) !== null) {
-      if (current !== from) {
-        ++current
-        continue
+      if (current === from) {
+        result = match.take('matched').with({
+          position,
+          start,
+          'from': data.toObject(matched.index),
+          'to': data.toObject(regex.lastIndex),
+          'groups': data.toTuple(
+            matched.map((group) => data.toObject(group))
+          )
+        })
+        break
       }
-      result = match.take('matched').with({
-        'position': position,
-        'start': start,
-        'from': data.toObject(matched.index),
-        'to': data.toObject(regex.lastIndex),
-        'groups': data.toTuple(
-          matched.map((group) => data.toObject(group))
-        )
-      })
-      break
+      ++current
     }
     if (result === undefined) {
       result = match.take('not-matched').with({
-        'position': position
+        position
       })
     }
     return result

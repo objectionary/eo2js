@@ -15,8 +15,8 @@ const data = require('../../../runtime/data')
  */
 const malloc$of$allocated$read = function() {
   const obj = object('malloc$of$allocated$read')
-  obj.attrs['offset'] = at_void('offset')
-  obj.attrs['length'] = at_void('length')
+  obj.attrs.offset = at_void('offset')
+  obj.attrs.length = at_void('length')
   obj.assets[LAMBDA] = function(self) {
     return data.toObject(
       heaps.read(

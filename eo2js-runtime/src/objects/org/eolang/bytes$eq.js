@@ -13,7 +13,7 @@ const data = require('../../../runtime/data');
  */
 const bytes$eq = function() {
   const obj = object('bytes$eq')
-  obj.attrs['b'] = at_void('b')
+  obj.attrs.b = at_void('b')
   obj.assets[LAMBDA] = function(self) {
     const rho = dataized(self.take(RHO))
     const arg = dataized(self.take('b'))

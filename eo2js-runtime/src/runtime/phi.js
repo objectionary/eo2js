@@ -18,10 +18,10 @@ const GLOBAL = 'Φ'
 const phi = {
   attrs: {},
   assets: {},
-  with: function(_) {
+  with(_) {
     throw new ErFailure(`Can't put objects to the ${GLOBAL} object`)
   },
-  take: function(name) {
+  take(name) {
     if ([PHI, RHO, LAMBDA].includes(name)) {
       throw new ErFailure(`Can't take ${name} attribute from ${GLOBAL} object`)
     }
@@ -33,10 +33,10 @@ const phi = {
     }
     return object
   },
-  copy: function() {
+  copy() {
     return phi
   },
-  toString: function() {
+  toString() {
     return `${GLOBAL}`
   }
 }

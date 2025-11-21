@@ -21,7 +21,7 @@ const data = {
    * @param {string|boolean|number|array.<string>|array.<number>|BigInt} data
    * @return {object} - Object from given data
    */
-  toObject: function(data) {
+  toObject(data) {
     const phi = require('./phi')
     const eolang = phi.take('org.eolang')
     let object
@@ -66,7 +66,7 @@ const data = {
    * @param {array.<object>} objects - Array of objects
    * @return {object} - The `org.eolang.tuple` of provided objects
    */
-  toTuple: function(objects) {
+  toTuple(objects) {
     const phi = require('./phi')
     const tuple = phi.take('org.eolang.tuple')
     let args = tuple.take('empty')

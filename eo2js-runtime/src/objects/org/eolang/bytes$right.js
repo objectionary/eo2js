@@ -15,7 +15,7 @@ const data = require('../../../runtime/data')
  */
 const bytes$right = function() {
   const obj = object('bytes$right')
-  obj.attrs['x'] = at_void('x')
+  obj.attrs.x = at_void('x')
   obj.assets[LAMBDA] = function(self) {
     return data.toObject(
       bytesOf.bytes(dataized(self.take(RHO)))

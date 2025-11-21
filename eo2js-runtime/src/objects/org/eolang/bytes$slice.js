@@ -14,8 +14,8 @@ const data = require('../../../runtime/data')
  */
 const bytes$slice = function() {
   const obj = object('bytes$slice')
-  obj.attrs['start'] = at_void('start')
-  obj.attrs['len'] = at_void('len')
+  obj.attrs.start = at_void('start')
+  obj.attrs.len = at_void('len')
   obj.assets[LAMBDA] = function(self) {
     const start = dataized(self.take('start'), NUMBER)
     return data.toObject(

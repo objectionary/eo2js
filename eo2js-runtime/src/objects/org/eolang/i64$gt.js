@@ -15,7 +15,7 @@ const phi = require('../../../runtime/phi');
  */
 const i64$gt = function() {
   const obj = object('i64$gt')
-  obj.attrs['x'] = at_void('x')
+  obj.attrs.x = at_void('x')
   obj.assets[LAMBDA] = function(self) {
     return phi.take('org.eolang.i64').with({
       0: data.toObject(

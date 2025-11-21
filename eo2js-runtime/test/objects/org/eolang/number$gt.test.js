@@ -9,8 +9,8 @@ const {RHO} = require('../../../../temp/runtime/attribute/specials');
 const at_rho = require('../../../../temp/runtime/attribute/at-rho');
 const data = require('../../../../temp/runtime/data')
 
-describe('number$gt', function() {
-  it('should confirm that 7.2 > 3.1', function() {
+describe('number$gt', () => {
+  it('should confirm that 7.2 > 3.1', () => {
     const gt = number$gt()
     gt.attrs[RHO] = at_rho(data.toObject(7.2))
     assert.equal(
@@ -18,7 +18,7 @@ describe('number$gt', function() {
       true
     )
   })
-  it('should not confirm that 10.4 > 20.1', function() {
+  it('should not confirm that 10.4 > 20.1', () => {
     const gt = number$gt()
     gt.attrs[RHO] = at_rho(data.toObject(10.4))
     assert.equal(

@@ -9,8 +9,8 @@ const {RHO} = require('../../../../temp/runtime/attribute/specials');
 const at_rho = require('../../../../temp/runtime/attribute/at-rho');
 const data = require('../../../../temp/runtime/data')
 
-describe('number$plus', function() {
-  it('should add two floats', function() {
+describe('number$plus', () => {
+  it('should add two floats', () => {
     const plus = number$plus()
     plus.attrs[RHO] = at_rho(data.toObject(7.1))
     assert.equal(

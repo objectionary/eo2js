@@ -26,11 +26,8 @@ const DATAIZING_CAGES = {}
  * @param {Number} depth - Depth of cage recursion
  */
 const increment = function(locator, depth) {
-  if (!DATAIZING_CAGES.hasOwnProperty(locator)) {
-    DATAIZING_CAGES[locator] = 1
-  } else {
-    DATAIZING_CAGES[locator] = DATAIZING_CAGES[locator] + 1
-  }
+  const exists = DATAIZING_CAGES.hasOwnProperty(locator)
+  DATAIZING_CAGES[locator] = exists ? DATAIZING_CAGES[locator] + 1 : 1
   if (DATAIZING_CAGES[locator] > depth) {
     throw new ErFailure(
       `The cage with locator ${locator} has reached the maximum nesting depth = ${depth}`
@@ -63,7 +60,7 @@ const decrement = function(locator) {
 const traced = function(object, locator, depth = RECURSION_THRESHOLD) {
   return trapped(
     object,
-    function(_, target, thisArg, args) {
+    (_, target, thisArg, args) => {
       increment(locator, depth)
       const ret = target.call(thisArg, ...args)
       decrement(locator)

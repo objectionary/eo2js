@@ -6,13 +6,13 @@ const ErFailure = require('../../temp/runtime/error/ErFailure');
 const assert = require('assert');
 const ErError = require('../../temp/runtime/error/ErError');
 
-describe('safe', function() {
-  it('should validate #with() and #take() methods', function() {
+describe('safe', () => {
+  it('should validate #with() and #take() methods', () => {
     const obj = safe({
-      take: function(_) {
+      take(_) {
         throw new ErFailure('take')
       },
-      with: function(_) {
+      with(_) {
         throw new ErFailure('with')
       }
     })

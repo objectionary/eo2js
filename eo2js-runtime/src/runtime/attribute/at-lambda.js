@@ -13,16 +13,16 @@ const {LAMBDA} = require('./specials');
  */
 const at_lambda = function(object, callback) {
   return {
-    put: function(_) {
+    put(_) {
       throw new ErFailure(`You can't override ${LAMBDA} expression in ${object.toString()}`)
     },
-    get: function() {
+    get() {
       return validated(() => callback(object))
     },
-    copy: function(rho) {
+    copy(rho) {
       return at_lambda(rho, callback)
     },
-    φTerm: function() {
+    φTerm() {
       return LAMBDA
     }
   }

@@ -9,8 +9,8 @@ const {RHO} = require('../../../../temp/runtime/attribute/specials');
 const at_rho = require('../../../../temp/runtime/attribute/at-rho');
 const data = require('../../../../temp/runtime/data')
 
-describe('number$times', function() {
-  it('should multiply two numbers', function() {
+describe('number$times', () => {
+  it('should multiply two numbers', () => {
     const times = number$times()
     times.attrs[RHO] = at_rho(data.toObject(5.5))
     assert.equal(
