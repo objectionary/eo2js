@@ -51,7 +51,7 @@ describe.skip('integration test', function() {
   const project = path.resolve(target, 'project')
   const runtime = path.resolve('../eo2js-runtime')
   this.timeout(1000000)
-  before('recompile stylesheets', async function() {
+  before('recompile stylesheets', async () => {
     compileStylesheets()
     fs.rmSync(home, {recursive: true, force: true})
     fs.mkdirSync(project, {recursive: true})
@@ -62,12 +62,12 @@ describe.skip('integration test', function() {
     )
     await prepare(home)
   })
-  it('should execute simple unit test', function(done) {
+  it('should execute simple unit test', (done) => {
     const log = runSync(['test', '-t', target, '-p project -d', runtime])
     assert.ok(log.includes('test "story_is_not_empty" should work'))
     done()
   })
-  it('should dataize simple program', function(done) {
+  it('should dataize simple program', (done) => {
     const log = runSync(['dataize program -t', target, '-p project -d', runtime])
     assert.ok(log.includes('Hello, Jeff'))
     done()

@@ -31,7 +31,7 @@ const broken = function(name) {
       throw new ErFailure(MESSAGE)
     }
   } else {
-    obj.attrs[name] = attr.lambda(obj, function(_) {
+    obj.attrs[name] = attr.lambda(obj, (_) => {
       throw new ErFailure(MESSAGE)
     })
   }
@@ -54,7 +54,7 @@ const main = function() {
  */
 const catcher = function() {
   const obj = object('catcher')
-  obj.attrs['ex'] = attr.void('ex')
+  obj.attrs.ex = attr.void('ex')
   obj.attrs[PHI] = attr.lambda(obj, (rho) => rho.take('ex'))
   return obj
 }
@@ -77,7 +77,7 @@ const nop = function() {
  */
 const tryObj = function(main, final) {
   return tr().with({
-    'main': main,
+    main,
     'catch': catcher(),
     'finally': final || nop()
   })
@@ -90,7 +90,7 @@ const tryObj = function(main, final) {
  */
 const stdout = function(out) {
   const obj = object('stdout')
-  obj.attrs['x'] = at_void()
+  obj.attrs.x = at_void()
   obj.assets[LAMBDA] = function(self) {
     out.log(dataized(self.take('x'), STRING))
     return data.toObject(true)
@@ -98,17 +98,17 @@ const stdout = function(out) {
   return obj
 }
 
-describe('try', function() {
-  it(`should catch error via ${PHI}`, function() {
+describe('try', () => {
+  it(`should catch error via ${PHI}`, () => {
     assert.equal(dataized(tryObj(broken(PHI)), STRING), MESSAGE)
   })
-  it(`should catch error via ${LAMBDA}`, function() {
+  it(`should catch error via ${LAMBDA}`, () => {
     assert.equal(dataized(tryObj(broken(LAMBDA)), STRING), MESSAGE)
   })
-  it('should be dataized to body', function() {
+  it('should be dataized to body', () => {
     assert.equal(dataized(tryObj(main()), BOOL), true)
   })
-  it('should dataize "finally" attribute', function() {
+  it('should dataize "finally" attribute', () => {
     const logs = []
     dataized(
       tryObj(
@@ -120,7 +120,7 @@ describe('try', function() {
     )
     assert.ok(logs.includes('Hello'))
   })
-  it('should not dataize body twice', function() {
+  it('should not dataize body twice', () => {
     const logs = []
     dataized(
       tryObj(

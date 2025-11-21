@@ -63,7 +63,7 @@ const decrement = function(locator) {
 const traced = function(object, locator, depth = RECURSION_THRESHOLD) {
   return trapped(
     object,
-    function(_, target, thisArg, args) {
+    (_, target, thisArg, args) => {
       increment(locator, depth)
       const ret = target.call(thisArg, ...args)
       decrement(locator)

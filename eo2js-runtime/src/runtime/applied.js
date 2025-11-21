@@ -11,9 +11,7 @@ const once = require('./once');
  */
 const applied = function(object, bindings) {
   return once(
-    function() {
-      return object.with(bindings)
-    }
+    () => object.with(bindings)
   )
 }
 

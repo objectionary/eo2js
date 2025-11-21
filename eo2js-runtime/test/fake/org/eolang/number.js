@@ -15,7 +15,7 @@ const number = function() {
   const obj = object('float')
   obj.attrs['as-bytes'] = attr.void('as-bytes')
   obj.attrs[PHI] = attr.once(attr.lambda(obj, (rho) => rho.take('as-bytes')))
-  obj.attrs['plus'] = attr.simple(plus())
+  obj.attrs.plus = attr.simple(plus())
   return obj
 }
 

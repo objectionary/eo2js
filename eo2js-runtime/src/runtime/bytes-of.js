@@ -80,7 +80,7 @@ const bytesOf = {
    * @param {Array.<Number|String>} bytes - Byte array
    * @return {Object} - Bytes conversion
    */
-  bytes: function(bytes) {
+  bytes(bytes) {
     if (!Array.isArray(bytes)) {
       throw new Error(`Can't take byte array bytes from non byte array (${bytes})`)
     }
@@ -91,7 +91,7 @@ const bytesOf = {
    * @param {BigInt} num - 2 bytes integer number
    * @return {Object} - Bytes conversion
    */
-  short: function(num) {
+  short(num) {
     if (typeof num !== 'bigint') {
       throw new Error(`Can't take 2 bytes from not BigInt number (${num})`)
     }
@@ -108,7 +108,7 @@ const bytesOf = {
    * @param {BigInt} num - 4 bytes integer number
    * @return {Object} - Bytes conversion
    */
-  int: function(num) {
+  int(num) {
     if (typeof num !== 'bigint') {
       throw new Error(`Can't take 4 bytes from not BigInt number (${num})`)
     }
@@ -126,7 +126,7 @@ const bytesOf = {
    * @param {Boolean} bounds - Skip bounds checking
    * @return {Object} - Bytes conversion
    */
-  long: function(num, bounds = true) {
+  long(num, bounds = true) {
     if (typeof num !== 'bigint') {
       throw new Error(`Can't take 8 bytes from non BigInt number (${num})`)
     }
@@ -143,7 +143,7 @@ const bytesOf = {
    * @param {Number} num - 8 byte float number
    * @return {Object} - Bytes conversion
    */
-  number: function(num) {
+  number(num) {
     if (typeof num !== 'number') {
       throw new Error(`Can't take number bytes from not a number (${num})`)
     }
@@ -157,7 +157,7 @@ const bytesOf = {
    * @param {String} str - String
    * @return {Object} - Bytes conversion
    */
-  string: function(str) {
+  string(str) {
     if (typeof str !== 'string') {
       throw new Error(`Can't take string bytes from non string (${str})`)
     }
@@ -168,7 +168,7 @@ const bytesOf = {
    * @param {Boolean} bool - Boolean value
    * @return {Object} - Bytes conversion
    */
-  bool: function(bool) {
+  bool(bool) {
     if (typeof bool !== 'boolean') {
       throw new Error(`Can't take boolean bytes from non boolean (${bool})`)
     }
@@ -200,7 +200,7 @@ const conversion = function(bytes) {
      * Get byte array.
      * @return {Array.<Number>} - Byte array
      */
-    asBytes: function() {
+    asBytes() {
       return bytes
     },
     /**
@@ -208,7 +208,7 @@ const conversion = function(bytes) {
      * @param {String} [type] - Number type
      * @return {number} - Number
      */
-    asNumber: function(type = NUMBER) {
+    asNumber(type = NUMBER) {
       let res
       if (type === NUMBER && bytes.length === 8) {
         res = new DataView(new Int8Array(bytes).buffer).getFloat64(0)
@@ -227,14 +227,14 @@ const conversion = function(bytes) {
      * Convert bytes to string
      * @return {string} - String number
      */
-    asString: function() {
+    asString() {
       return Buffer.from(bytes).toString('utf-8')
     },
     /**
      * Convert bytes to bool.
      * @return {boolean} - Boolean
      */
-    asBool: function() {
+    asBool() {
       if (bytes.length !== 1) {
         throw new Error(`Byte array must be 1 byte long to convert to bool (${bytes})`)
       }
@@ -244,7 +244,7 @@ const conversion = function(bytes) {
      * Get verbose bytes string representation depends on its length
      * @return {string} - Verbose string representation of bytes
      */
-    verbose: function() {
+    verbose() {
       let str
       if (bytes.length === 0) {
         str = '--'
@@ -283,7 +283,7 @@ const conversion = function(bytes) {
      *  shift: (function(Number): *)}
      * }}
      */
-    and: function(other) {
+    and(other) {
       const copy = bytes
       for (let i = 0; i < Math.min(copy.length, other.length); ++i) {
         copy[i] = copy[i] & other[i]
@@ -306,7 +306,7 @@ const conversion = function(bytes) {
      *  shift: (function(Number): *)}
      * }}
      */
-    or: function(other) {
+    or(other) {
       const copy = bytes
       for (let i = 0; i < Math.min(copy.length, other.length); ++i) {
         copy[i] = copy[i] | other[i]
@@ -329,7 +329,7 @@ const conversion = function(bytes) {
      *  shift: (function(Number): *)}
      * }}
      */
-    xor: function(other) {
+    xor(other) {
       const copy = bytes
       for (let i = 0; i < Math.min(copy.length, other.length); ++i) {
         copy[i] = copy[i] ^ other[i]
@@ -351,7 +351,7 @@ const conversion = function(bytes) {
      *  shift: (function(Number): *)}
      * }}
      */
-    not: function() {
+    not() {
       const copy = bytes
       for (let i = 0; i < copy.length; ++i) {
         copy[i] = ~copy[i]
@@ -376,7 +376,7 @@ const conversion = function(bytes) {
      *  shift: (function(Number): *)}
      * }}
      */
-    shift: function(bits) {
+    shift(bits) {
       bits = Number(bits)
       const bts = bytes
       const mod = Math.abs(bits) % BYTE_SIZE;

@@ -90,7 +90,7 @@ describe.skip('runtime tests', function() {
   const project = path.resolve(target, 'project')
   const runtime = path.resolve('../eo2js-runtime')
   const tag = fs.readFileSync(path.resolve('test/mvnw/eo-version.txt')).toString().trim()
-  before('prepare environment', async function() {
+  before('prepare environment', async () => {
     if (COMPILE) {
       fs.rmSync(home, {recursive: true, force: true})
       fs.mkdirSync(project, {recursive: true})
@@ -117,7 +117,7 @@ describe.skip('runtime tests', function() {
       await mvnw('lint', {...opts, easy: true})
     }
   })
-  it('should execute all eo-runtime tests', function(done) {
+  it('should execute all eo-runtime tests', (done) => {
     if (!COMPILE) {
       runSync(['link -t', target, '-p project --tests --alone -d', runtime])
     }

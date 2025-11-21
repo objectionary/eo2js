@@ -21,9 +21,7 @@ const PERCENT = '%'
  * @return {string} - Byte array as string
  */
 const bytesToHex = function(bts) {
-  return Array.from(bts, function(byte) {
-    return ('0' + (byte & 0xFF).toString(16)).slice(-2);
-  }).join('-').toUpperCase()
+  return Array.from(bts, (byte) => (`0${  (byte & 0xFF).toString(16)}`).slice(-2)).join('-').toUpperCase()
 }
 
 /**
@@ -35,19 +33,19 @@ const bytesToHex = function(bts) {
  * }}
  */
 const CONVERSION = {
-  's': function(obj) {
+  's'(obj) {
     return dataized(obj, STRING)
   },
-  'd': function(obj) {
+  'd'(obj) {
     return Math.floor(dataized(obj, NUMBER)).toString()
   },
-  'f': function(obj) {
+  'f'(obj) {
     return dataized(obj, NUMBER).toString()
   },
-  'x': function(obj) {
+  'x'(obj) {
     return bytesToHex(dataized(obj))
   },
-  'b': function(obj) {
+  'b'(obj) {
     return dataized(obj, BOOL).toString()
   }
 }
@@ -92,8 +90,8 @@ const formatted = function(symbol, element) {
  */
 const sprintf = function() {
   const obj = object('sscanf')
-  obj.attrs['format'] = at_void('format')
-  obj.attrs['args'] = at_void('args')
+  obj.attrs.format = at_void('format')
+  obj.attrs.args = at_void('args')
   obj.assets[LAMBDA] = function(self) {
     const format = dataized(this.take('format'), STRING)
     const args = this.take('args')

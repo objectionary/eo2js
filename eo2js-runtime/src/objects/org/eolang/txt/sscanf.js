@@ -25,10 +25,10 @@ const PERCENT = '%'
  */
 const CONVERSION = {
   's': data.toObject,
-  'd': function(str) {
+  'd'(str) {
     return data.toObject(Math.floor(Number(str)))
   },
-  'f': function(str) {
+  'f'(str) {
     return data.toObject(Number(str))
   }
 }
@@ -54,8 +54,8 @@ const converted = function(symbol, str) {
  */
 const sscanf = function() {
   const obj = object('sscanf')
-  obj.attrs['format'] = at_void('format')
-  obj.attrs['read'] = at_void('read')
+  obj.attrs.format = at_void('format')
+  obj.attrs.read = at_void('read')
   obj.assets[LAMBDA] = function(self) {
     let format = dataized(self.take('format'), STRING)
     let literal = false
@@ -69,27 +69,25 @@ const sscanf = function() {
         } else {
           literal = true
         }
-      } else {
-        if (literal) {
-          switch (sym) {
-            case 'd':
-              regex += '(\\d+)'
-              break
-            case 'f':
-              regex += '([+-]?\\\\d+(?:\\\\.\\\\d+)?)'
-              break
-            case 's':
-              regex += '(\\S+)'
-              break
-            default:
-              throw new ErFailure(
-                `Unsupported format specifier: %${sym}`
-              )
-          }
-          literal = false
-        } else {
-          regex += `\\Q${sym}\\E`
+      } else if (literal) {
+        switch (sym) {
+          case 'd':
+            regex += '(\\d+)'
+            break
+          case 'f':
+            regex += '([+-]?\\\\d+(?:\\\\.\\\\d+)?)'
+            break
+          case 's':
+            regex += '(\\S+)'
+            break
+          default:
+            throw new ErFailure(
+              `Unsupported format specifier: %${sym}`
+            )
         }
+        literal = false
+      } else {
+        regex += `\\Q${sym}\\E`
       }
     }
     const output = []

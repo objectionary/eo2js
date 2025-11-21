@@ -11,95 +11,95 @@ const ErError = require('../../temp/runtime/error/ErError');
 const with_rho = require('../../temp/runtime/with-rho');
 const at_rho = require('../../temp/runtime/attribute/at-rho');
 
-describe('object', function() {
-  it(`should not have ${RHO} attribute at the beginning`, function() {
+describe('object', () => {
+  it(`should not have ${RHO} attribute at the beginning`, () => {
     assert.ok(!object().attrs.hasOwnProperty(RHO))
   })
-  it(`should have empty assets`, function() {
+  it(`should have empty assets`, () => {
     assert.equal(Object.keys(object().assets).length, 0)
   })
-  it('should be able to be printed', function() {
+  it('should be able to be printed', () => {
     assert.doesNotThrow(() => object().toString())
   })
-  it('should not be equal to other object', function() {
+  it('should not be equal to other object', () => {
     assert.notDeepStrictEqual(object(), object())
   })
-  describe('#take()', function() {
-    it('should set rho to self', function() {
+  describe('#take()', () => {
+    it('should set rho to self', () => {
       const first = object('first')
       const second = object('second')
-      first.attrs['attr'] = at_simple(second)
+      first.attrs.attr = at_simple(second)
       assert.deepStrictEqual(first.take('attr').take(RHO).toString(), first.toString())
     })
-    it('should not copy on dispatch if rho is set', function() {
+    it('should not copy on dispatch if rho is set', () => {
       const first = object('f')
       const second = object('s')
       const third = with_rho(object('t'), second, 'attr')
-      first.attrs['attr'] = at_simple(third)
+      first.attrs.attr = at_simple(third)
       assert.deepStrictEqual(first.take('attr').toString(), third.toString())
       assert.deepStrictEqual(third.take(RHO).toString(), second.toString())
     })
-    it('should copy object on dispatch', function() {
+    it('should copy object on dispatch', () => {
       const first = object()
       const second = object()
-      second.attrs['attr'] = at_simple(first)
+      second.attrs.attr = at_simple(first)
       assert.notDeepStrictEqual(second.take('attr'), first)
     })
-    it(`should return object through ${PHI} attribute`, function() {
+    it(`should return object through ${PHI} attribute`, () => {
       const first = object('first')
       const second = object()
       const phi = object()
-      phi.attrs['attr'] = at_simple(first)
+      phi.attrs.attr = at_simple(first)
       second.attrs[PHI] = at_simple(phi)
       assert.ok(second.take('attr').toString().includes('first'))
     })
-    it(`should return object through ${LAMBDA} asset`, function() {
+    it(`should return object through ${LAMBDA} asset`, () => {
       const first = object('first')
       const second = object()
       const third = object()
-      third.attrs['attr'] = at_simple(first)
+      third.attrs.attr = at_simple(first)
       second.assets[LAMBDA] = function(_) {
         return third
       }
       assert.ok(second.take('attr').toString().includes('first'))
     })
-    it('should throw an error if no attribute with given name', function() {
+    it('should throw an error if no attribute with given name', () => {
       assert.throws(() => object().take('attr'))
     })
-    it(`should throw an error if no attribute in ${PHI} with given name`, function() {
+    it(`should throw an error if no attribute in ${PHI} with given name`, () => {
       const obj = object()
       const phi = object()
       obj.attrs[PHI] = at_simple(phi)
       assert.throws(() => obj.take('attr'))
     })
-    it(`should throw an error if no attribute in ${LAMBDA} with given name`, function() {
+    it(`should throw an error if no attribute in ${LAMBDA} with given name`, () => {
       const obj = object()
       obj.assets[LAMBDA] = function(_) {
         return object()
       }
       assert.throws(() => obj.take('attr'))
     })
-    it(`should throw an error if ${LAMBDA} attribute is being taken`, function() {
+    it(`should throw an error if ${LAMBDA} attribute is being taken`, () => {
       const obj = object()
       obj.attrs[LAMBDA] = at_simple({})
       assert.throws(() => obj.take(LAMBDA), ErFailure)
     })
-    it(`should throw an error if absent ${LAMBDA} asset is being taken`, function() {
+    it(`should throw an error if absent ${LAMBDA} asset is being taken`, () => {
       assert.throws(() => object().take(LAMBDA), ErFailure)
     })
-    it(`should validate the result of ${LAMBDA} asset`, function() {
+    it(`should validate the result of ${LAMBDA} asset`, () => {
       const obj = object()
       obj.assets[LAMBDA] = function(_) {
         throw new ErFailure('error')
       }
       assert.throws(() => obj.take(LAMBDA), ErError)
     })
-    it(`should wrap with "safe" the result of ${LAMBDA} asset`, function() {
+    it(`should wrap with "safe" the result of ${LAMBDA} asset`, () => {
       const obj = object()
       obj.assets[LAMBDA] = function(_) {
         return {
           attrs: {},
-          copy: function() {
+          copy() {
             return this
           },
           take: (_) => {
@@ -114,84 +114,84 @@ describe('object', function() {
       assert.throws(() => res.take(''), ErError)
       assert.throws(() => res.with({}), ErError)
     })
-    it('should wrap attribute with "at_safe"', function() {
+    it('should wrap attribute with "at_safe"', () => {
       const obj = object()
-      obj.attrs['x'] = at_void('x')
+      obj.attrs.x = at_void('x')
       assert.throws(() => obj.take('x'), ErError)
     })
   })
-  describe('#with()', function() {
-    it('should copy itself', function() {
+  describe('#with()', () => {
+    it('should copy itself', () => {
       const obj = object()
       const applied = obj.with({})
       assert.notDeepStrictEqual(obj, applied)
     })
-    it('should put the right object by name', function() {
+    it('should put the right object by name', () => {
       let first = object()
       const second = object('second')
-      first.attrs['attr'] = at_void('attr')
+      first.attrs.attr = at_void('attr')
       first = first.with({attr: second})
       assert.ok(first.take('attr').toString().includes('second'))
     })
-    it('should put object by position', function() {
+    it('should put object by position', () => {
       let first = object()
       const second = object('second')
-      first.attrs['attr'] = at_void('attr')
+      first.attrs.attr = at_void('attr')
       first = first.with({0: second})
       assert.ok(first.take('attr').toString().includes('second'))
     })
-    it('should put object by 2nd position', function() {
+    it('should put object by 2nd position', () => {
       let first = object()
       const second = object('s')
-      first.attrs['f'] = at_void('f')
-      first.attrs['s'] = at_void('s')
+      first.attrs.f = at_void('f')
+      first.attrs.s = at_void('s')
       first = first.with({1: second})
       assert.throws(() => first.take('f'))
       assert.ok(first.take('s').toString().includes('s'))
     })
-    it('should return copy of self', function() {
+    it('should return copy of self', () => {
       const obj = object('somebody')
-      obj.attrs['f'] = at_void('f')
+      obj.attrs.f = at_void('f')
       const applied = obj.with({f: object()})
       assert.notDeepStrictEqual(applied, obj)
       assert.notEqual(applied.toString(), obj.toString())
       assert.ok(applied.toString().includes('somebody'))
     })
-    it('should throw an error if position is negative', function() {
+    it('should throw an error if position is negative', () => {
       const obj = object()
-      obj.attrs['attr'] = at_void('attr')
+      obj.attrs.attr = at_void('attr')
       assert.throws(() => obj.with({'-1': object()}))
     })
-    it('should throw an error if position if float', function() {
+    it('should throw an error if position if float', () => {
       const obj = object()
-      obj.attrs['attr'] = at_void('attr')
+      obj.attrs.attr = at_void('attr')
       assert.throws(() => obj.with({'1.5': object()}))
     })
-    it('should throw an error if attribute with name is absent', function() {
+    it('should throw an error if attribute with name is absent', () => {
       assert.throws(() => object().with({'at': object()}))
     })
-    it('should throw an error if attribute with position is absent', function() {
+    it('should throw an error if attribute with position is absent', () => {
       assert.throws(() => object().with({0: object()}))
     })
   })
-  describe('#copy()', function() {
-    it('should make a true copy', function() {
+  describe('#copy()', () => {
+    it('should make a true copy', () => {
       const obj = object()
       assert.notDeepStrictEqual(obj.copy(), obj)
     })
-    it('should make a true copy of the attribute', function() {
+    it('should make a true copy of the attribute', () => {
       const obj = object()
       const attr = object()
-      obj.attrs['attr'] = at_simple(attr)
+      obj.attrs.attr = at_simple(attr)
       assert.notDeepStrictEqual(obj.copy().take('attr'), attr)
     })
-    it(`should save the ${RHO} attribute`, function() {
+    it(`should save the ${RHO} attribute`, () => {
       const obj = object('o')
       const rho = object('rho')
       obj.attrs[RHO] = at_rho(rho)
       assert.deepStrictEqual(obj.copy().take(RHO).toString(), rho.toString())
     })
-    it('should copy assets', function() {
+    it('should copy assets', () => {
       const obj = object()
       obj.assets[LAMBDA] = function(_) {
         return object()
@@ -201,13 +201,13 @@ describe('object', function() {
       assert.deepStrictEqual(obj.assets, copy.assets)
     })
   })
-  describe('#φTerm()', function() {
-    it('should contain all properties', function() {
+  describe('#φTerm()', () => {
+    it('should contain all properties', () => {
       const somebody = object('somebody')
-      somebody.attrs['m'] = at_void('m')
+      somebody.attrs.m = at_void('m')
       const obj = object('x')
-      obj.attrs['y'] = at_void('y')
-      obj.attrs['s'] = at_simple(somebody)
+      obj.attrs.y = at_void('y')
+      obj.attrs.s = at_simple(somebody)
       obj.assets[DELTA] = [1, 2, 3]
       obj.assets[LAMBDA] = () => {}
       const term = obj.φTerm()

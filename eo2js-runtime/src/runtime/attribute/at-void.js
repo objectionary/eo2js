@@ -13,22 +13,22 @@ const {EMPTY} = require('./specials');
 const at_void = function(name, object = null) {
   let obj = object
   return {
-    put: function(object) {
+    put(object) {
       if (obj != null) {
         throw new ErFailure(`Void attribute '${name}' is already set, can't reset`)
       }
       obj = object
     },
-    get: function() {
+    get() {
       if (obj == null) {
         throw new ErFailure(`Void attribute '${name}' is not set, can't take`)
       }
       return obj
     },
-    copy: function(_) {
+    copy(_) {
       return at_void(name, obj)
     },
-    φTerm: function() {
+    φTerm() {
       let term
       if (obj === null) {
         term = EMPTY

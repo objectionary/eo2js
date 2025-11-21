@@ -25,7 +25,7 @@ const regex$compiled = function() {
     }
     const last = expression.lastIndexOf('/')
     if (!expression.endsWith('/')) {
-      pattern += '(?' + expression.substring(last + 1) + ')'
+      pattern += `(?${  expression.substring(last + 1)  })`
     }
     pattern += expression.substring(1, last)
     return regex.take('pattern').with({

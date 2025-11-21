@@ -15,7 +15,7 @@ const ErFailure = require('../../../../runtime/error/ErFailure');
  */
 const dir$walk = function() {
   const obj = object('dir$walk')
-  obj.attrs['glob'] = at_void('glob')
+  obj.attrs.glob = at_void('glob')
   obj.assets[LAMBDA] = function(_) {
     throw new ErFailure(
       `Atom dir$walk is not implemented yet`

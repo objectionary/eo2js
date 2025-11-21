@@ -7,30 +7,28 @@ const object = require('../../../temp/runtime/object');
 const ErFailure = require('../../../temp/runtime/error/ErFailure');
 const ErError = require('../../../temp/runtime/error/ErError');
 
-describe('at_lambda', function() {
-  describe('#put()', function() {
-    it('should fail', function() {
+describe('at_lambda', () => {
+  describe('#put()', () => {
+    it('should fail', () => {
       assert.throws(() => at_lambda({}, () => {}).put({}))
     })
   })
-  describe('#get()', function() {
-    it('should execute callback', function() {
+  describe('#get()', () => {
+    it('should execute callback', () => {
       const obj = object('')
       assert.deepStrictEqual(
         at_lambda({}, (_) => obj).get(),
         obj
       )
     })
-    it('should pass given object to callback', function() {
+    it('should pass given object to callback', () => {
       const obj = {
         counter: 0
       }
-      at_lambda(obj, function(rho) {
-        return rho.counter++
-      }).get()
+      at_lambda(obj, (rho) => rho.counter++).get()
       assert.equal(obj.counter, 1)
     })
-    it('should validate given callback', function() {
+    it('should validate given callback', () => {
       assert.throws(
         at_lambda({}, (_) => {
           throw new ErFailure('error')

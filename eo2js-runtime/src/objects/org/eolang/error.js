@@ -16,7 +16,7 @@ const ErError = require('../../../runtime/error/ErError');
  */
 const error = function() {
   const obj = object('error')
-  obj.attrs['message'] = at_void('message')
+  obj.attrs.message = at_void('message')
   obj.assets[LAMBDA] = function(self) {
     throw new ErError(
       self.take('message')

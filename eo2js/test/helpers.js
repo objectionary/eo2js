@@ -57,7 +57,7 @@ const assertFilesExist = function(stdout, home, paths) {
     const abs = path.resolve(home, p)
     assert(
       fs.existsSync(abs),
-      stdout + '\nFile ' + abs + ' is absent'
+      `${stdout  }\nFile ${  abs  } is absent`
     )
   })
 }
@@ -80,65 +80,63 @@ const pack = async function(params) {
     xmir: '',
     json: ''
   }
-  if (params.json['skip'] || !params.json['xsls'] || params.json['xsls'].length === 0) {
+  if (params.json.skip || !params.json.xsls || params.json.xsls.length === 0) {
     return new Promise((resolve) => {
       res.skip = true
       resolve(res)
     })
-  } else {
-    const sources = path.resolve(params.home, params.sources)
-    const target = path.resolve(params.home, params.target)
-    fs.mkdirSync(sources, {recursive: true})
-    fs.mkdirSync(target, {recursive: true})
-    fs.writeFileSync(path.resolve(sources, `test.eo`), `${params.json['eo'].join('\n')}\n`)
-    return mvnw(['register', 'parse', 'optimize', 'shake'], params).then((r) => {
-      const shaken = JSON.parse(
-        fs.readFileSync(path.resolve(target, 'eo-foreign.json')).toString()
-      )[0]['shaken']
-      let xml = fs.readFileSync(shaken).toString()
-      const transformations = path.resolve(__dirname, '../src/resources/json')
-      params.json['xsls']
-        .map((name) => path.resolve(transformations, `${name}.sef.json`))
-        .forEach((transformation) => {
-          xml = saxon.transform({
-            stylesheetFileName: transformation,
-            sourceText: xml,
-            destination: 'serialized'
-          }).principalResult
-        })
-      res.xmir = xml
-      const saved = path.resolve(target, '3-transpiled')
-      fs.mkdirSync(saved, {recursive: true})
-      fs.writeFileSync(path.resolve(saved, 'test.xmir'), res.xmir)
-      xml = parser.parse(xml, {})
-      res.json = xml
-      params.json['tests'].forEach((test) => {
-        if (typeof test === 'object') {
-          const node = test.node
-          const method = test.method
-          const args = test.args
-          const applied = jp.apply(node, xml)
-          if (applied.length === 0) {
-            res.failures.push(node)
-          } else {
-            args.forEach((arg) => {
-              if (Array.isArray(arg)) {
-                arg = arg.join('\n')
-              }
-              if (!applied[0][method](arg)) {
-                res.failures.push(`NODE: ${node}, METHOD: ${method}, ARG: ${arg}`)
-              }
-            })
-          }
-        } else {
-          if (jp.apply(test, xml).length === 0) {
-            res.failures.push(test)
-          }
-        }
+  } 
+  const sources = path.resolve(params.home, params.sources)
+  const target = path.resolve(params.home, params.target)
+  fs.mkdirSync(sources, {recursive: true})
+  fs.mkdirSync(target, {recursive: true})
+  fs.writeFileSync(path.resolve(sources, `test.eo`), `${params.json.eo.join('\n')}\n`)
+  return mvnw(['register', 'parse', 'optimize', 'shake'], params).then((r) => {
+    const shaken = JSON.parse(
+      fs.readFileSync(path.resolve(target, 'eo-foreign.json')).toString()
+    )[0].shaken
+    let xml = fs.readFileSync(shaken).toString()
+    const transformations = path.resolve(__dirname, '../src/resources/json')
+    params.json.xsls
+      .map((name) => path.resolve(transformations, `${name}.sef.json`))
+      .forEach((transformation) => {
+        xml = saxon.transform({
+          stylesheetFileName: transformation,
+          sourceText: xml,
+          destination: 'serialized'
+        }).principalResult
       })
-      return res
+    res.xmir = xml
+    const saved = path.resolve(target, '3-transpiled')
+    fs.mkdirSync(saved, {recursive: true})
+    fs.writeFileSync(path.resolve(saved, 'test.xmir'), res.xmir)
+    xml = parser.parse(xml, {})
+    res.json = xml
+    params.json.tests.forEach((test) => {
+      if (typeof test === 'object') {
+        const node = test.node
+        const method = test.method
+        const args = test.args
+        const applied = jp.apply(node, xml)
+        if (applied.length === 0) {
+          res.failures.push(node)
+        } else {
+          args.forEach((arg) => {
+            if (Array.isArray(arg)) {
+              arg = arg.join('\n')
+            }
+            if (!applied[0][method](arg)) {
+              res.failures.push(`NODE: ${node}, METHOD: ${method}, ARG: ${arg}`)
+            }
+          })
+        }
+      } else if (jp.apply(test, xml).length === 0) {
+        res.failures.push(test)
+      }
     })
-  }
+    return res
+  })
+  
 }
 
 /**
