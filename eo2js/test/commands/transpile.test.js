@@ -37,7 +37,7 @@ describe('transpile', () => {
      */
     const transpile = function(opts= {}) {
       opts.name ||= 'simple'
-      if (opts.prepare === undefined) {
+      if (typeof opts.prepare === 'undefined') {
         opts.prepare = true
       }
       if (opts.prepare) {
@@ -121,9 +121,9 @@ describe('transpile', () => {
    *  Prerequisites for Fix:
    *  - All skipped tests must pass with current EO version
    */
-  describe('transformation packs', () => {
+  describe('transformation packs', async () => {
     const packs = path.resolve(__dirname, '../resources/transpile/packs')
-    fs.readdirSync(packs)
+    await Promise.all(fs.readdirSync(packs)
       .filter((test) => only.length === 0 || only.includes(test.substring(0, test.lastIndexOf('.json'))))
       .forEach((test) => {
         it(test, async function() {
@@ -132,17 +132,18 @@ describe('transpile', () => {
             fs.rmSync(folder, {recursive: true})
           }
           const json = JSON.parse(fs.readFileSync(path.resolve(packs, test)).toString())
-          const res = await pack({home: folder, sources: 'src', target: 'target', json})
-          if (res.skip) {
-            this.skip()
-            return
-          }
-          assert.equal(
-            res.failures.length,
-            0,
-            `Result XMIR:\n ${res.xmir}\nJSON: ${JSON.stringify(res.json, null, 2)}\nFailed tests: ${res.failures.join(';\n')}`
-          )
+          await pack({home: folder, sources: 'src', target: 'target', json}).then((res) => {
+            if (res.skip) {
+              this.skip()
+            } else {
+              assert.equal(
+                res.failures.length,
+                0,
+                `Result XMIR:\n ${res.xmir}\nJSON: ${JSON.stringify(res.json, null, 2)}\nFailed tests: ${res.failures.join(';\n')}`
+              )
+            }
+          })
         })
-      })
+      }))
   })
 })
