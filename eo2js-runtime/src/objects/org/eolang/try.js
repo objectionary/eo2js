@@ -11,7 +11,7 @@ const data = require('../../../runtime/data');
  * Try.
  * @return {Object} - Try object
  */
-const tryObject = function() {
+const _try = function() {
   const obj = object('try')
   obj.attrs.main = at_void('main')
   obj.attrs.catch = at_void('catch')
@@ -30,4 +30,4 @@ const tryObject = function() {
   return obj
 }
 
-module.exports = tryObject
+module.exports = _try

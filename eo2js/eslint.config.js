@@ -60,7 +60,8 @@ module.exports = [
       'require-unicode-regexp': 'off',
       'sort-keys': 'off',
       'sort-vars': 'off',
-      "promise/prefer-await-to-then": "error"
+      "promise/prefer-await-to-then": "error",
+      'no-underscore-dangle': 'off',
     }
   },
 ];
