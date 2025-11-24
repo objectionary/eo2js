@@ -52,11 +52,11 @@ const hasMeta = function(xmir, name) {
   const metas = xmir.program.metas
   let res = false
   if (metas !== null && metas !== undefined) {
-    const metaNodes = xmir.program.metas.meta
-    if (Array.isArray(metaNodes)) {
-      res = metaNodes.findIndex((meta) => meta.head === name) !== -1
-    } else if (typeof metaNodes === 'object' && metaNodes.hasOwnProperty('head')) {
-      res = metaNodes.head === name
+    const nodes = xmir.program.metas.meta
+    if (Array.isArray(nodes)) {
+      res = nodes.findIndex((meta) => meta.head === name) !== -1
+    } else if (typeof nodes === 'object' && nodes.hasOwnProperty('head')) {
+      res = nodes.head === name
     }
   }
   return res
