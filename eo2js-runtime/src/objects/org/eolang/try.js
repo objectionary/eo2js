@@ -13,9 +13,9 @@ const data = require('../../../runtime/data');
  */
 const _try = function() {
   const obj = object('try')
-  obj.attrs['main'] = at_void('main')
-  obj.attrs['catch'] = at_void('catch')
-  obj.attrs['finally'] = at_void('finally')
+  obj.attrs.main = at_void('main')
+  obj.attrs.catch = at_void('catch')
+  obj.attrs.finally = at_void('finally')
   obj.assets[LAMBDA] = function(self) {
     let res
     try {

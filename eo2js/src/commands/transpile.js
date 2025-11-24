@@ -51,12 +51,12 @@ const makeDirIfNotExist = function(dir) {
 const hasMeta = function(xmir, name) {
   const metas = xmir.program.metas
   let res = false
-  if (metas != null) {
-    const metas = xmir.program.metas.meta
-    if (Array.isArray(metas)) {
-      res = metas.findIndex((meta) => meta.head === name) !== -1
-    } else if (typeof metas === 'object' && metas.hasOwnProperty('head')) {
-      res = metas.head === name
+  if (metas !== null && metas !== undefined) {
+    const nodes = xmir.program.metas.meta
+    if (Array.isArray(nodes)) {
+      res = nodes.findIndex((meta) => meta.head === name) !== -1
+    } else if (typeof nodes === 'object' && nodes.hasOwnProperty('head')) {
+      res = nodes.head === name
     }
   }
   return res
@@ -82,7 +82,7 @@ const needsRetranspile = function(source, transpiled) {
 const transform = function(tojo, options, transformations, parser) {
   const text = fs.readFileSync(tojo[verified]).toString()
   let xml = parser.parse(text)
-  const pth = pathFromName(xml['program']['@_name'])
+  const pth = pathFromName(xml.program['@_name'])
   const isTest = hasMeta(xml, 'tests')
   const transpiled = path.resolve(options.target, dir, `${pth}.xmir`)
   const dest = path.resolve(options.project, `${pth}${isTest ? '.test' : ''}.js`)
@@ -103,13 +103,13 @@ const transform = function(tojo, options, transformations, parser) {
     if (!Array.isArray(objects)) {
       objects = [objects]
     }
-    const filtered = objects.filter((obj) => !!obj && obj.hasOwnProperty('javascript') && !obj.hasOwnProperty('@_atom'))
+    const filtered = objects.filter((obj) => Boolean(obj) && obj.hasOwnProperty('javascript') && !obj.hasOwnProperty('@_atom'))
     const count = isTest ? 0 : 1
     if (filtered.length > count) {
       const first = filtered[0]
       makeDirIfNotExist(dest.substring(0, dest.lastIndexOf(path.sep)))
-      fs.writeFileSync(dest, first['javascript'])
-      filtered.slice(1).forEach((obj) => fs.appendFileSync(dest, `\n${obj['javascript']}`))
+      fs.writeFileSync(dest, first.javascript)
+      filtered.slice(1).forEach((obj) => fs.appendFileSync(dest, `\n${obj.javascript}`))
     }
   } else if (options.verbose) {
     console.log(`Skipping ${pth} - already transpiled`)
@@ -122,7 +122,7 @@ const transform = function(tojo, options, transformations, parser) {
  */
 const transpile = function(options) {
   options = {...program.opts(), ...options}
-  const foreign = path.resolve(options['target'], options['foreign'])
+  const foreign = path.resolve(options.target, options.foreign)
   console.log(`Reading foreign tojos from: ${foreign}`)
   if (!fs.existsSync(foreign)) {
     throw new Error(`File ${foreign} is not found`)
@@ -132,10 +132,10 @@ const transpile = function(options) {
   }
   const transformations = [
     'objects', 'package', 'tests', 'attrs', 'data', 'to-js'
-  ].map((name) => path.resolve(options['resources'], `json/${name}.sef.json`))
-  console.log(`Using transformations from: ${options['resources']}/json/`)
+  ].map((name) => path.resolve(options.resources, `json/${name}.sef.json`))
+  console.log(`Using transformations from: ${options.resources}/json/`)
   const parser = new XMLParser({ignoreAttributes: false})
-  const project = path.resolve(options['target'], options['project'])
+  const project = path.resolve(options.target, options.project)
   console.log(`Output directory: ${project}`)
   fs.mkdirSync(project, {recursive: true})
   const tojos = JSON.parse(fs.readFileSync(foreign).toString())
@@ -144,7 +144,7 @@ const transpile = function(options) {
   let processed = 0
   tojos.forEach((tojo) => {
     console.log(`Processing: ${tojo[verified]}`)
-    transform(tojo, {target: options['target'], project, verbose: options.verbose}, transformations, parser)
+    transform(tojo, {target: options.target, project, verbose: options.verbose}, transformations, parser)
     processed++
   })
   console.log(`Successfully processed ${processed} files`)

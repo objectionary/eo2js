@@ -13,7 +13,7 @@ program
   .name('eo2js')
   .usage('[options] command')
   .summary('EO to JS command line toolkit')
-  .description('EOLANG to JavaScript command-line toolkit (' + version.what + ' built on ' + version.when + ')')
+  .description(`EOLANG to JavaScript command-line toolkit (${  version.what  } built on ${  version.when  })`)
   .version(version.what, '-v, --version', 'Output the version number')
   .helpOption('-?, --help', 'Print this help information');
 

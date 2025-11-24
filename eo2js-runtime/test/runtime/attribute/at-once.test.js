@@ -4,14 +4,14 @@
 const at_once = require('../../../temp/runtime/attribute/at-once')
 const assert = require('assert');
 
-describe('at_once', function() {
-  describe('#put()', function() {
-    it('should throw an error', function() {
+describe('at_once', () => {
+  describe('#put()', () => {
+    it('should throw an error', () => {
       assert.throws(() => at_once({}).put())
     })
   })
-  describe('#get()', function() {
-    it('should take from origin only once', function() {
+  describe('#get()', () => {
+    it('should take from origin only once', () => {
       let count = 0
       const origin = {get: () => ++count}
       const attr = at_once(origin)
@@ -19,13 +19,13 @@ describe('at_once', function() {
       assert.equal(attr.get(), attr.get())
     })
   })
-  describe('#copy()', function() {
-    it('should return new attribute', function() {
+  describe('#copy()', () => {
+    it('should return new attribute', () => {
       const origin = {copy: () => 'Hello'}
       const attr = at_once(origin)
       assert.notDeepStrictEqual(attr.copy(), attr)
     })
-    it('should reset cache', function() {
+    it('should reset cache', () => {
       let count = 0;
       const origin = {get: () => ++count, copy: () => origin}
       const attr = at_once(origin)

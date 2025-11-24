@@ -35,7 +35,7 @@ const object = function(name = 'object') {
      * Copy itself.
      * @return {Object} - Copied object.
      */
-    copy: function() {
+    copy() {
       const copy = object(name)
       Object.keys(this.attrs)
         .forEach((key) => {
@@ -53,7 +53,7 @@ const object = function(name = 'object') {
      * @return {Object} - Self with attached attributes
      * @throws ErFailure - If something wrong with bindings
      */
-    with: function(bindings) {
+    with(bindings) {
       const copy = this.copy()
       const attrs = Object.keys(copy.attrs)
       Object.keys(bindings).forEach((attr) => {
@@ -90,7 +90,7 @@ const object = function(name = 'object') {
      * @return {Object} - Retrieved attribute/asset by name
      * @throws ErFailure - If something wrong with attribute/asset retrieving
      */
-    take: function(name) {
+    take(name) {
       name = String(name)
       let object
       if (name === RHO && !this.attrs.hasOwnProperty(RHO)) {
@@ -122,7 +122,7 @@ const object = function(name = 'object') {
      * Retrieve data from the object
      * @return {Array.<Number>} - Data
      */
-    data: function() {
+    data() {
       let data
       if (this.assets.hasOwnProperty(DELTA)) {
         data = this.assets[DELTA]
@@ -139,7 +139,7 @@ const object = function(name = 'object') {
      * Print itself.
      * @return {String} - String representation of object
      */
-    toString: function() {
+    toString() {
       return `${name}ν${vtx}`
     },
     /**
@@ -150,14 +150,14 @@ const object = function(name = 'object') {
      *  is wrong, it should be 'org.eolang.int'. So we need to fix this naming and make sure
      *  that, for example, 'org.eolang.int' and 'com.example.int' have different formas.
      */
-    forma: function() {
+    forma() {
       return name
     },
     /**
      * Represent self as φ term.
      * @return {String} - Self as φ calculus term
      */
-    φTerm: function() {
+    φTerm() {
       const list = []
       const binding = (left, right) => `${left} ↦ ${right}`
       if (this.assets.hasOwnProperty(DELTA)) {

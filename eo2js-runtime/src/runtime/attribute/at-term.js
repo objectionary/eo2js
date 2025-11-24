@@ -9,7 +9,7 @@
 const at_term = function(origin) {
   return {
     ...origin,
-    φTerm: function() {
+    φTerm() {
       return origin.get().φTerm()
     }
   }

@@ -20,7 +20,7 @@ const second_test = function() {
   return obj
 }
 
-it('test "second_test" should work', function() {
+it('test "second_test" should work', () => {
   const assert = require('assert')
   const dataized = require('eo2js-runtime/src/runtime/dataized')
   const {BOOL} = require('eo2js-runtime/src/runtime/data')

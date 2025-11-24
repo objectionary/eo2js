@@ -15,7 +15,7 @@ const data = require('../../../runtime/data')
  */
 const malloc$of$allocated$resized = function() {
   const obj = object('malloc$of$allocated$resize')
-  obj.attrs['size'] = at_void('size')
+  obj.attrs.size = at_void('size')
   obj.assets[LAMBDA] = function(self) {
     heaps.resize(
       dataized(self.take(RHO).take('id'), NUMBER),

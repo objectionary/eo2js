@@ -13,19 +13,19 @@ const at_once = function(origin) {
     term: null
   }
   return {
-    put: function(object) {
+    put(object) {
       origin.put(object)
     },
-    get: function() {
+    get() {
       if (cache.object === null) {
         cache.object = origin.get()
       }
       return cache.object
     },
-    copy: function(rho) {
+    copy(rho) {
       return at_once(origin.copy(rho))
     },
-    φTerm: function() {
+    φTerm() {
       if (cache.term === null) {
         cache.term = origin.φTerm()
       }
