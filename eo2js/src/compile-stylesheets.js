@@ -33,7 +33,7 @@ const compile = function(source, dest) {
       (e && e.message) ||
       String(e);
     console.error(`xslt3 failed for ${source} -> ${dest}: ${details}`);
-    throw new Error(`xslt3 failed for ${source} -> ${dest}: ${details}`)
+    throw new Error(`xslt3 failed for ${source} -> ${dest}: ${details}`, {cause: e})
   }
 }
 
