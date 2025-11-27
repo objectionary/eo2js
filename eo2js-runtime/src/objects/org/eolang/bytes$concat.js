@@ -13,7 +13,7 @@ const dataized = require('../../../runtime/dataized');
  */
 const bytes$concat = function() {
   const obj = object('bytes$concat')
-  obj.attrs['b'] = at_void('b')
+  obj.attrs.b = at_void('b')
   obj.assets[LAMBDA] = function(self) {
     return data.toObject([
       ...dataized(self.take(RHO)),

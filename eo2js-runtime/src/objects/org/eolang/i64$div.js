@@ -16,7 +16,7 @@ const bytesOf = require('../../../runtime/bytes-of');
  */
 const i64$div = function() {
   const obj = object('i64$div')
-  obj.attrs['x'] = at_void('x')
+  obj.attrs.x = at_void('x')
   obj.assets[LAMBDA] = function(self) {
     return phi.take('org.eolang.i64').with({
       0: data.toObject(

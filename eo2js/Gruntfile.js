@@ -2,26 +2,36 @@
 // SPDX-License-Identifier: MIT
 
 module.exports = function(grunt) {
+  require('load-grunt-tasks')(grunt);
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
     clean: ['temp'],
     mochacli: {
-      test: {
-        options: {
-          timeout: '1200000',
-          files: ['test/**/*.test.js', '!test/resources/**'],
-        },
+      options: {
+        timeout: 120000,
+        recursive: true,
+        reporter: 'spec',
+      },
+      all: {
+        src: ['test/commands/*.test.js', 'test/it/*.test.js', '!test/resources/**'],
+      },
+      unit: {
+        src: ['test/commands/*.test.js', '!test/resources/**'],
+      },
+      integration: {
+        src: ['test/it/*.test.js', '!test/resources/**'],
       },
     },
     eslint: {
       options: {
         overrideConfigFile: 'eslint.config.js',
+        fix: true,
       },
       target: ['Gruntfile.js', 'src/**/*.js', 'test/**/*.js'],
     },
   })
-  grunt.loadNpmTasks('grunt-eslint')
-  grunt.loadNpmTasks('grunt-mocha-cli')
-  grunt.loadNpmTasks('grunt-contrib-clean')
-  grunt.registerTask('default', ['mochacli', 'eslint'])
+  grunt.registerTask('test', ['mochacli:all']);
+  grunt.registerTask('test:unit', ['mochacli:unit']);
+  grunt.registerTask('test:integration', ['mochacli:integration']);
+  grunt.registerTask('default', ['test', 'eslint']);
 }

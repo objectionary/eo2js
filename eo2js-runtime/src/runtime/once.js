@@ -11,7 +11,7 @@ const once = function(callback) {
   return new Proxy(
     callback,
     {
-      get: function(target, property, _) {
+      get(target, property, _) {
         if (cached === null) {
           cached = target()
         }
