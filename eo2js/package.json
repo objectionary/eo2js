@@ -11,14 +11,16 @@
   },
   "description": "EOLANG to JavaScript translator",
   "devDependencies": {
-    "eslint": "9.6.0",
+    "eslint": "9.39.1",
     "eslint-config-google": "0.14.0",
+    "eslint-plugin-promise": "^7.2.1",
     "grunt": "^1.6.1",
     "grunt-cli": "^1.5.0",
     "grunt-contrib-clean": "2.0.1",
     "grunt-eslint": "26.0.0",
     "grunt-mocha-cli": "^7.0.0",
     "jspath": "0.4.0",
+    "load-grunt-tasks": "^5.1.0",
     "mocha": "^11.0.0",
     "patch-package": "^8.0.0",
     "xslt3": "^2.7.0"
@@ -33,8 +35,8 @@
   "name": "eo2js",
   "scripts": {
     "postinstall": "patch-package",
-    "test": "./node_modules/mocha/bin/mocha.js test/**/*.test.js --exclude test/resources",
-    "test-easy": "./node_modules/mocha/bin/mocha.js test/**/*.test.js --exclude test/resources --exclude test/it/runtime-tests.test.js"
+    "test": "npx grunt",
+    "test-easy": "npx grunt test:unit"
   },
   "version": "0.0.0"
 }

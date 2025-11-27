@@ -1,34 +1,67 @@
-// SPDX-FileCopyrightText: Copyright (c) 2024 Objectionary.com
-// SPDX-License-Identifier: MIT
+/*
+ * SPDX-FileCopyrightText: Copyright (c) 2024 Objectionary.com
+ * SPDX-License-Identifier: MIT
+ */
 
-const {FlatCompat} = require('@eslint/eslintrc');
-const globals = require('globals');
-
-const compat = new FlatCompat({baseDirectory: __dirname});
-
-const google = compat.extends('google').map((cfg) => {
-  if (!cfg || !cfg.rules) return cfg;
-  const rules = Object.fromEntries(
-    Object.entries(cfg.rules).filter(
-      ([name]) => name !== 'valid-jsdoc' && name !== 'require-jsdoc'
-    )
-  );
-  return {...cfg, rules};
-});
+const { configs } = require('@eslint/js');
+const promise = require('eslint-plugin-promise');
 
 module.exports = [
-  ...google,
-  {ignores: ['node_modules/']},
   {
+    ignores: ['node_modules/', 'temp/'],
+  },
+  {
+    ...configs.all,
     files: ['**/*.js'],
-    languageOptions: {ecmaVersion: 2019, globals: {...globals.es2015}},
+    languageOptions: {
+      ecmaVersion: 2021,
+      sourceType: 'module'
+    },
+    plugins: {
+      promise,
+    },
     rules: {
+      ...configs.all.rules,
       'camelcase': 'off',
-      'comma-dangle': 'off',
-      'indent': ['error', 2],
-      'max-len': ['error', {code: 300}],
-      'semi': 'off',
+      'capitalized-comments': 'off',
+      'consistent-return': 'off',
+      'default-param-last': 'off',
+      'eqeqeq': 'off',
+      'func-names': 'off',
+      'func-style': 'off',
+      'id-length': 'off',
+      'indent': ['error', 2, { "SwitchCase": 1 }],
+      'init-declarations': 'off',
+      'max-len': ['error', { code: 200 }],
+      'max-lines': 'off',
+      'max-lines-per-function': 'off',
+      'max-params': 'off',
+      'max-statements': 'off',
+      'no-alert': 'off',
+      'no-console': 'off',
+      'no-dupe-keys': 'off',
+      'no-inline-comments': 'off',
       'no-invalid-this': 'off',
+      'no-magic-numbers': 'off',
+      'no-multi-assign': 'off',
+      'no-param-reassign': 'off',
+      'no-plusplus': 'off',
+      'no-promise-executor-return': 'off',
+      'no-prototype-builtins': 'off',
+      'no-shadow': 'off',
+      'no-ternary': 'off',
+      'no-undef': 'off',
+      'no-undefined': 'off',
+      'no-unused-vars': 'off',
+      'no-use-before-define': 'off',
+      'one-var': 'off',
+      'prefer-destructuring': 'off',
+      'require-await': 'off',
+      'require-unicode-regexp': 'off',
+      'sort-keys': 'off',
+      'sort-vars': 'off',
+      "promise/prefer-await-to-then": "error",
+      'no-underscore-dangle': 'off',
     }
-  }
+  },
 ];

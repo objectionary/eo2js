@@ -11,9 +11,7 @@ const once = require('./once');
  */
 const taken = function(object, attribute) {
   return once(
-    function() {
-      return object.take(attribute)
-    }
+    () => object.take(attribute)
   )
 }
 

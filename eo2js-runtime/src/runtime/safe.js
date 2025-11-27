@@ -13,9 +13,7 @@ const trapped = require('./trapped');
 const safe = function(origin) {
   return trapped(
     origin,
-    function(_, target, thisArg, args) {
-      return validated(() => target.call(origin, ...args))
-    }
+    (_, target, thisArg, args) => validated(() => target.call(origin, ...args))
   )
 }
 
