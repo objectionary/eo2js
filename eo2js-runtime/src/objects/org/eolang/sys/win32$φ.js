@@ -60,23 +60,23 @@ const win32$φ = function() {
 
     // Map of supported Win32 functions to their implementations
     const functions = {
-      'GetCurrentProcessId': GetCurrentProcessId,
-      'ReadFile': ReadFile,
-      'WriteFile': WriteFile,
-      'GetEnvironmentVariable': GetEnvironmentVariable,
-      'GetSystemTime': GetSystemTime,
-      'socket': socket,
-      'connect': connect,
-      'accept': accept,
-      'bind': bind,
-      'listen': listen,
-      'send': send,
-      'recv': recv,
-      'closesocket': closesocket,
-      'inet_addr': inet_addr,
-      'WSAStartup': WSAStartup,
-      'WSACleanup': WSACleanup,
-      'WSAGetLastError': WSAGetLastError,
+      GetCurrentProcessId,
+      ReadFile,
+      WriteFile,
+      GetEnvironmentVariable,
+      GetSystemTime,
+      socket,
+      connect,
+      accept,
+      bind,
+      listen,
+      send,
+      recv,
+      closesocket,
+      inet_addr,
+      WSAStartup,
+      WSACleanup,
+      WSAGetLastError,
     };
 
     // Check if function is supported
@@ -94,10 +94,10 @@ const win32$φ = function() {
     } else if (functionName === 'GetSystemTime') {
       // GetSystemTime doesn't need arguments
       return func(rho, args);
-    } else {
-      // Functions that need argument handling
-      return func(rho, args, getArg, length);
-    }
+    } 
+    // Functions that need argument handling
+    return func(rho, args, getArg, length);
+    
   }
   return obj
 }
