@@ -6,7 +6,7 @@ const fs = require('fs')
 const os = require('os')
 const path = require('path')
 const dataized = require('../../temp/runtime/dataized')
-const {BOOL, STRING, INT} = require('../../temp/runtime/types')
+const {BOOL, STRING, NUMBER} = require('../../temp/runtime/types')
 const inet_addr = require('../../temp/objects/org/eolang/sys/win32/inet_addr')
 const GetCurrentProcessId = require('../../temp/objects/org/eolang/sys/win32/GetCurrentProcessId')
 const GetEnvironmentVariable = require('../../temp/objects/org/eolang/sys/win32/GetEnvironmentVariable')
@@ -19,7 +19,7 @@ const callWin32 = (fn, args = []) => fn({}, {}, (idx) => args[idx], args.length)
 
 describeOnWindows('win32 atoms', () => {
   it('should return positive process id', () => {
-    const pid = dataized(callWin32(GetCurrentProcessId), INT)
+    const pid = dataized(callWin32(GetCurrentProcessId), NUMBER)
     assert.ok(pid > 0)
   })
 
@@ -33,7 +33,7 @@ describeOnWindows('win32 atoms', () => {
   })
 
   it('should convert IPv4 to integer', () => {
-    const number = dataized(callWin32(inet_addr, ['192.168.1.1']), INT)
+    const number = dataized(callWin32(inet_addr, ['192.168.1.1']), NUMBER)
     assert.equal(number, 3232235777)
   })
 
