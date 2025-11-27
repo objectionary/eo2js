@@ -21,16 +21,19 @@ const inet_addr = function(win, args, getArg, length) {
   }
   const ipString = getArg(0)
   // Validate IP address format (simplified IPv4 validation)
-  const ipRegex = /^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})$/
+  const ipRegex = /^(?<first>\d{1,3})\.(?<second>\d{1,3})\.(?<third>\d{1,3})\.(?<fourth>\d{1,3})$/
   const match = String(ipString).match(ipRegex)
   if (!match) {
     throw new ErFailure(
       `Invalid IP address format: '${ipString}'`
     )
   }
+  const octets = ['first', 'second', 'third', 'fourth'].map(
+    (key) => parseInt(match.groups[key], 10)
+  )
   // Check each octet is 0-255
-  for (let i = 1; i <= 4; i++) {
-    const octet = parseInt(match[i], 10)
+  for (let i = 0; i < 4; i++) {
+    const octet = octets[i]
     if (octet > 255) {
       throw new ErFailure(
         `Invalid IP address: octet ${octet} is greater than 255`
@@ -38,8 +41,7 @@ const inet_addr = function(win, args, getArg, length) {
     }
   }
   // Return IP as integer (standard inet_addr behavior)
-  const octets = [match[1], match[2], match[3], match[4]].map((x) => parseInt(x, 10))
-  const ipInt = (octets[0] << 24) + (octets[1] << 16) + (octets[2] << 8) + octets[3]
+  const ipInt = (((octets[0] * 256) + octets[1]) * 256 + octets[2]) * 256 + octets[3]
   return data.toObject(ipInt)
 }
 
