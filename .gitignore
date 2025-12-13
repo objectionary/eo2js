@@ -15,6 +15,7 @@ eo2js/coverage/
 eo2js/node_modules/
 eo2js/src/resources/json
 eo2js/temp
+*.log
 mochawesome-report/
 node_modules/
 temp/
