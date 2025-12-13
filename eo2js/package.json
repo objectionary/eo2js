@@ -11,7 +11,7 @@
   },
   "description": "EOLANG to JavaScript translator",
   "devDependencies": {
-    "eslint": "9.39.1",
+    "eslint": "9.39.2",
     "eslint-config-google": "0.14.0",
     "eslint-plugin-promise": "^7.2.1",
     "grunt": "^1.6.1",
