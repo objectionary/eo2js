@@ -1,0 +1,17 @@
+# SPDX-FileCopyrightText: Copyright (c) 2024 Objectionary.com
+# SPDX-License-Identifier: MIT
+---
+# yamllint disable rule:line-length
+name: pr-size
+'on': pull_request
+jobs:
+  pr-size:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - uses: maidsafe/pr_size_checker@v3
+        with:
+          target_branch: master
+          max_lines_changed: 200

@@ -1,0 +1,32 @@
+# SPDX-FileCopyrightText: Copyright (c) 2024 Objectionary.com
+# SPDX-License-Identifier: MIT
+---
+# yamllint disable rule:line-length
+documentation:
+  - changed-files:
+      - any-glob-to-any-file: '**/*.md'
+
+eo2js:
+  - changed-files:
+      - any-glob-to-any-file: 'eo2js/**/*'
+
+eo2js-runtime:
+  - changed-files:
+      - any-glob-to-any-file: 'eo2js-runtime/**/*'
+
+tests:
+  - changed-files:
+      - any-glob-to-any-file:
+          - '**/test/**/*'
+          - '**/*.test.js'
+
+ci:
+  - changed-files:
+      - any-glob-to-any-file: '.github/**/*'
+
+dependencies:
+  - changed-files:
+      - any-glob-to-any-file:
+          - '**/package.json'
+          - '**/package-lock.json'
+          - 'renovate.json'
