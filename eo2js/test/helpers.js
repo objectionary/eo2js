@@ -91,11 +91,11 @@ const pack = async function(params) {
   fs.mkdirSync(sources, {recursive: true})
   fs.mkdirSync(target, {recursive: true})
   fs.writeFileSync(path.resolve(sources, `test.eo`), `${params.json.eo.join('\n')}\n`)
-  await mvnw(['register', 'parse', 'optimize', 'shake'], params)
-  const shaken = JSON.parse(
+  await mvnw(['register', 'parse', 'lint'], params)
+  const linted = JSON.parse(
     fs.readFileSync(path.resolve(target, 'eo-foreign.json')).toString()
-  )[0].shaken
-  let xml = fs.readFileSync(shaken).toString()
+  )[0].linted
+  let xml = fs.readFileSync(linted).toString()
   const transformations = path.resolve(__dirname, '../src/resources/json')
   params.json.xsls
     .map((name) => path.resolve(transformations, `${name}.sef.json`))

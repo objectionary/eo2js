@@ -14,7 +14,7 @@ test. It does **not** read `.eo` directly — you must generate XMIR first.
 
 ## EO version
 
-Built and tested with EO version `0.49.0`
+Built and tested with EO version `0.59.0`
 ([eo2js/test/mvnw/eo-version.txt](https://github.com/objectionary/eo2js/blob/master/eo2js/test/mvnw/eo-version.txt)).
 Using other versions may lead to unpredictable results.
 
@@ -38,8 +38,6 @@ Example with EO Maven plugin:
 ```bash
 mvn org.eolang:eo-maven-plugin:register \
     org.eolang:eo-maven-plugin:parse \
-    org.eolang:eo-maven-plugin:optimize \
-    org.eolang:eo-maven-plugin:shake \
     org.eolang:eo-maven-plugin:lint \
     -Deo.sourcesDir=src \
     -Deo.targetDir=.eoc \
@@ -93,8 +91,6 @@ Compile to `.eoc` from the folder where `hello/` lives:
 ```bash
 mvn org.eolang:eo-maven-plugin:register \
     org.eolang:eo-maven-plugin:parse \
-    org.eolang:eo-maven-plugin:optimize \
-    org.eolang:eo-maven-plugin:shake \
     org.eolang:eo-maven-plugin:lint \
     -Deo.sourcesDir=hello \
     -Deo.targetDir=.eoc \
