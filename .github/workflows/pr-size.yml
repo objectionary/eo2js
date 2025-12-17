@@ -14,4 +14,4 @@ jobs:
       - uses: maidsafe/pr_size_checker@v3
         with:
           target_branch: master
-          max_lines_changed: 200
+          max_lines_changed: 500
