@@ -75,7 +75,8 @@ const parser = new XMLParser({ignoreAttributes: false})
  */
 const extractPackage = function(eoLines) {
   for (const line of eoLines) {
-    const match = line.match(/^\+package\s+(?<pkg>.+)$/)
+    // Use [^\s]+ instead of .+$ to handle embedded \n in strings
+    const match = line.match(/^\+package\s+(?<pkg>[^\s]+)/)
     if (match) {
       return match.groups.pkg.trim()
     }
