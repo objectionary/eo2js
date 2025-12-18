@@ -13,7 +13,8 @@
       <xsl:apply-templates select="@name"/>
       <xsl:variable name="t">
         <xsl:choose>
-          <xsl:when test="@base">
+          <!-- EO 0.59.0 uses base="∅" for void attributes -->
+          <xsl:when test="@base and @base != '∅'">
             <xsl:text>bound</xsl:text>
           </xsl:when>
           <xsl:otherwise>
