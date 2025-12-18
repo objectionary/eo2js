@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: Copyright (c) 2024 Objectionary.com
+// SPDX-License-Identifier: MIT
+
 // Experiment: Run integration test to understand the lambda override error
 
 const fs = require('fs');
