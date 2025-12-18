@@ -69,6 +69,36 @@ const assertFilesExist = function(stdout, home, paths) {
 const parser = new XMLParser({ignoreAttributes: false})
 
 /**
+ * Extract package name from EO source lines.
+ * @param {Array.<String>} eoLines - EO source lines
+ * @return {String|null} Package name or null if not found
+ */
+const extractPackage = function(eoLines) {
+  for (const line of eoLines) {
+    const match = line.match(/^\+package\s+(?<pkg>.+)$/)
+    if (match) {
+      return match.groups.pkg.trim()
+    }
+  }
+  return null
+}
+
+/**
+ * Extract object name from EO source lines.
+ * @param {Array.<String>} eoLines - EO source lines
+ * @return {String} Object name
+ */
+const extractObjectName = function(eoLines) {
+  for (const line of eoLines) {
+    const match = line.match(/^\[.*\]\s*>\s*(?<name>\w+)/)
+    if (match) {
+      return match.groups.name
+    }
+  }
+  return 'test'
+}
+
+/**
  * Transformations test pack.
  * @param {{home: String, sources: String, target: String, json: Object}} params - Pack params
  * @return {Promise<{skip: boolean, failures: array.<String>, xmir: String, json: Object}>}
@@ -85,12 +115,20 @@ const pack = async function(params) {
       res.skip = true
       resolve(res)
     })
-  } 
+  }
   const sources = path.resolve(params.home, params.sources)
   const target = path.resolve(params.home, params.target)
-  fs.mkdirSync(sources, {recursive: true})
+  // Extract package and object name for EO 0.59.0 file structure
+  const pkg = extractPackage(params.json.eo)
+  const objName = extractObjectName(params.json.eo)
+  // Build source path based on package structure
+  let sourcePath = sources
+  if (pkg) {
+    sourcePath = path.resolve(sources, pkg.replace(/\./g, '/'))
+  }
+  fs.mkdirSync(sourcePath, {recursive: true})
   fs.mkdirSync(target, {recursive: true})
-  fs.writeFileSync(path.resolve(sources, `test.eo`), `${params.json.eo.join('\n')}\n`)
+  fs.writeFileSync(path.resolve(sourcePath, `${objName}.eo`), `${params.json.eo.join('\n')}\n`)
   await mvnw(['register', 'parse', 'lint'], params)
   const linted = JSON.parse(
     fs.readFileSync(path.resolve(target, 'eo-foreign.json')).toString()
