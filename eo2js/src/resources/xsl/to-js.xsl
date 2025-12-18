@@ -193,6 +193,23 @@
       <xsl:text>')</xsl:text>
     </xsl:for-each>
   </xsl:function>
+  <!-- Handle ξ-prefixed paths from EO 0.59.0 -->
+  <!-- ξ.ρ.first.x -> taken(taken(taken(rho, 'ρ'), 'first'), 'x') -->
+  <xsl:function name="eo:xi-path">
+    <xsl:param name="path"/>
+    <xsl:variable name="parts" select="tokenize($path, '\.')"/>
+    <!-- Skip first part (ξ) and start with rho -->
+    <xsl:variable name="rest" select="subsequence($parts, 2)"/>
+    <xsl:for-each select="$rest">
+      <xsl:text>taken(</xsl:text>
+    </xsl:for-each>
+    <xsl:text>rho</xsl:text>
+    <xsl:for-each select="$rest">
+      <xsl:text>, '</xsl:text>
+      <xsl:value-of select="."/>
+      <xsl:text>')</xsl:text>
+    </xsl:for-each>
+  </xsl:function>
   <!-- TEMPLATES -->
   <xsl:template match="objects">
     <xsl:copy>
@@ -342,10 +359,23 @@
   <!--    <xsl:text>* anonymous abstract object without attributes */ };</xsl:text>-->
   <!--    <xsl:value-of select="eo:eol(0)"/>-->
   <!--  </xsl:template>-->
+  <!-- EO 0.59.0: Primitive element without @base (inline data) -->
+  <xsl:template match="o[@primitive and not(@base)]">
+    <xsl:param name="name"/>
+    <xsl:param name="indent" select="0"/>
+    <xsl:value-of select="eo:eol($indent)"/>
+    <xsl:text>let </xsl:text>
+    <xsl:value-of select="$name"/>
+    <xsl:text> = object()</xsl:text>
+    <xsl:apply-templates select="value">
+      <xsl:with-param name="name" select="$name"/>
+      <xsl:with-param name="indent" select="$indent"/>
+    </xsl:apply-templates>
+  </xsl:template>
   <!-- Based, not method -->
   <xsl:template match="o[@base and not(starts-with(@base, '.'))]">
     <xsl:param name="name"/>
-    <xsl:param name="indent"/>
+    <xsl:param name="indent" select="0"/>
     <xsl:variable name="current" select="."/>
     <xsl:variable name="source" select="//*[generate-id()!=generate-id($current) and @name=$current/@base and @line=$current/@ref]"/>
     <!-- Terminate -->
@@ -378,6 +408,10 @@
         <xsl:value-of select="eo:fetch(@base)"/>
         <xsl:text>.copy()</xsl:text>
       </xsl:when>
+      <!-- EO 0.59.0: Handle primitive element without @base (inline data) -->
+      <xsl:when test="@primitive and not(@base)">
+        <xsl:text>object()</xsl:text>
+      </xsl:when>
       <xsl:when test="@base='$'">
         <xsl:text>rho</xsl:text>
       </xsl:when>
@@ -388,6 +422,14 @@
         <xsl:text>taken(rho, '</xsl:text>
         <xsl:value-of select="$RHO"/>
         <xsl:text>')</xsl:text>
+      </xsl:when>
+      <!-- EO 0.59.0: Handle ξ-prefixed paths like ξ.ρ.first.x -->
+      <xsl:when test="starts-with(@base, 'ξ.')">
+        <xsl:value-of select="eo:xi-path(@base)"/>
+      </xsl:when>
+      <!-- EO 0.59.0: Handle single ξ reference (current object) -->
+      <xsl:when test="@base='ξ'">
+        <xsl:text>rho</xsl:text>
       </xsl:when>
       <xsl:when test="$source/@ancestors">
         <xsl:value-of select="eo:object-name($source/@name, eo:suffix(@line, @pos))"/>
@@ -430,7 +472,7 @@
   </xsl:template>
   <!-- Based, method, starts with . -->
   <xsl:template match="o[starts-with(@base, '.') and *]">
-    <xsl:param name="indent"/>
+    <xsl:param name="indent" select="0"/>
     <xsl:param name="name"/>
     <xsl:apply-templates select="*[1]">
       <xsl:with-param name="name">
@@ -488,7 +530,7 @@
   <!--  </xsl:template>-->
   <!-- APPLICATION  -->
   <xsl:template match="*" mode="application">
-    <xsl:param name="indent"/>
+    <xsl:param name="indent" select="0"/>
     <xsl:param name="name"/>
     <xsl:param name="skip" select="0"/>
     <!-- CREATE OBJECTS TO PUT -->
@@ -555,7 +597,7 @@
   </xsl:template>
   <!-- VALUE TO PUT  -->
   <xsl:template match="value">
-    <xsl:param name="indent"/>
+    <xsl:param name="indent" select="0"/>
     <xsl:param name="name"/>
     <xsl:value-of select="eo:eol($indent)"/>
     <xsl:value-of select="$name"/>

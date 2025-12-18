@@ -1,5 +1,4 @@
 {
-  "skip": true,
   "eo": [
     "# This is the default 64+ symbols comment in front of named abstract object.",
     "[] > simple",
@@ -17,8 +16,7 @@
           "  obj.attrs['five'] = attr.once(",
           "    attr.lambda(",
           "      obj, function(rho) {",
-          "        let ret_base = taken(taken(rho, '\u03c1'), 'first')",
-          "        let ret = taken(ret_base, 'x')",
+          "        let ret = taken(taken(taken(rho, '\u03c1'), 'first'), 'x')",
           "        return ret",
           "      }",
           "    )",
@@ -26,7 +24,7 @@
         ]
       ],
       "method": "includes",
-      "node": ".program.objects.object{.\"@_name\" == 'simple$second'}.javascript"
+      "node": ".program.objects.object{.\"@_name\" == 'simple'}.javascript"
     }
   ],
   "xsls": [
