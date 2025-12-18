@@ -43,16 +43,27 @@ const makeDirIfNotExist = function(dir) {
 }
 
 /**
+ * Get the root container from XMIR (handles both old 'program' and new 'object' format).
+ * EO 0.59.0 changed the root element from <program> to <object>.
+ * @param {any} xmir - Parsed XMIR
+ * @return {any} - The root container (program or object)
+ */
+const getRoot = function(xmir) {
+  return xmir.program || xmir.object
+}
+
+/**
  * Check if given XMIR has meta.
  * @param {any} xmir - XMIR
  * @param {String} name - Name of the meta
  * @return {boolean} - If given XMIR has tests meta or not
  */
 const hasMeta = function(xmir, name) {
-  const metas = xmir.program.metas
+  const root = getRoot(xmir)
+  const metas = root.metas
   let res = false
   if (metas !== null && metas !== undefined) {
-    const nodes = xmir.program.metas.meta
+    const nodes = metas.meta
     if (Array.isArray(nodes)) {
       res = nodes.findIndex((meta) => meta.head === name) !== -1
     } else if (typeof nodes === 'object' && nodes.hasOwnProperty('head')) {
@@ -73,6 +84,58 @@ const needsRetranspile = function(source, transpiled) {
 }
 
 /**
+ * Get the program name from XMIR (handles both old 'program' and new 'object' format).
+ * In old format: <program name="com.eo2js.simple">
+ * In new format (EO 0.59.0): Name is derived from package meta and main object name
+ * @param {any} xmir - Parsed XMIR
+ * @return {string} - The program name (e.g. "com.eo2js.simple")
+ */
+const getProgramName = function(xmir) {
+  const root = getRoot(xmir)
+  // Old format: name attribute on program element
+  if (root['@_name']) {
+    return root['@_name']
+  }
+  // New format (EO 0.59.0): construct from package meta and main object name
+  let pkg = ''
+  const metas = root.metas
+  if (metas && metas.meta) {
+    const metaArr = Array.isArray(metas.meta) ? metas.meta : [metas.meta]
+    const pkgMeta = metaArr.find((m) => m.head === 'package')
+    if (pkgMeta && pkgMeta.part) {
+      pkg = Array.isArray(pkgMeta.part) ? pkgMeta.part[0] : pkgMeta.part
+    }
+  }
+  // Get main object name from <o> element
+  let objName = ''
+  const obj = root.o
+  if (obj) {
+    const mainObj = Array.isArray(obj) ? obj.find((o) => o['@_name']) : obj
+    if (mainObj && mainObj['@_name']) {
+      objName = mainObj['@_name']
+    }
+  }
+  return pkg ? `${pkg}.${objName}` : objName
+}
+
+/**
+ * Get objects from XMIR (handles both old and new format).
+ * Old format: xml.program.objects.object
+ * New format (EO 0.59.0): xml.object.objects.object (after transformation)
+ * @param {any} xmir - Parsed XMIR
+ * @return {Array} - Array of objects
+ */
+const getObjects = function(xmir) {
+  const root = getRoot(xmir)
+  // Try old format first: <objects><object>...</object></objects>
+  if (root.objects && root.objects.object) {
+    const objs = root.objects.object
+    return Array.isArray(objs) ? objs : [objs]
+  }
+  return []
+}
+
+/**
  * Transform XMIR from given tojo and save.
  * @param {Object} tojo - Tojo.
  * @param {{target: String, project: String, verbose: boolean}} options - Program options
@@ -82,7 +145,7 @@ const needsRetranspile = function(source, transpiled) {
 const transform = function(tojo, options, transformations, parser) {
   const text = fs.readFileSync(tojo[verified]).toString()
   let xml = parser.parse(text)
-  const pth = pathFromName(xml.program['@_name'])
+  const pth = pathFromName(getProgramName(xml))
   const isTest = hasMeta(xml, 'tests')
   const transpiled = path.resolve(options.target, dir, `${pth}.xmir`)
   const dest = path.resolve(options.project, `${pth}${isTest ? '.test' : ''}.js`)
@@ -99,10 +162,7 @@ const transform = function(tojo, options, transformations, parser) {
     })
     fs.writeFileSync(transpiled, xml)
     xml = parser.parse(xml)
-    let objects = xml.program.objects.object
-    if (!Array.isArray(objects)) {
-      objects = [objects]
-    }
+    const objects = getObjects(xml)
     const filtered = objects.filter((obj) => Boolean(obj) && obj.hasOwnProperty('javascript') && !obj.hasOwnProperty('@_atom'))
     const count = isTest ? 0 : 1
     if (filtered.length > count) {
