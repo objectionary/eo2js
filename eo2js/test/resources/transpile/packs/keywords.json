@@ -1,19 +1,25 @@
 {
-  "skip": true,
+  "skip": false,
   "eo": [
-    "+package com.eo2js\n",
+    "+architect yegor256@gmail.com",
+    "+home https://github.com/objectionary/eo2js",
+    "+package com.eo2js.test",
+    "+version 0.0.0",
+    "+spdx SPDX-FileCopyrightText: Copyright (c) 2024 Objectionary.com",
+    "+spdx SPDX-License-Identifier: MIT",
+    "",
     "# This is the default 64+ symbols comment in front of named abstract object.",
     "[] > while",
-    "  [] > if ?",
-    "  [] > for"
+    "  # This object mimics a conditional or loop-like structure.",
+    "  [] > for",
+    "    true > @"
   ],
   "tests": [
-    ".program.objects.object{.\"@_js-name\" === 'com.eo2js.while'}",
+    ".program.objects.object{.\"@_js-name\" === 'com.eo2js.test.while'}",
     {
       "args": [
         "const _while = function() {",
-        "        let ret = while$if(rho)",
-        "        let ret = while$for(rho)"
+        "const _for = function() {"
       ],
       "method": "includes",
       "node": ".program.objects.object{.\"@_name\" == 'while'}.javascript"

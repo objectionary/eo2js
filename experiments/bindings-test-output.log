@@ -1,0 +1,75 @@
+Testing pack: bindings-to-js
+EO source:
+# Simple.
+[] > simple
+  stdout x:0 > print1
+  stdout x:text > print2
+
+XSL transformations: [ 'objects', 'package', 'attrs', 'data', 'to-js' ]
+
+Tests: [
+  {
+    "args": [
+      [
+        "        ret = applied(ret, {",
+        "          0: ret_1",
+        "        })"
+      ],
+      [
+        "        ret = applied(ret, {",
+        "          'text': ret_1",
+        "        })"
+      ]
+    ],
+    "method": "includes",
+    "node": ".program.objects.object{.\"@_name\" == 'simple'}.javascript"
+  },
+  {
+    "args": [
+      "module.exports = simple"
+    ],
+    "method": "includes",
+    "node": ".program.objects.object[-1].javascript"
+  }
+]
+Running: /tmp/gh-issue-solver-1766085739012/eo2js/test/mvnw/mvnw org.eolang:eo-maven-plugin:register org.eolang:eo-maven-plugin:parse org.eolang:eo-maven-plugin:lint -Deo.version=0.59.0 -Deo.tag=0.59.0 -Deo.sourcesDir=/tmp/gh-issue-solver-1766085739012/experiments/test-pack-run/bindings-to-js/src -Deo.targetDir=/tmp/gh-issue-solver-1766085739012/experiments/test-pack-run/bindings-to-js/target -Deo.failOnWarning=false --batch-mode --color=never --update-snapshots --fail-fast --strict-checksums
+[33m 0ms; 0 files generated so far...[39m[0K[1GWarning: JAVA_HOME environment variable is not set.
+[INFO] Scanning for projects...
+[33m 2s; 0 files generated so far...[39m[0K[1G[INFO] 
+[INFO] -----------------------< com.maxonfjvipon:eo2js >-----------------------
+[INFO] Building eo2js 0.0.0
+[INFO]   from pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- eo:0.59.0:register (default-cli) @ eo2js ---
+[INFO] Registered 1 EO sources from /tmp/gh-issue-solver-1766085739012/experiments/test-pack-run/bindings-to-js/src to /tmp/gh-issue-solver-1766085739012/experiments/test-pack-run/bindings-to-js/target/eo-foreign.json, included [**.eo], excluded []
+[INFO] 
+[INFO] --- eo:0.59.0:parse (default-cli) @ eo2js ---
+[33m 3s; 1 files generated so far...[39m[0K[1G[33m 4s; 1 files generated so far...[39m[0K[1G[INFO] Parsed 1 new .eo sources out of 1 to XMIRs in 2s
+[INFO] 
+[INFO] --- eo:0.59.0:lint (default-cli) @ eo2js ---
+[33m 5s; 2 files generated so far...[39m[0K[1G[33m 6s; 2 files generated so far...[39m[0K[1G[WARNING] simple:0 The +version meta is mandatory, but is absent (mandatory-version (Single))
+[WARNING] simple:0 Tests not found for "simple" (unit-test-missing (Single))
+[WARNING] simple:0 The +spdx meta is mandatory, but is absent (mandatory-spdx (Single))
+[WARNING] simple:3 The object "print1" is redundant and may be inlined (redundant-object (Single))
+[WARNING] simple:4 The object "print2" is redundant and may be inlined (redundant-object (Single))
+[WARNING] simple:2 The comment for the object is too short (shorter than 32 characters) (comment-too-short (Single))
+[WARNING] simple:0 The +package meta is mandatory, but is absent (mandatory-package (Single))
+[WARNING] simple:0 The +home meta is mandatory, but is absent (must contain URL of repository where object sources may be found) (mandatory-home (Single))
+[INFO] XMIR programs linted as a package: 1
+[INFO] Linted 1 out of 1 XMIR program(s) that needed this (out of 1 total programs) in 2s: 8 warnings
+[INFO] Read more about lints: https://www.objectionary.com/lints/0.0.60
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  4.646 s
+[INFO] Finished at: 2025-12-18T20:27:46+01:00
+[INFO] ------------------------------------------------------------------------
+[2K
+=== RESULT ===
+FAILURES:
+  1. NODE: .program.objects.object{."@_name" == 'simple'}.javascript, METHOD: includes, ARG:         ret = applied(ret, {
+          0: ret_1
+        })
+
+XMIR saved to: /tmp/gh-issue-solver-1766085739012/experiments/test-pack-run/bindings-to-js/result.xmir

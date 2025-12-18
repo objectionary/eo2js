@@ -1,0 +1,11 @@
+
+[
+    {
+        "id": "my",
+        "eo": "/tmp/gh-issue-solver-1766085739012/experiments/test-pack-run/full-test/src/my.eo",
+        "linted": "/tmp/gh-issue-solver-1766085739012/experiments/test-pack-run/full-test/target/3-lint/my-test.xmir",
+        "version": "0.0.0",
+        "xmir": "/tmp/gh-issue-solver-1766085739012/experiments/test-pack-run/full-test/target/1-parse/my.xmir",
+        "scope": "compile"
+    }
+]

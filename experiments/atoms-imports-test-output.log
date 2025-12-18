@@ -1,0 +1,62 @@
+Testing pack: atoms-imports
+EO source:
+# This is the default 64+ symbols comment in front of named abstract object.
+[] > outer
+  [] > @ ?
+
+XSL transformations: [ 'objects', 'package', 'attrs', 'data', 'to-js' ]
+
+Tests: [
+  {
+    "args": [
+      "const outer$φ = require('eo2js-runtime/src/objects/outer$φ')",
+      "        let ret = outer$φ(rho)"
+    ],
+    "method": "includes",
+    "node": ".program.objects.object{.\"@_name\" == 'outer'}.javascript"
+  }
+]
+Running: /tmp/gh-issue-solver-1766085739012/eo2js/test/mvnw/mvnw org.eolang:eo-maven-plugin:register org.eolang:eo-maven-plugin:parse org.eolang:eo-maven-plugin:lint -Deo.version=0.59.0 -Deo.tag=0.59.0 -Deo.sourcesDir=/tmp/gh-issue-solver-1766085739012/experiments/test-pack-run/atoms-imports/src -Deo.targetDir=/tmp/gh-issue-solver-1766085739012/experiments/test-pack-run/atoms-imports/target -Deo.failOnWarning=false --batch-mode --color=never --update-snapshots --fail-fast --strict-checksums
+[33m 0ms; 0 files generated so far...[39m[0K[1GWarning: JAVA_HOME environment variable is not set.
+[INFO] Scanning for projects...
+[33m 2s; 0 files generated so far...[39m[0K[1G[INFO] 
+[INFO] -----------------------< com.maxonfjvipon:eo2js >-----------------------
+[INFO] Building eo2js 0.0.0
+[INFO]   from pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- eo:0.59.0:register (default-cli) @ eo2js ---
+[INFO] Registered 1 EO sources from /tmp/gh-issue-solver-1766085739012/experiments/test-pack-run/atoms-imports/src to /tmp/gh-issue-solver-1766085739012/experiments/test-pack-run/atoms-imports/target/eo-foreign.json, included [**.eo], excluded []
+[INFO] 
+[INFO] --- eo:0.59.0:parse (default-cli) @ eo2js ---
+[33m 3s; 1 files generated so far...[39m[0K[1G[INFO] Parsed 1 new .eo sources out of 1 to XMIRs in 1s
+[INFO] 
+[INFO] --- eo:0.59.0:lint (default-cli) @ eo2js ---
+[33m 4s; 2 files generated so far...[39m[0K[1G[33m 5s; 2 files generated so far...[39m[0K[1G[WARNING] outer:3 The idempotent object must go first inside formation (idempotent-attribute-is-not-first (Single))
+[WARNING] outer:2 Sparse decoration is prohibited (sparse-decoration (Single))
+[WARNING] outer:0 Tests not found for "outer" (unit-test-missing (Single))
+[WARNING] outer:0 The +package meta is mandatory, but is absent (mandatory-package (Single))
+[ERROR] outer:3 The "φ" atom is defined without the +rt meta, which doesn't make any sense (atom-without-rt (Single))
+[WARNING] outer:0 The +home meta is mandatory, but is absent (must contain URL of repository where object sources may be found) (mandatory-home (Single))
+[WARNING] outer:3 The formation "φ" does not have a comment (formation-without-comment (Single))
+[WARNING] outer:3 The formation "λ" does not have a comment (formation-without-comment (Single))
+[WARNING] outer:0 The +spdx meta is mandatory, but is absent (mandatory-spdx (Single))
+[WARNING] outer:0 The +version meta is mandatory, but is absent (mandatory-version (Single))
+[INFO] XMIR programs linted as a package: 1
+[INFO] Linted 1 out of 1 XMIR program(s) that needed this (out of 1 total programs) in 2s: 1 error and 9 warnings
+[INFO] Read more about lints: https://www.objectionary.com/lints/0.0.60
+[ERROR] In 1 XMIR files, we found 1 error and 9 warnings (must stop here)
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD FAILURE
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  4.108 s
+[INFO] Finished at: 2025-12-18T20:29:24+01:00
+[INFO] ------------------------------------------------------------------------
+[ERROR] Failed to execute goal org.eolang:eo-maven-plugin:0.59.0:lint (default-cli) on project eo2js: 'MjLint' execution failed: java.lang.IllegalStateException: In 1 XMIR files, we found 1 error and 9 warnings (must stop here) -> [Help 1]
+[ERROR] 
+[ERROR] To see the full stack trace of the errors, re-run Maven with the -e switch.
+[ERROR] Re-run Maven using the -X switch to enable full debug logging.
+[ERROR] 
+[ERROR] For more information about the errors and possible solutions, please read the following articles:
+[ERROR] [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/MojoFailureException
+[33m 6s; 3 files generated so far...[39m[0K[1GThe command "/tmp/gh-issue-solver-1766085739012/eo2js/test/mvnw/mvnw org.eolang:eo-maven-plugin:register org.eolang:eo-maven-plugin:parse org.eolang:eo-maven-plugin:lint -Deo.version=0.59.0 -Deo.tag=0.59.0 -Deo.sourcesDir=/tmp/gh-issue-solver-1766085739012/experiments/test-pack-run/atoms-imports/src -Deo.targetDir=/tmp/gh-issue-solver-1766085739012/experiments/test-pack-run/atoms-imports/target -Deo.failOnWarning=false --batch-mode --color=never --update-snapshots --fail-fast --strict-checksums" exited with #1 code

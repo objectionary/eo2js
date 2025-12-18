@@ -1,0 +1,68 @@
+Testing pack: keywords
+EO source:
++architect yegor256@gmail.com
++home https://github.com/objectionary/eo2js
++package com.eo2js.test
++version 0.0.0
++spdx SPDX-FileCopyrightText: Copyright (c) 2024 Objectionary.com
++spdx SPDX-License-Identifier: MIT
+
+# This is the default 64+ symbols comment in front of named abstract object.
+[] > while
+  # This object mimics a conditional or loop-like structure.
+  [] > for
+    true > @
+
+XSL transformations: [ 'objects', 'package', 'attrs', 'data', 'to-js' ]
+
+Tests: [
+  ".program.objects.object{.\"@_js-name\" === 'com.eo2js.test.while'}",
+  {
+    "args": [
+      "const _while = function() {",
+      "        let ret = _while$for(rho)"
+    ],
+    "method": "includes",
+    "node": ".program.objects.object{.\"@_name\" == 'while'}.javascript"
+  },
+  {
+    "args": [
+      "module.exports = _while"
+    ],
+    "method": "includes",
+    "node": ".program.objects.object[-1].javascript"
+  }
+]
+Running: /tmp/gh-issue-solver-1766085739012/eo2js/test/mvnw/mvnw org.eolang:eo-maven-plugin:register org.eolang:eo-maven-plugin:parse org.eolang:eo-maven-plugin:lint -Deo.version=0.59.0 -Deo.tag=0.59.0 -Deo.sourcesDir=/tmp/gh-issue-solver-1766085739012/experiments/test-pack-run/keywords/src -Deo.targetDir=/tmp/gh-issue-solver-1766085739012/experiments/test-pack-run/keywords/target -Deo.failOnWarning=false --batch-mode --color=never --update-snapshots --fail-fast --strict-checksums
+[33m 0ms; 0 files generated so far...[39m[0K[1GWarning: JAVA_HOME environment variable is not set.
+[INFO] Scanning for projects...
+[INFO] 
+[33m 2s; 0 files generated so far...[39m[0K[1G[INFO] -----------------------< com.maxonfjvipon:eo2js >-----------------------
+[INFO] Building eo2js 0.0.0
+[INFO]   from pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- eo:0.59.0:register (default-cli) @ eo2js ---
+[INFO] Registered 1 EO sources from /tmp/gh-issue-solver-1766085739012/experiments/test-pack-run/keywords/src to /tmp/gh-issue-solver-1766085739012/experiments/test-pack-run/keywords/target/eo-foreign.json, included [**.eo], excluded []
+[INFO] 
+[INFO] --- eo:0.59.0:parse (default-cli) @ eo2js ---
+[33m 3s; 1 files generated so far...[39m[0K[1G[33m 4s; 1 files generated so far...[39m[0K[1G[INFO] Parsed 1 new .eo sources out of 1 to XMIRs in 2s
+[INFO] 
+[INFO] --- eo:0.59.0:lint (default-cli) @ eo2js ---
+[33m 5s; 2 files generated so far...[39m[0K[1G[33m 6s; 2 files generated so far...[39m[0K[1G[WARNING] com.eo2js.test.while:0 Tests not found for "while" (unit-test-missing (Single))
+[WARNING] com.eo2js.test.while:11 Sparse decoration is prohibited (sparse-decoration (Single))
+[INFO] XMIR programs linted as a package: 1
+[INFO] Linted 1 out of 1 XMIR program(s) that needed this (out of 1 total programs) in 2s: 2 warnings
+[INFO] Read more about lints: https://www.objectionary.com/lints/0.0.60
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  4.672 s
+[INFO] Finished at: 2025-12-18T20:26:41+01:00
+[INFO] ------------------------------------------------------------------------
+[2K
+=== RESULT ===
+FAILURES:
+  1. NODE: .program.objects.object{."@_name" == 'while'}.javascript, METHOD: includes, ARG:         let ret = _while$for(rho)
+
+XMIR saved to: /tmp/gh-issue-solver-1766085739012/experiments/test-pack-run/keywords/result.xmir

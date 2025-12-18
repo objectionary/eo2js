@@ -1,7 +1,14 @@
 {
-  "skip": true,
+  "skip": false,
   "eo": [
-    "# Simple.",
+    "+architect yegor256@gmail.com",
+    "+home https://github.com/objectionary/eo2js",
+    "+package com.eo2js.test",
+    "+version 0.0.0",
+    "+spdx SPDX-FileCopyrightText: Copyright (c) 2024 Objectionary.com",
+    "+spdx SPDX-License-Identifier: MIT",
+    "",
+    "# This is the default 64+ symbols comment in front of named abstract object.",
     "[] > simple",
     "  stdout x:0 > print1",
     "  stdout x:text > print2"
@@ -11,7 +18,7 @@
       "args": [
         [
           "        ret = applied(ret, {",
-          "          0: ret_1",
+          "          'α0': ret_1",
           "        })"
         ],
         [
