@@ -1,6 +1,13 @@
 {
   "skip": true,
   "eo": [
+    "+architect yegor256@gmail.com",
+    "+home https://github.com/objectionary/eo2js",
+    "+package com.eo2js.test",
+    "+version 0.0.0",
+    "+spdx SPDX-FileCopyrightText: Copyright (c) 2024 Objectionary.com",
+    "+spdx SPDX-License-Identifier: MIT",
+    "",
     "# This is the default 64+ symbols comment in front of named abstract object.",
     "[x] > foo",
     "  $ > this",
@@ -35,7 +42,7 @@
         ]
       ],
       "method": "includes",
-      "node": ".program.objects.object{.\"@_name\" == 'foo'}.javascript"
+      "node": ".object.object{.\"@_name\" == 'foo'}.javascript"
     },
     {
       "args": [
@@ -51,15 +58,15 @@
         ]
       ],
       "method": "includes",
-      "node": ".program.objects.object{.\"@_name\" == 'foo$xyz'}.javascript"
+      "node": ".object.object{.\"@_name\" == 'foo$xyz'}.javascript"
     },
     {
       "args": [
         [
-          "  obj.attrs['\u03c6'] = attr.once(",
+          "  obj.attrs['φ'] = attr.once(",
           "    attr.lambda(",
           "      obj, function(rho) {",
-          "        let ret_base = taken(taken(taken(rho, '\u03c1'), '\u03c1'), 'this')",
+          "        let ret_base = taken(taken(taken(rho, 'ρ'), 'ρ'), 'this')",
           "        let ret = taken(ret_base, 'x')",
           "        return ret",
           "      }",
@@ -68,14 +75,14 @@
         ]
       ],
       "method": "includes",
-      "node": ".program.objects.object{.\"@_name\" == 'foo$xyz$bar'}.javascript"
+      "node": ".object.object{.\"@_name\" == 'foo$xyz$bar'}.javascript"
     },
     {
       "args": [
         "module.exports = foo"
       ],
       "method": "includes",
-      "node": ".program.objects.object[-1].javascript"
+      "node": ".object.object[-1].javascript"
     }
   ],
   "xsls": [

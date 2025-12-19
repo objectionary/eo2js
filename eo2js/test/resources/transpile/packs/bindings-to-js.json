@@ -1,5 +1,4 @@
 {
-  "skip": false,
   "eo": [
     "+architect yegor256@gmail.com",
     "+home https://github.com/objectionary/eo2js",
@@ -18,7 +17,7 @@
       "args": [
         [
           "        ret = applied(ret, {",
-          "          'α0': ret_1",
+          "          0: ret_1",
           "        })"
         ],
         [
@@ -28,14 +27,14 @@
         ]
       ],
       "method": "includes",
-      "node": ".program.objects.object{.\"@_name\" == 'simple'}.javascript"
+      "node": ".object.object{.\"@_name\" == 'simple'}.javascript"
     },
     {
       "args": [
         "module.exports = simple"
       ],
       "method": "includes",
-      "node": ".program.objects.object[-1].javascript"
+      "node": ".object.object[-1].javascript"
     }
   ],
   "xsls": [

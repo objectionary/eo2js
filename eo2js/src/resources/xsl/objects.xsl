@@ -9,35 +9,9 @@
                                <object>
   <o abstract="" name="x"/> =>   <o abstract="" name="x"/>
                                </object>
-
-  Also handles EO 0.59.0 XMIR format where root is <object> instead of <program>
   -->
   <xsl:output encoding="UTF-8" method="xml"/>
-  <xsl:template match="/object">
-    <xsl:element name="program">
-      <xsl:variable name="pkg" select="metas/meta[head='package']/part[1]"/>
-      <xsl:variable name="objName" select="o[1]/@name"/>
-      <xsl:attribute name="name">
-        <xsl:choose>
-          <xsl:when test="$pkg">
-            <xsl:value-of select="concat($pkg, '.', $objName)"/>
-          </xsl:when>
-          <xsl:otherwise>
-            <xsl:value-of select="$objName"/>
-          </xsl:otherwise>
-        </xsl:choose>
-      </xsl:attribute>
-      <xsl:apply-templates select="@*[name()!='name']"/>
-      <xsl:apply-templates select="metas"/>
-      <xsl:apply-templates select="listing"/>
-      <xsl:apply-templates select="comments"/>
-      <xsl:apply-templates select="sheets"/>
-      <xsl:apply-templates select="errors"/>
-      <xsl:element name="objects">
-        <xsl:apply-templates select="o"/>
-      </xsl:element>
-    </xsl:element>
-  </xsl:template>
+  <!-- SERIALIZE ORIGINAL XMIR  -->
   <xsl:template name="serialize">
     <xsl:param name="node"/>
     <xsl:param name="indent"/>

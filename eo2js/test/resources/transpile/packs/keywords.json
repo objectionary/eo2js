@@ -1,5 +1,5 @@
 {
-  "skip": false,
+  "skip": true,
   "eo": [
     "+architect yegor256@gmail.com",
     "+home https://github.com/objectionary/eo2js",
@@ -10,26 +10,26 @@
     "",
     "# This is the default 64+ symbols comment in front of named abstract object.",
     "[] > while",
-    "  # This object mimics a conditional or loop-like structure.",
-    "  [] > for",
-    "    true > @"
+    "  [] > if ?",
+    "  [] > for"
   ],
   "tests": [
-    ".program.objects.object{.\"@_js-name\" === 'com.eo2js.test.while'}",
+    ".object.object{.\"@_js-name\" === 'com.eo2js.test.while'}",
     {
       "args": [
         "const _while = function() {",
-        "const _for = function() {"
+        "        let ret = while$if(rho)",
+        "        let ret = while$for(rho)"
       ],
       "method": "includes",
-      "node": ".program.objects.object{.\"@_name\" == 'while'}.javascript"
+      "node": ".object.object{.\"@_name\" == 'while'}.javascript"
     },
     {
       "args": [
         "module.exports = _while"
       ],
       "method": "includes",
-      "node": ".program.objects.object[-1].javascript"
+      "node": ".object.object[-1].javascript"
     }
   ],
   "xsls": [

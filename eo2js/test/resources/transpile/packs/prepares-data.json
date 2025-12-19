@@ -1,5 +1,4 @@
 {
-  "skip": false,
   "eo": [
     "+architect yegor256@gmail.com",
     "+home https://github.com/objectionary/eo2js",
@@ -14,11 +13,10 @@
     "  \"Hello\" > str"
   ],
   "tests": [
-    ".program.objects.object.o{.\"@_base\" == 'Φ.org.eolang.number'}{.o{.\"@_base\" == 'Φ.org.eolang.bytes'}{.o.value == \"['0x40', '0x14', '0x00', '0x00', '0x00', '0x00', '0x00', '0x00']\"}}",
-    ".program.objects.object.o{.\"@_base\" == 'Φ.org.eolang.string'}{.o{.\"@_base\" == 'Φ.org.eolang.bytes'}{.o.value == \"['0x48', '0x65', '0x6C', '0x6C', '0x6F']\"}}"
+    ".object.o.o{.\"@_base\" == 'Φ.org.eolang.number'}{.o{.\"@_base\" == 'Φ.org.eolang.bytes'}{.o.value == \"['0x40', '0x14', '0x00', '0x00', '0x00', '0x00', '0x00', '0x00']\"}}",
+    ".object.o.o{.\"@_base\" == 'Φ.org.eolang.string'}{.o{.\"@_base\" == 'Φ.org.eolang.bytes'}{.o.value == \"['0x48', '0x65', '0x6C', '0x6C', '0x6F']\"}}"
   ],
   "xsls": [
-    "objects",
     "data"
   ]
 }

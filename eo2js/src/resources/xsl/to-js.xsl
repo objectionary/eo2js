@@ -193,36 +193,24 @@
       <xsl:text>')</xsl:text>
     </xsl:for-each>
   </xsl:function>
-  <!-- Handle ξ-prefixed paths from EO 0.59.0 -->
-  <!-- ξ.ρ.first.x -> taken(taken(taken(rho, 'ρ'), 'first'), 'x') -->
-  <xsl:function name="eo:xi-path">
-    <xsl:param name="path"/>
-    <xsl:variable name="parts" select="tokenize($path, '\.')"/>
-    <!-- Skip first part (ξ) and start with rho -->
-    <xsl:variable name="rest" select="subsequence($parts, 2)"/>
-    <xsl:for-each select="$rest">
-      <xsl:text>taken(</xsl:text>
-    </xsl:for-each>
-    <xsl:text>rho</xsl:text>
-    <xsl:for-each select="$rest">
-      <xsl:text>, '</xsl:text>
-      <xsl:value-of select="."/>
-      <xsl:text>')</xsl:text>
-    </xsl:for-each>
-  </xsl:function>
   <!-- TEMPLATES -->
-  <xsl:template match="objects">
+  <xsl:template match="/object">
     <xsl:copy>
       <xsl:apply-templates select="@*"/>
+      <xsl:apply-templates select="metas"/>
+      <xsl:apply-templates select="listing"/>
+      <xsl:apply-templates select="comments"/>
+      <xsl:apply-templates select="sheets"/>
+      <xsl:apply-templates select="errors"/>
       <xsl:for-each select="object[not(@atom)]">
         <xsl:copy>
           <xsl:apply-templates select="@*"/>
           <xsl:element name="javascript">
             <xsl:if test="position()=1">
-              <xsl:apply-templates select="/program" mode="license"/>
-              <xsl:apply-templates select="/program" mode="imports"/>
+              <xsl:apply-templates select="/object" mode="license"/>
+              <xsl:apply-templates select="/object" mode="imports"/>
               <xsl:if test="//meta[head='tests'] and not(@parent)">
-                <xsl:apply-templates select="/program" mode="test-imports"/>
+                <xsl:apply-templates select="/object" mode="test-imports"/>
               </xsl:if>
               <xsl:apply-templates select="//object[@atom]" mode="atom-imports"/>
             </xsl:if>
@@ -359,23 +347,10 @@
   <!--    <xsl:text>* anonymous abstract object without attributes */ };</xsl:text>-->
   <!--    <xsl:value-of select="eo:eol(0)"/>-->
   <!--  </xsl:template>-->
-  <!-- EO 0.59.0: Primitive element without @base (inline data) -->
-  <xsl:template match="o[@primitive and not(@base)]">
-    <xsl:param name="name"/>
-    <xsl:param name="indent" select="0"/>
-    <xsl:value-of select="eo:eol($indent)"/>
-    <xsl:text>let </xsl:text>
-    <xsl:value-of select="$name"/>
-    <xsl:text> = object()</xsl:text>
-    <xsl:apply-templates select="value">
-      <xsl:with-param name="name" select="$name"/>
-      <xsl:with-param name="indent" select="$indent"/>
-    </xsl:apply-templates>
-  </xsl:template>
   <!-- Based, not method -->
   <xsl:template match="o[@base and not(starts-with(@base, '.'))]">
     <xsl:param name="name"/>
-    <xsl:param name="indent" select="0"/>
+    <xsl:param name="indent"/>
     <xsl:variable name="current" select="."/>
     <xsl:variable name="source" select="//*[generate-id()!=generate-id($current) and @name=$current/@base and @line=$current/@ref]"/>
     <!-- Terminate -->
@@ -408,10 +383,6 @@
         <xsl:value-of select="eo:fetch(@base)"/>
         <xsl:text>.copy()</xsl:text>
       </xsl:when>
-      <!-- EO 0.59.0: Handle primitive element without @base (inline data) -->
-      <xsl:when test="@primitive and not(@base)">
-        <xsl:text>object()</xsl:text>
-      </xsl:when>
       <xsl:when test="@base='$'">
         <xsl:text>rho</xsl:text>
       </xsl:when>
@@ -422,14 +393,6 @@
         <xsl:text>taken(rho, '</xsl:text>
         <xsl:value-of select="$RHO"/>
         <xsl:text>')</xsl:text>
-      </xsl:when>
-      <!-- EO 0.59.0: Handle ξ-prefixed paths like ξ.ρ.first.x -->
-      <xsl:when test="starts-with(@base, 'ξ.')">
-        <xsl:value-of select="eo:xi-path(@base)"/>
-      </xsl:when>
-      <!-- EO 0.59.0: Handle single ξ reference (current object) -->
-      <xsl:when test="@base='ξ'">
-        <xsl:text>rho</xsl:text>
       </xsl:when>
       <xsl:when test="$source/@ancestors">
         <xsl:value-of select="eo:object-name($source/@name, eo:suffix(@line, @pos))"/>
@@ -472,7 +435,7 @@
   </xsl:template>
   <!-- Based, method, starts with . -->
   <xsl:template match="o[starts-with(@base, '.') and *]">
-    <xsl:param name="indent" select="0"/>
+    <xsl:param name="indent"/>
     <xsl:param name="name"/>
     <xsl:apply-templates select="*[1]">
       <xsl:with-param name="name">
@@ -530,7 +493,7 @@
   <!--  </xsl:template>-->
   <!-- APPLICATION  -->
   <xsl:template match="*" mode="application">
-    <xsl:param name="indent" select="0"/>
+    <xsl:param name="indent"/>
     <xsl:param name="name"/>
     <xsl:param name="skip" select="0"/>
     <!-- CREATE OBJECTS TO PUT -->
@@ -562,6 +525,9 @@
             <xsl:choose>
               <xsl:when test="matches(@as,'^[0-9]+$')">
                 <xsl:value-of select="eo:attr-name(@as)"/>
+              </xsl:when>
+              <xsl:when test="matches(@as,'^α[0-9]+$')">
+                <xsl:value-of select="substring(@as, 2)"/>
               </xsl:when>
               <xsl:otherwise>
                 <xsl:text>'</xsl:text>
@@ -597,7 +563,7 @@
   </xsl:template>
   <!-- VALUE TO PUT  -->
   <xsl:template match="value">
-    <xsl:param name="indent" select="0"/>
+    <xsl:param name="indent"/>
     <xsl:param name="name"/>
     <xsl:value-of select="eo:eol($indent)"/>
     <xsl:value-of select="$name"/>
@@ -649,14 +615,14 @@
     <xsl:text>(), BOOL)</xsl:text>
   </xsl:template>
   <!-- Disclaimer -->
-  <xsl:template match="/program" mode="license">
+  <xsl:template match="/object" mode="license">
     <xsl:value-of select="eo:eol(0)"/>
     <xsl:text>/* </xsl:text>
     <xsl:value-of select="$disclaimer"/>
     <xsl:text> */</xsl:text>
   </xsl:template>
   <!-- Imports -->
-  <xsl:template match="/program" mode="imports">
+  <xsl:template match="/object" mode="imports">
     <xsl:value-of select="eo:eol(0)"/>
     <xsl:text>const attr = require('eo2js-runtime/src/runtime/attribute/attr')</xsl:text>
     <xsl:value-of select="eo:eol(0)"/>
@@ -669,7 +635,7 @@
     <xsl:text>const applied = require('eo2js-runtime/src/runtime/applied')</xsl:text>
   </xsl:template>
   <!-- Imports for tests -->
-  <xsl:template match="/program" mode="test-imports">
+  <xsl:template match="/object" mode="test-imports">
     <xsl:value-of select="eo:eol(0)"/>
     <xsl:text>const dataized = require('eo2js-runtime/src/runtime/dataized')</xsl:text>
     <xsl:value-of select="eo:eol(0)"/>

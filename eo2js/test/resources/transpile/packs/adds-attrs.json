@@ -1,5 +1,4 @@
 {
-  "skip": false,
   "eo": [
     "+architect yegor256@gmail.com",
     "+home https://github.com/objectionary/eo2js",
@@ -13,8 +12,8 @@
     "  x > @"
   ],
   "tests": [
-    ".program.objects.object{.\"@_name\" == 'simple'}{.attr{.bound.o{.\"@_base\" == 'ξ.x'}}}",
-    ".program.objects.object{.\"@_name\" == 'simple'}{.attr{.void.o{.\"@_name\" == 'x'}}}"
+    ".object.object{.\"@_name\" == 'simple'}{.attr{.bound.o{.\"@_base\" == 'ξ.x'}}}",
+    ".object.object{.\"@_name\" == 'simple'}{.attr{.void.o{.\"@_name\" == 'x'}}}"
   ],
   "xsls": [
     "objects",

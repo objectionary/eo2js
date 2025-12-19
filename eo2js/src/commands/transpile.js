@@ -73,14 +73,12 @@ const needsRetranspile = function(source, transpiled) {
 }
 
 /**
- * Get the full qualified name from XMIR.
- * In EO 0.59.0 format, constructs from package meta and top-level <o> name.
+ * Get package from XMIR metas.
  * @param {any} xmir - Parsed XMIR
- * @return {string} - The full qualified name (e.g. "com.eo2js.simple")
+ * @return {string} - Package name or empty string
  */
-const getFullName = function(xmir) {
-  const root = xmir.object
-  const metas = root.metas
+const getPackage = function(xmir) {
+  const metas = xmir.object.metas
   let pkg = ''
   if (metas && metas.meta) {
     const metaArr = Array.isArray(metas.meta) ? metas.meta : [metas.meta]
@@ -89,22 +87,41 @@ const getFullName = function(xmir) {
       pkg = Array.isArray(pkgMeta.part) ? pkgMeta.part[0] : pkgMeta.part
     }
   }
-  const obj = root.o
+  return pkg
+}
+
+/**
+ * Get top-level object name from XMIR.
+ * @param {any} xmir - Parsed XMIR
+ * @return {string} - Object name
+ */
+const getObjectName = function(xmir) {
+  const obj = xmir.object.o
   const mainObj = Array.isArray(obj) ? obj.find((o) => o['@_name']) : obj
-  const objName = mainObj && mainObj['@_name'] ? mainObj['@_name'] : ''
+  return mainObj && mainObj['@_name'] ? mainObj['@_name'] : ''
+}
+
+/**
+ * Get full name from XMIR (package.objectName).
+ * @param {any} xmir - Parsed XMIR
+ * @return {string} - Full name
+ */
+const getFullName = function(xmir) {
+  const pkg = getPackage(xmir)
+  const objName = getObjectName(xmir)
   return pkg ? `${pkg}.${objName}` : objName
 }
 
 /**
  * Get objects from transformed XMIR.
- * After objects.xsl transformation: <program><objects><object>...</object></objects></program>
+ * In EO 0.59.0 format: <object><object>...</object></object>
  * @param {any} xmir - Parsed XMIR (after XSL transformation)
  * @return {Array} - Array of objects
  */
 const getObjects = function(xmir) {
   let result = []
-  if (xmir.program && xmir.program.objects && xmir.program.objects.object) {
-    const objs = xmir.program.objects.object
+  if (xmir.object && xmir.object.object) {
+    const objs = xmir.object.object
     result = Array.isArray(objs) ? objs : [objs]
   }
   return result
