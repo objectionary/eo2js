@@ -17,7 +17,7 @@
           "  obj.attrs['five'] = attr.once(",
           "    attr.lambda(",
           "      obj, function(rho) {",
-          "        let ret_base = taken(taken(rho, 'ρ'), 'first')",
+          "        let ret_base = taken(taken(rho, '\u03c1'), 'first')",
           "        let ret = taken(ret_base, 'x')",
           "        return ret",
           "      }",
@@ -26,7 +26,7 @@
         ]
       ],
       "method": "includes",
-      "node": ".object.object{.\"@_name\" == 'simple$second'}.javascript"
+      "node": ".program.objects.object{.\"@_name\" == 'simple$second'}.javascript"
     }
   ],
   "xsls": [

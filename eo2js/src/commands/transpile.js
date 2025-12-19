@@ -73,11 +73,11 @@ const needsRetranspile = function(source, transpiled) {
 }
 
 /**
- * Get package from XMIR metas.
+ * Get full object name from XMIR (package.objectName).
  * @param {any} xmir - Parsed XMIR
- * @return {string} - Package name or empty string
+ * @return {string} - Full name like "com.example.foo"
  */
-const getPackage = function(xmir) {
+const fullName = function(xmir) {
   const metas = xmir.object.metas
   let pkg = ''
   if (metas && metas.meta) {
@@ -87,42 +87,12 @@ const getPackage = function(xmir) {
       pkg = Array.isArray(pkgMeta.part) ? pkgMeta.part[0] : pkgMeta.part
     }
   }
-  return pkg
-}
-
-/**
- * Get top-level object name from XMIR.
- * @param {any} xmir - Parsed XMIR
- * @return {string} - Object name
- */
-const getObjectName = function(xmir) {
   const obj = xmir.object.o
   const mainObj = Array.isArray(obj) ? obj.find((o) => o['@_name']) : obj
-  return mainObj && mainObj['@_name'] ? mainObj['@_name'] : ''
-}
-
-/**
- * Get full name from XMIR (package.objectName).
- * @param {any} xmir - Parsed XMIR
- * @return {string} - Full name
- */
-const getFullName = function(xmir) {
-  const pkg = getPackage(xmir)
-  const objName = getObjectName(xmir)
-  return pkg ? `${pkg}.${objName}` : objName
-}
-
-/**
- * Get objects from transformed XMIR.
- * In EO 0.59.0 format: <object><object>...</object></object>
- * @param {any} xmir - Parsed XMIR (after XSL transformation)
- * @return {Array} - Array of objects
- */
-const getObjects = function(xmir) {
-  let result = []
-  if (xmir.object && xmir.object.object) {
-    const objs = xmir.object.object
-    result = Array.isArray(objs) ? objs : [objs]
+  const objName = mainObj && mainObj['@_name'] ? mainObj['@_name'] : ''
+  let result = objName
+  if (pkg) {
+    result = `${pkg}.${objName}`
   }
   return result
 }
@@ -137,7 +107,7 @@ const getObjects = function(xmir) {
 const transform = function(tojo, options, transformations, parser) {
   const text = fs.readFileSync(tojo[verified]).toString()
   let xml = parser.parse(text)
-  const pth = pathFromName(getFullName(xml))
+  const pth = pathFromName(fullName(xml))
   const isTest = hasMeta(xml, 'tests')
   const transpiled = path.resolve(options.target, dir, `${pth}.xmir`)
   const dest = path.resolve(options.project, `${pth}${isTest ? '.test' : ''}.js`)
@@ -154,7 +124,8 @@ const transform = function(tojo, options, transformations, parser) {
     })
     fs.writeFileSync(transpiled, xml)
     xml = parser.parse(xml)
-    const objects = getObjects(xml)
+    const objs = xml.object.object
+    const objects = Array.isArray(objs) ? objs : [objs]
     const filtered = objects.filter((obj) => Boolean(obj) && obj.hasOwnProperty('javascript') && !obj.hasOwnProperty('@_atom'))
     const count = isTest ? 0 : 1
     if (filtered.length > count) {
