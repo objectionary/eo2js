@@ -73,28 +73,30 @@ const needsRetranspile = function(source, transpiled) {
 }
 
 /**
- * Get full object name from XMIR (package.objectName).
- * @param {any} xmir - Parsed XMIR
- * @return {string} - Full name like "com.example.foo"
+ * Get package name from XMIR metas.
+ * @param {any} metas - Metas object
+ * @return {string} - Package name or empty string
  */
-const fullName = function(xmir) {
-  const metas = xmir.object.metas
-  let pkg = ''
-  if (metas && metas.meta) {
-    const metaArr = Array.isArray(metas.meta) ? metas.meta : [metas.meta]
-    const pkgMeta = metaArr.find((m) => m.head === 'package')
-    if (pkgMeta && pkgMeta.part) {
-      pkg = Array.isArray(pkgMeta.part) ? pkgMeta.part[0] : pkgMeta.part
-    }
+const packageName = function(metas) {
+  if (!metas || !metas.meta) {
+    return ''
   }
-  const obj = xmir.object.o
-  const mainObj = Array.isArray(obj) ? obj.find((o) => o['@_name']) : obj
-  const objName = mainObj && mainObj['@_name'] ? mainObj['@_name'] : ''
-  let result = objName
-  if (pkg) {
-    result = `${pkg}.${objName}`
+  const arr = Array.isArray(metas.meta) ? metas.meta : [metas.meta]
+  const pkg = arr.find((m) => m.head === 'package')
+  if (!pkg || !pkg.part) {
+    return ''
   }
-  return result
+  return Array.isArray(pkg.part) ? pkg.part[0] : pkg.part
+}
+
+/**
+ * Get top-level object name from XMIR.
+ * @param {any} obj - The o element(s)
+ * @return {string} - Object name
+ */
+const topObjectName = function(obj) {
+  const main = Array.isArray(obj) ? obj.find((o) => o['@_name']) : obj
+  return main && main['@_name'] ? main['@_name'] : ''
 }
 
 /**
@@ -107,7 +109,9 @@ const fullName = function(xmir) {
 const transform = function(tojo, options, transformations, parser) {
   const text = fs.readFileSync(tojo[verified]).toString()
   let xml = parser.parse(text)
-  const pth = pathFromName(fullName(xml))
+  const pkg = packageName(xml.object.metas)
+  const name = topObjectName(xml.object.o)
+  const pth = pathFromName(pkg ? `${pkg}.${name}` : name)
   const isTest = hasMeta(xml, 'tests')
   const transpiled = path.resolve(options.target, dir, `${pth}.xmir`)
   const dest = path.resolve(options.project, `${pth}${isTest ? '.test' : ''}.js`)
