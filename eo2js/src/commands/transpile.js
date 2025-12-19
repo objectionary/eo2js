@@ -43,24 +43,13 @@ const makeDirIfNotExist = function(dir) {
 }
 
 /**
- * Get the root container from XMIR (handles both old 'program' and new 'object' format).
- * EO 0.59.0 changed the root element from <program> to <object>.
- * @param {any} xmir - Parsed XMIR
- * @return {any} - The root container (program or object)
- */
-const getRoot = function(xmir) {
-  return xmir.program || xmir.object
-}
-
-/**
  * Check if given XMIR has meta.
  * @param {any} xmir - XMIR
  * @param {String} name - Name of the meta
  * @return {boolean} - If given XMIR has tests meta or not
  */
 const hasMeta = function(xmir, name) {
-  const root = getRoot(xmir)
-  const metas = root.metas
+  const metas = xmir.object.metas
   let res = false
   if (metas !== null && metas !== undefined) {
     const nodes = metas.meta
@@ -84,21 +73,15 @@ const needsRetranspile = function(source, transpiled) {
 }
 
 /**
- * Get the program name from XMIR (handles both old 'program' and new 'object' format).
- * In old format: <program name="com.eo2js.simple">
- * In new format (EO 0.59.0): Name is derived from package meta and main object name
+ * Get the full qualified name from XMIR.
+ * In EO 0.59.0 format, constructs from package meta and top-level <o> name.
  * @param {any} xmir - Parsed XMIR
- * @return {string} - The program name (e.g. "com.eo2js.simple")
+ * @return {string} - The full qualified name (e.g. "com.eo2js.simple")
  */
-const getProgramName = function(xmir) {
-  const root = getRoot(xmir)
-  // Old format: name attribute on program element
-  if (root['@_name']) {
-    return root['@_name']
-  }
-  // New format (EO 0.59.0): construct from package meta and main object name
-  let pkg = ''
+const getFullName = function(xmir) {
+  const root = xmir.object
   const metas = root.metas
+  let pkg = ''
   if (metas && metas.meta) {
     const metaArr = Array.isArray(metas.meta) ? metas.meta : [metas.meta]
     const pkgMeta = metaArr.find((m) => m.head === 'package')
@@ -106,33 +89,25 @@ const getProgramName = function(xmir) {
       pkg = Array.isArray(pkgMeta.part) ? pkgMeta.part[0] : pkgMeta.part
     }
   }
-  // Get main object name from <o> element
-  let objName = ''
   const obj = root.o
-  if (obj) {
-    const mainObj = Array.isArray(obj) ? obj.find((o) => o['@_name']) : obj
-    if (mainObj && mainObj['@_name']) {
-      objName = mainObj['@_name']
-    }
-  }
+  const mainObj = Array.isArray(obj) ? obj.find((o) => o['@_name']) : obj
+  const objName = mainObj && mainObj['@_name'] ? mainObj['@_name'] : ''
   return pkg ? `${pkg}.${objName}` : objName
 }
 
 /**
- * Get objects from XMIR (handles both old and new format).
- * Old format: xml.program.objects.object
- * New format (EO 0.59.0): xml.object.objects.object (after transformation)
- * @param {any} xmir - Parsed XMIR
+ * Get objects from transformed XMIR.
+ * After objects.xsl transformation: <program><objects><object>...</object></objects></program>
+ * @param {any} xmir - Parsed XMIR (after XSL transformation)
  * @return {Array} - Array of objects
  */
 const getObjects = function(xmir) {
-  const root = getRoot(xmir)
-  // Try old format first: <objects><object>...</object></objects>
-  if (root.objects && root.objects.object) {
-    const objs = root.objects.object
-    return Array.isArray(objs) ? objs : [objs]
+  let result = []
+  if (xmir.program && xmir.program.objects && xmir.program.objects.object) {
+    const objs = xmir.program.objects.object
+    result = Array.isArray(objs) ? objs : [objs]
   }
-  return []
+  return result
 }
 
 /**
@@ -145,7 +120,7 @@ const getObjects = function(xmir) {
 const transform = function(tojo, options, transformations, parser) {
   const text = fs.readFileSync(tojo[verified]).toString()
   let xml = parser.parse(text)
-  const pth = pathFromName(getProgramName(xml))
+  const pth = pathFromName(getFullName(xml))
   const isTest = hasMeta(xml, 'tests')
   const transpiled = path.resolve(options.target, dir, `${pth}.xmir`)
   const dest = path.resolve(options.project, `${pth}${isTest ? '.test' : ''}.js`)

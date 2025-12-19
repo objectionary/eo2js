@@ -75,6 +75,7 @@
       <xsl:text>&gt;</xsl:text>
     </xsl:if>
   </xsl:template>
+  <!-- FOR ALL ABSTRACT OBJECTS -->
   <xsl:template match="o[not(exists(@base)) and (exists(o) or @atom or @abstract)]">
     <xsl:element name="object">
       <xsl:apply-templates select="node()|@*"/>
