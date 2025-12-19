@@ -26,7 +26,7 @@
         ]
       ],
       "method": "includes",
-      "node": ".program.objects.object{.\"@_name\" == 'simple$second'}.javascript"
+      "node": ".object.object{.\"@_name\" == 'simple$second'}.javascript"
     }
   ],
   "xsls": [
