@@ -5,6 +5,7 @@
 -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:eo="https://www.eolang.org" xmlns:xs="http://www.w3.org/2001/XMLSchema" id="to-java" version="2.0">
   <!-- Converts XMIR to JavaScript -->
+  <xsl:import href="_funcs.xsl"/>
   <xsl:output encoding="UTF-8" method="xml"/>
   <!-- VARIABLES -->
   <xsl:variable name="keywords" as="element()*">
@@ -209,7 +210,8 @@
             <xsl:if test="position()=1">
               <xsl:apply-templates select="/object" mode="license"/>
               <xsl:apply-templates select="/object" mode="imports"/>
-              <xsl:if test="//meta[head='tests'] and not(@parent)">
+              <!-- Include test imports if there are +tests meta or test attributes -->
+              <xsl:if test="(//meta[head='tests'] and not(@parent)) or //attr[starts-with(@name, '+')]">
                 <xsl:apply-templates select="/object" mode="test-imports"/>
               </xsl:if>
               <xsl:apply-templates select="//object[@atom]" mode="atom-imports"/>
@@ -260,9 +262,14 @@
     <xsl:apply-templates select="." mode="ctor"/>
     <xsl:text>}</xsl:text>
     <xsl:apply-templates select="object" mode="body"/>
+    <!-- Generate tests for +tests meta (whole file is tests) -->
     <xsl:if test="//meta[head='tests'] and not(@parent)">
       <xsl:apply-templates select="." mode="tests"/>
     </xsl:if>
+    <!-- Generate tests for inline test attributes (name starts with +) -->
+    <xsl:for-each select="attr[starts-with(@name, '+')]">
+      <xsl:apply-templates select="." mode="inline-test"/>
+    </xsl:for-each>
     <xsl:value-of select="eo:eol(0)"/>
   </xsl:template>
   <!-- XMIR as comment -->
@@ -613,6 +620,36 @@
     <xsl:text>dataized(</xsl:text>
     <xsl:value-of select="eo:object-name(@name, eo:suffix(@line, @pos))"/>
     <xsl:text>(), BOOL)</xsl:text>
+  </xsl:template>
+  <!-- Inline test attribute (name starts with +) -->
+  <xsl:template match="attr" mode="inline-test">
+    <xsl:variable name="testName" select="eo:escape-plus(@name)"/>
+    <xsl:variable name="parentName" select="eo:object-name(../@name, eo:suffix(../@line, ../@pos))"/>
+    <xsl:value-of select="eo:eol(0)"/>
+    <xsl:value-of select="eo:eol(0)"/>
+    <xsl:text>it('test "</xsl:text>
+    <xsl:value-of select="$testName"/>
+    <xsl:text>" should work', function(done) {</xsl:text>
+    <xsl:value-of select="eo:eol(1)"/>
+    <xsl:text>this.timeout(0)</xsl:text>
+    <xsl:value-of select="eo:eol(1)"/>
+    <xsl:choose>
+      <xsl:when test="starts-with($testName, 'throws')">
+        <xsl:text>assert.throws(() =&gt; </xsl:text>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:text>assert.ok(</xsl:text>
+      </xsl:otherwise>
+    </xsl:choose>
+    <xsl:text>dataized(</xsl:text>
+    <xsl:value-of select="$parentName"/>
+    <xsl:text>().take('</xsl:text>
+    <xsl:value-of select="$testName"/>
+    <xsl:text>'), BOOL))</xsl:text>
+    <xsl:value-of select="eo:eol(1)"/>
+    <xsl:text>done()</xsl:text>
+    <xsl:value-of select="eo:eol(0)"/>
+    <xsl:text>})</xsl:text>
   </xsl:template>
   <!-- Disclaimer -->
   <xsl:template match="/object" mode="license">

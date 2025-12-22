@@ -100,6 +100,30 @@ const topObjectName = function(obj) {
 }
 
 /**
+ * Check if XMIR has inline test attributes (name starts with +).
+ * @param {any} obj - The o element(s)
+ * @return {boolean} - True if there are test attributes
+ */
+const hasTestAttrs = function(obj) {
+  const findTestAttr = (node) => {
+    if (!node) {
+      return false
+    }
+    if (Array.isArray(node)) {
+      return node.some(findTestAttr)
+    }
+    if (typeof node === 'object') {
+      if (node['@_name'] && node['@_name'].startsWith('+')) {
+        return true
+      }
+      return Object.values(node).some(findTestAttr)
+    }
+    return false
+  }
+  return findTestAttr(obj)
+}
+
+/**
  * Transform XMIR from given tojo and save.
  * @param {Object} tojo - Tojo.
  * @param {{target: String, project: String, verbose: boolean}} options - Program options
@@ -113,8 +137,9 @@ const transform = function(tojo, options, transformations, parser) {
   const name = topObjectName(xml.object.o)
   const pth = pathFromName(pkg ? `${pkg}.${name}` : name)
   const isTest = hasMeta(xml, 'tests')
+  const hasInlineTests = hasTestAttrs(xml.object.o)
   const transpiled = path.resolve(options.target, dir, `${pth}.xmir`)
-  const dest = path.resolve(options.project, `${pth}${isTest ? '.test' : ''}.js`)
+  const dest = path.resolve(options.project, `${pth}${isTest || hasInlineTests ? '.test' : ''}.js`)
   if (needsRetranspile(tojo[verified], transpiled)) {
     makeDirIfNotExist(transpiled.substring(0, transpiled.lastIndexOf(path.sep)))
     fs.writeFileSync(transpiled, text)

@@ -8,4 +8,14 @@
     <xsl:param name="o" as="element()"/>
     <xsl:sequence select="normalize-space(string-join($o/text(), '')) != ''"/>
   </xsl:function>
+  <!-- Check if element is a test attribute (name starts with +) -->
+  <xsl:function name="eo:test-attr" as="xs:boolean">
+    <xsl:param name="o" as="element()"/>
+    <xsl:sequence select="starts-with($o/@name, '+')"/>
+  </xsl:function>
+  <!-- Remove the + prefix from test attribute name -->
+  <xsl:function name="eo:escape-plus" as="xs:string">
+    <xsl:param name="name" as="xs:string"/>
+    <xsl:sequence select="if (starts-with($name, '+')) then substring($name, 2) else $name"/>
+  </xsl:function>
 </xsl:stylesheet>
