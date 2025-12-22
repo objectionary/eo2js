@@ -15,10 +15,12 @@
 +version 0.0.0
 +spdx SPDX-FileCopyrightText: Copyright (c) 2024 Objectionary.com
 +spdx SPDX-License-Identifier: MIT
-+tests
 
 # This is the default 64+ symbols comment in front of named abstract object.
 [] &gt; alone-test
+  true &gt; @
+  [] +&gt; test-alone
+    true &gt; @
 </listing>
   <errors/>
   <sheets/>
@@ -52,13 +54,13 @@
       <part>2024</part>
       <part>Objectionary.com</part>
     </meta>
-    <meta line="7">
-      <head>tests</head>
-      <tail/>
-    </meta>
   </metas>
-  <o abstract=""
-     line="10"
-     name="alone-test"
-     pos="0"/>
+  <o line="9" name="alone-test" pos="0">
+    <o base="ξ" line="9" name="xi🌵" pos="0"/>
+    <o base="Φ.org.eolang.true" line="10" name="φ" pos="2"/>
+    <o line="11" name="+test-alone" pos="2">
+      <o base="ξ" line="11" name="xi🌵" pos="0"/>
+      <o base="Φ.org.eolang.true" line="12" name="φ" pos="4"/>
+    </o>
+  </o>
 </object>

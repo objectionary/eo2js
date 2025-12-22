@@ -52,8 +52,8 @@
       <part>Objectionary.com</part>
     </meta>
   </metas>
-  <o abstract=""
-     line="9"
-     name="simple"
-     pos="0"/>
+  <o line="9" name="simple" pos="0">
+    <o base="ξ" line="9" name="xi🌵" pos="0"/>
+    <o base="Φ.org.eolang.true" line="10" name="φ" pos="2"/>
+  </o>
 </object>

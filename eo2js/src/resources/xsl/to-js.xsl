@@ -177,6 +177,9 @@
       <xsl:when test="$attr='^'">
         <xsl:value-of select="$RHO"/>
       </xsl:when>
+      <xsl:when test="matches($attr,'^α[0-9]+$')">
+        <xsl:value-of select="substring($attr, 2)"/>
+      </xsl:when>
       <xsl:otherwise>
         <xsl:value-of select="concat('', $attr)"/>
       </xsl:otherwise>
@@ -210,8 +213,7 @@
             <xsl:if test="position()=1">
               <xsl:apply-templates select="/object" mode="license"/>
               <xsl:apply-templates select="/object" mode="imports"/>
-              <!-- Include test imports if there are +tests meta or test attributes -->
-              <xsl:if test="(//meta[head='tests'] and not(@parent)) or //attr[starts-with(@name, '+')]">
+              <xsl:if test="//attr[starts-with(@name, '+')]">
                 <xsl:apply-templates select="/object" mode="test-imports"/>
               </xsl:if>
               <xsl:apply-templates select="//object[@atom]" mode="atom-imports"/>
@@ -221,7 +223,7 @@
         </xsl:copy>
       </xsl:for-each>
       <!-- module.exports part -->
-      <xsl:if test="not(//meta[head='tests'] and not(@parent)) and object[position()=1 and not(@atom)]">
+      <xsl:if test="object[position()=1 and not(@atom)]">
         <xsl:element name="object">
           <xsl:element name="javascript">
             <xsl:value-of select="eo:eol(0)"/>
@@ -262,11 +264,6 @@
     <xsl:apply-templates select="." mode="ctor"/>
     <xsl:text>}</xsl:text>
     <xsl:apply-templates select="object" mode="body"/>
-    <!-- Generate tests for +tests meta (whole file is tests) -->
-    <xsl:if test="//meta[head='tests'] and not(@parent)">
-      <xsl:apply-templates select="." mode="tests"/>
-    </xsl:if>
-    <!-- Generate tests for inline test attributes (name starts with +) -->
     <xsl:for-each select="attr[starts-with(@name, '+')]">
       <xsl:apply-templates select="." mode="inline-test"/>
     </xsl:for-each>
@@ -530,11 +527,8 @@
         <xsl:choose>
           <xsl:when test="@as">
             <xsl:choose>
-              <xsl:when test="matches(@as,'^[0-9]+$')">
+              <xsl:when test="matches(@as,'^[0-9]+$') or matches(@as,'^α[0-9]+$')">
                 <xsl:value-of select="eo:attr-name(@as)"/>
-              </xsl:when>
-              <xsl:when test="matches(@as,'^α[0-9]+$')">
-                <xsl:value-of select="substring(@as, 2)"/>
               </xsl:when>
               <xsl:otherwise>
                 <xsl:text>'</xsl:text>
@@ -588,38 +582,6 @@
     <xsl:text>})</xsl:text>
     <xsl:value-of select="eo:eol($indent)"/>
     <xsl:text>})</xsl:text>
-  </xsl:template>
-  <!-- Object for tests -->
-  <xsl:template match="object" mode="tests">
-    <xsl:value-of select="eo:eol(0)"/>
-    <xsl:value-of select="eo:eol(0)"/>
-    <xsl:text>it('test "</xsl:text>
-    <xsl:value-of select="eo:object-name(@name, eo:suffix(@line, @pos))"/>
-    <xsl:text>" should work', function(done) {</xsl:text>
-    <xsl:value-of select="eo:eol(1)"/>
-    <xsl:text>this.timeout(0)</xsl:text>
-    <xsl:value-of select="eo:eol(1)"/>
-    <xsl:choose>
-      <xsl:when test="starts-with(@name, 'throws')">
-        <xsl:text>assert.throws(() =&gt; </xsl:text>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:text>assert.ok(</xsl:text>
-      </xsl:otherwise>
-    </xsl:choose>
-    <xsl:apply-templates select="." mode="dataized"/>
-    <xsl:text>)</xsl:text>
-    <xsl:value-of select="eo:eol(1)"/>
-    <xsl:text>done()</xsl:text>
-    <xsl:value-of select="eo:eol(0)"/>
-    <xsl:text>})</xsl:text>
-  </xsl:template>
-  <!-- Dataized object for tests -->
-  <xsl:template match="object" mode="dataized">
-    <xsl:param name="indent"/>
-    <xsl:text>dataized(</xsl:text>
-    <xsl:value-of select="eo:object-name(@name, eo:suffix(@line, @pos))"/>
-    <xsl:text>(), BOOL)</xsl:text>
   </xsl:template>
   <!-- Inline test attribute (name starts with +) -->
   <xsl:template match="attr" mode="inline-test">

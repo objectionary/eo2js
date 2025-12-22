@@ -43,26 +43,6 @@ const makeDirIfNotExist = function(dir) {
 }
 
 /**
- * Check if given XMIR has meta.
- * @param {any} xmir - XMIR
- * @param {String} name - Name of the meta
- * @return {boolean} - If given XMIR has tests meta or not
- */
-const hasMeta = function(xmir, name) {
-  const metas = xmir.object.metas
-  let res = false
-  if (metas !== null && metas !== undefined) {
-    const nodes = metas.meta
-    if (Array.isArray(nodes)) {
-      res = nodes.findIndex((meta) => meta.head === name) !== -1
-    } else if (typeof nodes === 'object' && nodes.hasOwnProperty('head')) {
-      res = nodes.head === name
-    }
-  }
-  return res
-}
-
-/**
  * Check if source needs to be retranspiled by comparing modification times.
  * @param {String} source - Source file path
  * @param {String} transpiled - Transpiled file path
@@ -136,10 +116,9 @@ const transform = function(tojo, options, transformations, parser) {
   const pkg = packageName(xml.object.metas)
   const name = topObjectName(xml.object.o)
   const pth = pathFromName(pkg ? `${pkg}.${name}` : name)
-  const isTest = hasMeta(xml, 'tests')
-  const hasInlineTests = hasTestAttrs(xml.object.o)
+  const hasTests = hasTestAttrs(xml.object.o)
   const transpiled = path.resolve(options.target, dir, `${pth}.xmir`)
-  const dest = path.resolve(options.project, `${pth}${isTest || hasInlineTests ? '.test' : ''}.js`)
+  const dest = path.resolve(options.project, `${pth}${hasTests ? '.test' : ''}.js`)
   if (needsRetranspile(tojo[verified], transpiled)) {
     makeDirIfNotExist(transpiled.substring(0, transpiled.lastIndexOf(path.sep)))
     fs.writeFileSync(transpiled, text)
@@ -156,8 +135,7 @@ const transform = function(tojo, options, transformations, parser) {
     const objs = xml.object.object
     const objects = Array.isArray(objs) ? objs : [objs]
     const filtered = objects.filter((obj) => Boolean(obj) && obj.hasOwnProperty('javascript') && !obj.hasOwnProperty('@_atom'))
-    const count = isTest ? 0 : 1
-    if (filtered.length > count) {
+    if (filtered.length > 0) {
       const first = filtered[0]
       makeDirIfNotExist(dest.substring(0, dest.lastIndexOf(path.sep)))
       fs.writeFileSync(dest, first.javascript)
