@@ -3,57 +3,15 @@
  * SPDX-FileCopyrightText: Copyright (c) 2024 Objectionary.com
  * SPDX-License-Identifier: MIT
 -->
-<object author="eo-parser"
-        dob="2024-12-19T00:00:00"
-        ms="49"
-        revision="0000000"
-        time="2024-12-19T00:00:00Z"
-        version="0.59.0">
-  <listing>+architect yegor256@gmail.com
-+home https://github.com/objectionary/eo2js
-+package com.eo2js
-+version 0.0.0
-+spdx SPDX-FileCopyrightText: Copyright (c) 2024 Objectionary.com
-+spdx SPDX-License-Identifier: MIT
-
-# This is the default 64+ symbols comment in front of named abstract object.
-[] &gt; simple
-</listing>
-  <errors/>
-  <sheets/>
+<object version="0.59.0">
   <metas>
     <meta line="1">
-      <head>architect</head>
-      <tail>yegor256@gmail.com</tail>
-      <part>yegor256@gmail.com</part>
-    </meta>
-    <meta line="2">
-      <head>home</head>
-      <tail>https://github.com/objectionary/eo2js</tail>
-      <part>https://github.com/objectionary/eo2js</part>
-    </meta>
-    <meta line="3">
       <head>package</head>
       <tail>com.eo2js</tail>
       <part>com.eo2js</part>
     </meta>
-    <meta line="4">
-      <head>version</head>
-      <tail>0.0.0</tail>
-      <part>0.0.0</part>
-    </meta>
-    <meta line="5">
-      <head>spdx</head>
-      <tail>SPDX-FileCopyrightText: Copyright (c) 2024 Objectionary.com</tail>
-      <part>SPDX-FileCopyrightText:</part>
-      <part>Copyright</part>
-      <part>(c)</part>
-      <part>2024</part>
-      <part>Objectionary.com</part>
-    </meta>
   </metas>
-  <o line="9" name="simple" pos="0">
-    <o base="ξ" line="9" name="xi🌵" pos="0"/>
-    <o base="Φ.org.eolang.true" line="10" name="φ" pos="2"/>
+  <o line="1" name="simple" pos="0">
+    <o base="Φ.org.eolang.true" line="2" name="φ" pos="2"/>
   </o>
 </object>

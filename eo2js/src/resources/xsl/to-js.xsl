@@ -177,6 +177,9 @@
       <xsl:when test="$attr='^'">
         <xsl:value-of select="$RHO"/>
       </xsl:when>
+      <xsl:when test="starts-with($attr, '+')">
+        <xsl:value-of select="substring($attr, 2)"/>
+      </xsl:when>
       <xsl:when test="matches($attr,'^α[0-9]+$')">
         <xsl:value-of select="substring($attr, 2)"/>
       </xsl:when>
@@ -527,7 +530,7 @@
         <xsl:choose>
           <xsl:when test="@as">
             <xsl:choose>
-              <xsl:when test="matches(@as,'^[0-9]+$') or matches(@as,'^α[0-9]+$')">
+              <xsl:when test="matches(@as,'^α[0-9]+$')">
                 <xsl:value-of select="eo:attr-name(@as)"/>
               </xsl:when>
               <xsl:otherwise>
@@ -585,7 +588,7 @@
   </xsl:template>
   <!-- Inline test attribute (name starts with +) -->
   <xsl:template match="attr" mode="inline-test">
-    <xsl:variable name="testName" select="eo:escape-plus(@name)"/>
+    <xsl:variable name="testName" select="eo:attr-name(@name)"/>
     <xsl:variable name="parentName" select="eo:object-name(../@name, eo:suffix(../@line, ../@pos))"/>
     <xsl:value-of select="eo:eol(0)"/>
     <xsl:value-of select="eo:eol(0)"/>
