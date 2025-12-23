@@ -529,13 +529,14 @@
       <xsl:for-each select="$to_put">
         <xsl:choose>
           <xsl:when test="@as">
+            <xsl:variable name="attr" select="eo:attr-name(@as)"/>
             <xsl:choose>
-              <xsl:when test="matches(@as,'^α[0-9]+$')">
-                <xsl:value-of select="eo:attr-name(@as)"/>
+              <xsl:when test="matches($attr,'^[0-9]+$')">
+                <xsl:value-of select="$attr"/>
               </xsl:when>
               <xsl:otherwise>
                 <xsl:text>'</xsl:text>
-                <xsl:value-of select="eo:attr-name(@as)"/>
+                <xsl:value-of select="$attr"/>
                 <xsl:text>'</xsl:text>
               </xsl:otherwise>
             </xsl:choose>
