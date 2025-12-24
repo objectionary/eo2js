@@ -8,7 +8,7 @@
     "  [] > for"
   ],
   "tests": [
-    ".object.object{.\"@_js-name\" === 'com.eo2js.while'}",
+    ".program.objects.object{.\"@_js-name\" === 'com.eo2js.while'}",
     {
       "args": [
         "const _while = function() {",
@@ -16,14 +16,14 @@
         "        let ret = while$for(rho)"
       ],
       "method": "includes",
-      "node": ".object.object{.\"@_name\" == 'while'}.javascript"
+      "node": ".program.objects.object{.\"@_name\" == 'while'}.javascript"
     },
     {
       "args": [
         "module.exports = _while"
       ],
       "method": "includes",
-      "node": ".object.object[-1].javascript"
+      "node": ".program.objects.object[-1].javascript"
     }
   ],
   "xsls": [

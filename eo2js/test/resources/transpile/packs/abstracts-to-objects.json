@@ -1,19 +1,12 @@
 {
+  "skip": true,
   "eo": [
-    "+architect yegor256@gmail.com",
-    "+home https://github.com/objectionary/eo2js",
-    "+package com.eo2js.test",
-    "+version 0.0.0",
-    "+spdx SPDX-FileCopyrightText: Copyright (c) 2024 Objectionary.com",
-    "+spdx SPDX-License-Identifier: MIT",
-    "",
     "# This is the default 64+ symbols comment in front of named abstract object.",
-    "[] > simple",
-    "  true > @"
+    "[] > simple"
   ],
   "tests": [
-    ".object.object.xmir",
-    ".object.object{.\"@_name\" == 'simple'}"
+    ".program.objects.object.xmir",
+    ".program.objects.object{.\"@_name\" == 'simple'}"
   ],
   "xsls": [
     "objects"

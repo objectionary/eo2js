@@ -35,7 +35,7 @@
         ]
       ],
       "method": "includes",
-      "node": ".object.object{.\"@_name\" == 'foo'}.javascript"
+      "node": ".program.objects.object{.\"@_name\" == 'foo'}.javascript"
     },
     {
       "args": [
@@ -51,15 +51,15 @@
         ]
       ],
       "method": "includes",
-      "node": ".object.object{.\"@_name\" == 'foo$xyz'}.javascript"
+      "node": ".program.objects.object{.\"@_name\" == 'foo$xyz'}.javascript"
     },
     {
       "args": [
         [
-          "  obj.attrs['φ'] = attr.once(",
+          "  obj.attrs['\u03c6'] = attr.once(",
           "    attr.lambda(",
           "      obj, function(rho) {",
-          "        let ret_base = taken(taken(taken(rho, 'ρ'), 'ρ'), 'this')",
+          "        let ret_base = taken(taken(taken(rho, '\u03c1'), '\u03c1'), 'this')",
           "        let ret = taken(ret_base, 'x')",
           "        return ret",
           "      }",
@@ -68,14 +68,14 @@
         ]
       ],
       "method": "includes",
-      "node": ".object.object{.\"@_name\" == 'foo$xyz$bar'}.javascript"
+      "node": ".program.objects.object{.\"@_name\" == 'foo$xyz$bar'}.javascript"
     },
     {
       "args": [
         "module.exports = foo"
       ],
       "method": "includes",
-      "node": ".object.object[-1].javascript"
+      "node": ".program.objects.object[-1].javascript"
     }
   ],
   "xsls": [

@@ -10,12 +10,12 @@
   "tests": [
     {
       "args": [
-        "const outer$φ = require('eo2js-runtime/src/objects/org/eolang/outer$φ')",
+        "const outer$\u03c6 = require('eo2js-runtime/src/objects/org/eolang/outer$\u03c6')",
         "const outer$in_side = require('eo2js-runtime/src/objects/org/eolang/outer$in-side')",
-        "        let ret = outer$φ(rho)"
+        "        let ret = outer$\u03c6(rho)"
       ],
       "method": "includes",
-      "node": ".object.object{.\"@_name\" == 'outer'}.javascript"
+      "node": ".program.objects.object{.\"@_name\" == 'outer'}.javascript"
     }
   ],
   "xsls": [

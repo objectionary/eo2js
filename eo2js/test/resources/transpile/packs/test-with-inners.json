@@ -9,7 +9,7 @@
     "  inner > @"
   ],
   "tests": [
-    ".object.object{.\"@_js-name\" == 'test_with_inner'}",
+    ".program.objects.object{.\"@_js-name\" == 'test_with_inner'}",
     {
       "args": [
         "const dataized = require('eo2js-runtime/src/runtime/dataized')",
@@ -35,7 +35,7 @@
         ]
       ],
       "method": "includes",
-      "node": ".object.object{.\"@_name\" == 'test-with-inner'}.javascript"
+      "node": ".program.objects.object{.\"@_name\" == 'test-with-inner'}.javascript"
     }
   ],
   "xsls": [

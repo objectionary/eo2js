@@ -53,54 +53,24 @@ const needsRetranspile = function(source, transpiled) {
 }
 
 /**
- * Get package name from XMIR metas.
- * @param {any} metas - Metas object
- * @return {string} - Package name or empty string
- */
-const packageName = function(metas) {
-  if (!metas || !metas.meta) {
-    return ''
-  }
-  const arr = Array.isArray(metas.meta) ? metas.meta : [metas.meta]
-  const pkg = arr.find((m) => m.head === 'package')
-  if (!pkg || !pkg.part) {
-    return ''
-  }
-  return Array.isArray(pkg.part) ? pkg.part[0] : pkg.part
-}
-
-/**
- * Get top-level object name from XMIR.
- * @param {any} obj - The o element(s)
- * @return {string} - Object name
- */
-const topObjectName = function(obj) {
-  const main = Array.isArray(obj) ? obj.find((o) => o['@_name']) : obj
-  return main && main['@_name'] ? main['@_name'] : ''
-}
-
-/**
  * Check if XMIR has inline test attributes (name starts with +).
- * @param {any} obj - The o element(s)
+ * @param {any} node - The node to check
  * @return {boolean} - True if there are test attributes
  */
-const hasTestAttrs = function(obj) {
-  const findTestAttr = (node) => {
-    if (!node) {
-      return false
-    }
-    if (Array.isArray(node)) {
-      return node.some(findTestAttr)
-    }
-    if (typeof node === 'object') {
-      if (node['@_name'] && node['@_name'].startsWith('+')) {
-        return true
-      }
-      return Object.values(node).some(findTestAttr)
-    }
+const hasTestAttrs = function(node) {
+  if (!node) {
     return false
   }
-  return findTestAttr(obj)
+  if (Array.isArray(node)) {
+    return node.some(hasTestAttrs)
+  }
+  if (typeof node === 'object') {
+    if (node['@_name'] && node['@_name'].startsWith('+')) {
+      return true
+    }
+    return Object.values(node).some(hasTestAttrs)
+  }
+  return false
 }
 
 /**
@@ -113,12 +83,21 @@ const hasTestAttrs = function(obj) {
 const transform = function(tojo, options, transformations, parser) {
   const text = fs.readFileSync(tojo[verified]).toString()
   let xml = parser.parse(text)
-  const pkg = packageName(xml.object.metas)
-  const name = topObjectName(xml.object.o)
+  const metas = xml.object.metas
+  let pkg = ''
+  if (metas && metas.meta) {
+    const arr = Array.isArray(metas.meta) ? metas.meta : [metas.meta]
+    const found = arr.find((m) => m.head === 'package')
+    if (found && found.part) {
+      pkg = Array.isArray(found.part) ? found.part[0] : found.part
+    }
+  }
+  const top = Array.isArray(xml.object.o) ? xml.object.o.find((o) => o['@_name']) : xml.object.o
+  const name = top && top['@_name'] ? top['@_name'] : ''
+  const isTest = hasTestAttrs(xml.object.o)
   const pth = pathFromName(pkg ? `${pkg}.${name}` : name)
-  const hasTests = hasTestAttrs(xml.object.o)
   const transpiled = path.resolve(options.target, dir, `${pth}.xmir`)
-  const dest = path.resolve(options.project, `${pth}${hasTests ? '.test' : ''}.js`)
+  const dest = path.resolve(options.project, `${pth}${isTest ? '.test' : ''}.js`)
   if (needsRetranspile(tojo[verified], transpiled)) {
     makeDirIfNotExist(transpiled.substring(0, transpiled.lastIndexOf(path.sep)))
     fs.writeFileSync(transpiled, text)

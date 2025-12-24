@@ -29,7 +29,7 @@
         ]
       ],
       "method": "includes",
-      "node": ".object.object{.\"@_name\" == 't'}.javascript"
+      "node": ".program.objects.object{.\"@_name\" == 't'}.javascript"
     },
     {
       "args": [
@@ -38,7 +38,7 @@
           "          let ret_1 = phi.take('org').take('eolang').take('bytes').copy()",
           "          ret_1 = applied(ret_1, {",
           "            0: object().with({",
-          "              'Δ': ['0x40', '0x45', '0x00', '0x00', '0x00', '0x00', '0x00', '0x00']",
+          "              '\u0394': ['0x40', '0x45', '0x00', '0x00', '0x00', '0x00', '0x00', '0x00']",
           "            })",
           "          })",
           "        ret = applied(ret, {",
@@ -48,7 +48,7 @@
         ]
       ],
       "method": "includes",
-      "node": ".object.object{.\"@_name\" == 'i'}.javascript"
+      "node": ".program.objects.object{.\"@_name\" == 'i'}.javascript"
     },
     {
       "args": [
@@ -58,7 +58,7 @@
           "            let ret_1_1 = phi.take('org').take('eolang').take('bytes').copy()",
           "            ret_1_1 = applied(ret_1_1, {",
           "              0: object().with({",
-          "                'Δ': ['0x40', '0x0C', '0x00', '0x00', '0x00', '0x00', '0x00', '0x00']",
+          "                '\u0394': ['0x40', '0x0C', '0x00', '0x00', '0x00', '0x00', '0x00', '0x00']",
           "              })",
           "            })",
           "          ret_1 = applied(ret_1, {",
@@ -71,7 +71,7 @@
         ]
       ],
       "method": "includes",
-      "node": ".object.object{.\"@_name\" == 'fl'}.javascript"
+      "node": ".program.objects.object{.\"@_name\" == 'fl'}.javascript"
     },
     {
       "args": [
@@ -79,14 +79,14 @@
           "        let ret = phi.take('org').take('eolang').take('bytes').copy()",
           "        ret = applied(ret, {",
           "          0: object().with({",
-          "            'Δ': ['0x01', '0xAF']",
+          "            '\u0394': ['0x01', '0xAF']",
           "          })",
           "        })",
           "        return ret"
         ]
       ],
       "method": "includes",
-      "node": ".object.object{.\"@_name\" == 'b'}.javascript"
+      "node": ".program.objects.object{.\"@_name\" == 'b'}.javascript"
     },
     {
       "args": [
@@ -94,14 +94,14 @@
           "        let ret = phi.take('org').take('eolang').take('bytes').copy()",
           "        ret = applied(ret, {",
           "          0: object().with({",
-          "            'Δ': ['0x01']",
+          "            '\u0394': ['0x01']",
           "          })",
           "        })",
           "        return ret"
         ]
       ],
       "method": "includes",
-      "node": ".object.object{.\"@_name\" == 'one-byte'}.javascript"
+      "node": ".program.objects.object{.\"@_name\" == 'one-byte'}.javascript"
     },
     {
       "args": [
@@ -109,14 +109,14 @@
           "        let ret = phi.take('org').take('eolang').take('bytes').copy()",
           "        ret = applied(ret, {",
           "          0: object().with({",
-          "            'Δ': []",
+          "            '\u0394': []",
           "          })",
           "        })",
           "        return ret"
         ]
       ],
       "method": "includes",
-      "node": ".object.object{.\"@_name\" == 'empty'}.javascript"
+      "node": ".program.objects.object{.\"@_name\" == 'empty'}.javascript"
     }
   ],
   "xsls": [

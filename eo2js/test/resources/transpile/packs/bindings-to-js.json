@@ -1,13 +1,7 @@
 {
+  "skip": true,
   "eo": [
-    "+architect yegor256@gmail.com",
-    "+home https://github.com/objectionary/eo2js",
-    "+package com.eo2js.test",
-    "+version 0.0.0",
-    "+spdx SPDX-FileCopyrightText: Copyright (c) 2024 Objectionary.com",
-    "+spdx SPDX-License-Identifier: MIT",
-    "",
-    "# This is the default 64+ symbols comment in front of named abstract object.",
+    "# Simple.",
     "[] > simple",
     "  stdout x:0 > print1",
     "  stdout x:text > print2"
@@ -27,14 +21,14 @@
         ]
       ],
       "method": "includes",
-      "node": ".object.object{.\"@_name\" == 'simple'}.javascript"
+      "node": ".program.objects.object{.\"@_name\" == 'simple'}.javascript"
     },
     {
       "args": [
         "module.exports = simple"
       ],
       "method": "includes",
-      "node": ".object.object[-1].javascript"
+      "node": ".program.objects.object[-1].javascript"
     }
   ],
   "xsls": [

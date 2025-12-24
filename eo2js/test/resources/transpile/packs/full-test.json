@@ -9,7 +9,7 @@
     "    10"
   ],
   "tests": [
-    ".object.object{.\"@_js-name\" == 'my_test'}",
+    ".program.objects.object{.\"@_js-name\" == 'my_test'}",
     {
       "args": [
         "const dataized = require('eo2js-runtime/src/runtime/dataized')",
@@ -25,7 +25,7 @@
         ]
       ],
       "method": "includes",
-      "node": ".object.object{.\"@_name\" == 'my-test'}.javascript"
+      "node": ".program.objects.object{.\"@_name\" == 'my-test'}.javascript"
     }
   ],
   "xsls": [

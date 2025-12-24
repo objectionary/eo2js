@@ -11,11 +11,11 @@
         [
           "  obj.attrs['x'] = attr.void('x')",
           "  obj.attrs['y'] = attr.void('y')",
-          "  obj.attrs['φ'] = attr.once("
+          "  obj.attrs['\u03c6'] = attr.once("
         ]
       ],
       "method": "includes",
-      "node": ".object.object{.\"@_name\" == 'left'}.javascript"
+      "node": ".program.objects.object{.\"@_name\" == 'left'}.javascript"
     }
   ],
   "xsls": [

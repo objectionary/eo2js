@@ -8,11 +8,11 @@
   "tests": [
     {
       "args": [
-        "const outer$φ = require('eo2js-runtime/src/objects/outer$φ')",
-        "        let ret = outer$φ(rho)"
+        "const outer$\u03c6 = require('eo2js-runtime/src/objects/outer$\u03c6')",
+        "        let ret = outer$\u03c6(rho)"
       ],
       "method": "includes",
-      "node": ".object.object{.\"@_name\" == 'outer'}.javascript"
+      "node": ".program.objects.object{.\"@_name\" == 'outer'}.javascript"
     }
   ],
   "xsls": [
