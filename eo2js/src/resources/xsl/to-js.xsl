@@ -5,6 +5,7 @@
 -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:eo="https://www.eolang.org" xmlns:xs="http://www.w3.org/2001/XMLSchema" id="to-java" version="2.0">
   <!-- Converts XMIR to JavaScript -->
+  <xsl:import href="_funcs.xsl"/>
   <xsl:output encoding="UTF-8" method="xml"/>
   <!-- VARIABLES -->
   <xsl:variable name="keywords" as="element()*">
@@ -176,6 +177,12 @@
       <xsl:when test="$attr='^'">
         <xsl:value-of select="$RHO"/>
       </xsl:when>
+      <xsl:when test="starts-with($attr, '+')">
+        <xsl:value-of select="substring($attr, 2)"/>
+      </xsl:when>
+      <xsl:when test="matches($attr,'^α[0-9]+$')">
+        <xsl:value-of select="substring($attr, 2)"/>
+      </xsl:when>
       <xsl:otherwise>
         <xsl:value-of select="concat('', $attr)"/>
       </xsl:otherwise>
@@ -194,18 +201,23 @@
     </xsl:for-each>
   </xsl:function>
   <!-- TEMPLATES -->
-  <xsl:template match="objects">
+  <xsl:template match="/object">
     <xsl:copy>
       <xsl:apply-templates select="@*"/>
+      <xsl:apply-templates select="metas"/>
+      <xsl:apply-templates select="listing"/>
+      <xsl:apply-templates select="comments"/>
+      <xsl:apply-templates select="sheets"/>
+      <xsl:apply-templates select="errors"/>
       <xsl:for-each select="object[not(@atom)]">
         <xsl:copy>
           <xsl:apply-templates select="@*"/>
           <xsl:element name="javascript">
             <xsl:if test="position()=1">
-              <xsl:apply-templates select="/program" mode="license"/>
-              <xsl:apply-templates select="/program" mode="imports"/>
-              <xsl:if test="//meta[head='tests'] and not(@parent)">
-                <xsl:apply-templates select="/program" mode="test-imports"/>
+              <xsl:apply-templates select="/object" mode="license"/>
+              <xsl:apply-templates select="/object" mode="imports"/>
+              <xsl:if test="//attr[starts-with(@name, '+')]">
+                <xsl:apply-templates select="/object" mode="test-imports"/>
               </xsl:if>
               <xsl:apply-templates select="//object[@atom]" mode="atom-imports"/>
             </xsl:if>
@@ -214,7 +226,7 @@
         </xsl:copy>
       </xsl:for-each>
       <!-- module.exports part -->
-      <xsl:if test="not(//meta[head='tests'] and not(@parent)) and object[position()=1 and not(@atom)]">
+      <xsl:if test="object[position()=1 and not(@atom)]">
         <xsl:element name="object">
           <xsl:element name="javascript">
             <xsl:value-of select="eo:eol(0)"/>
@@ -255,9 +267,9 @@
     <xsl:apply-templates select="." mode="ctor"/>
     <xsl:text>}</xsl:text>
     <xsl:apply-templates select="object" mode="body"/>
-    <xsl:if test="//meta[head='tests'] and not(@parent)">
-      <xsl:apply-templates select="." mode="tests"/>
-    </xsl:if>
+    <xsl:for-each select="attr[starts-with(@name, '+')]">
+      <xsl:apply-templates select="." mode="inline-test"/>
+    </xsl:for-each>
     <xsl:value-of select="eo:eol(0)"/>
   </xsl:template>
   <!-- XMIR as comment -->
@@ -517,13 +529,14 @@
       <xsl:for-each select="$to_put">
         <xsl:choose>
           <xsl:when test="@as">
+            <xsl:variable name="attr" select="eo:attr-name(@as)"/>
             <xsl:choose>
-              <xsl:when test="matches(@as,'^[0-9]+$')">
-                <xsl:value-of select="eo:attr-name(@as)"/>
+              <xsl:when test="matches($attr,'^[0-9]+$')">
+                <xsl:value-of select="$attr"/>
               </xsl:when>
               <xsl:otherwise>
                 <xsl:text>'</xsl:text>
-                <xsl:value-of select="eo:attr-name(@as)"/>
+                <xsl:value-of select="$attr"/>
                 <xsl:text>'</xsl:text>
               </xsl:otherwise>
             </xsl:choose>
@@ -574,47 +587,45 @@
     <xsl:value-of select="eo:eol($indent)"/>
     <xsl:text>})</xsl:text>
   </xsl:template>
-  <!-- Object for tests -->
-  <xsl:template match="object" mode="tests">
+  <!-- Inline test attribute (name starts with +) -->
+  <xsl:template match="attr" mode="inline-test">
+    <xsl:variable name="testName" select="eo:attr-name(@name)"/>
+    <xsl:variable name="parentName" select="eo:object-name(../@name, eo:suffix(../@line, ../@pos))"/>
     <xsl:value-of select="eo:eol(0)"/>
     <xsl:value-of select="eo:eol(0)"/>
     <xsl:text>it('test "</xsl:text>
-    <xsl:value-of select="eo:object-name(@name, eo:suffix(@line, @pos))"/>
+    <xsl:value-of select="$testName"/>
     <xsl:text>" should work', function(done) {</xsl:text>
     <xsl:value-of select="eo:eol(1)"/>
     <xsl:text>this.timeout(0)</xsl:text>
     <xsl:value-of select="eo:eol(1)"/>
     <xsl:choose>
-      <xsl:when test="starts-with(@name, 'throws')">
+      <xsl:when test="starts-with($testName, 'throws')">
         <xsl:text>assert.throws(() =&gt; </xsl:text>
       </xsl:when>
       <xsl:otherwise>
         <xsl:text>assert.ok(</xsl:text>
       </xsl:otherwise>
     </xsl:choose>
-    <xsl:apply-templates select="." mode="dataized"/>
-    <xsl:text>)</xsl:text>
+    <xsl:text>dataized(</xsl:text>
+    <xsl:value-of select="$parentName"/>
+    <xsl:text>().take('</xsl:text>
+    <xsl:value-of select="$testName"/>
+    <xsl:text>'), BOOL))</xsl:text>
     <xsl:value-of select="eo:eol(1)"/>
     <xsl:text>done()</xsl:text>
     <xsl:value-of select="eo:eol(0)"/>
     <xsl:text>})</xsl:text>
   </xsl:template>
-  <!-- Dataized object for tests -->
-  <xsl:template match="object" mode="dataized">
-    <xsl:param name="indent"/>
-    <xsl:text>dataized(</xsl:text>
-    <xsl:value-of select="eo:object-name(@name, eo:suffix(@line, @pos))"/>
-    <xsl:text>(), BOOL)</xsl:text>
-  </xsl:template>
   <!-- Disclaimer -->
-  <xsl:template match="/program" mode="license">
+  <xsl:template match="/object" mode="license">
     <xsl:value-of select="eo:eol(0)"/>
     <xsl:text>/* </xsl:text>
     <xsl:value-of select="$disclaimer"/>
     <xsl:text> */</xsl:text>
   </xsl:template>
   <!-- Imports -->
-  <xsl:template match="/program" mode="imports">
+  <xsl:template match="/object" mode="imports">
     <xsl:value-of select="eo:eol(0)"/>
     <xsl:text>const attr = require('eo2js-runtime/src/runtime/attribute/attr')</xsl:text>
     <xsl:value-of select="eo:eol(0)"/>
@@ -627,7 +638,7 @@
     <xsl:text>const applied = require('eo2js-runtime/src/runtime/applied')</xsl:text>
   </xsl:template>
   <!-- Imports for tests -->
-  <xsl:template match="/program" mode="test-imports">
+  <xsl:template match="/object" mode="test-imports">
     <xsl:value-of select="eo:eol(0)"/>
     <xsl:text>const dataized = require('eo2js-runtime/src/runtime/dataized')</xsl:text>
     <xsl:value-of select="eo:eol(0)"/>

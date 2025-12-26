@@ -43,26 +43,6 @@ const makeDirIfNotExist = function(dir) {
 }
 
 /**
- * Check if given XMIR has meta.
- * @param {any} xmir - XMIR
- * @param {String} name - Name of the meta
- * @return {boolean} - If given XMIR has tests meta or not
- */
-const hasMeta = function(xmir, name) {
-  const metas = xmir.program.metas
-  let res = false
-  if (metas !== null && metas !== undefined) {
-    const nodes = xmir.program.metas.meta
-    if (Array.isArray(nodes)) {
-      res = nodes.findIndex((meta) => meta.head === name) !== -1
-    } else if (typeof nodes === 'object' && nodes.hasOwnProperty('head')) {
-      res = nodes.head === name
-    }
-  }
-  return res
-}
-
-/**
  * Check if source needs to be retranspiled by comparing modification times.
  * @param {String} source - Source file path
  * @param {String} transpiled - Transpiled file path
@@ -70,6 +50,27 @@ const hasMeta = function(xmir, name) {
  */
 const needsRetranspile = function(source, transpiled) {
   return !fs.existsSync(transpiled) || fs.statSync(source).mtime > fs.statSync(transpiled).mtime
+}
+
+/**
+ * Check if XMIR has inline test attributes (name starts with +).
+ * @param {any} node - The node to check
+ * @return {boolean} - True if there are test attributes
+ */
+const hasTestAttrs = function(node) {
+  if (!node) {
+    return false
+  }
+  if (Array.isArray(node)) {
+    return node.some(hasTestAttrs)
+  }
+  if (typeof node === 'object') {
+    if (node['@_name'] && node['@_name'].startsWith('+')) {
+      return true
+    }
+    return Object.values(node).some(hasTestAttrs)
+  }
+  return false
 }
 
 /**
@@ -82,8 +83,19 @@ const needsRetranspile = function(source, transpiled) {
 const transform = function(tojo, options, transformations, parser) {
   const text = fs.readFileSync(tojo[verified]).toString()
   let xml = parser.parse(text)
-  const pth = pathFromName(xml.program['@_name'])
-  const isTest = hasMeta(xml, 'tests')
+  const metas = xml.object.metas
+  let pkg = ''
+  if (metas && metas.meta) {
+    const arr = Array.isArray(metas.meta) ? metas.meta : [metas.meta]
+    const found = arr.find((m) => m.head === 'package')
+    if (found && found.part) {
+      pkg = Array.isArray(found.part) ? found.part[0] : found.part
+    }
+  }
+  const top = Array.isArray(xml.object.o) ? xml.object.o.find((o) => o['@_name']) : xml.object.o
+  const name = top && top['@_name'] ? top['@_name'] : ''
+  const isTest = hasTestAttrs(xml.object.o)
+  const pth = pathFromName(pkg ? `${pkg}.${name}` : name)
   const transpiled = path.resolve(options.target, dir, `${pth}.xmir`)
   const dest = path.resolve(options.project, `${pth}${isTest ? '.test' : ''}.js`)
   if (needsRetranspile(tojo[verified], transpiled)) {
@@ -99,13 +111,10 @@ const transform = function(tojo, options, transformations, parser) {
     })
     fs.writeFileSync(transpiled, xml)
     xml = parser.parse(xml)
-    let objects = xml.program.objects.object
-    if (!Array.isArray(objects)) {
-      objects = [objects]
-    }
+    const objs = xml.object.object
+    const objects = Array.isArray(objs) ? objs : [objs]
     const filtered = objects.filter((obj) => Boolean(obj) && obj.hasOwnProperty('javascript') && !obj.hasOwnProperty('@_atom'))
-    const count = isTest ? 0 : 1
-    if (filtered.length > count) {
+    if (filtered.length > 0) {
       const first = filtered[0]
       makeDirIfNotExist(dest.substring(0, dest.lastIndexOf(path.sep)))
       fs.writeFileSync(dest, first.javascript)
