@@ -69,6 +69,28 @@ const assertFilesExist = function(stdout, home, paths) {
 const parser = new XMLParser({ignoreAttributes: false})
 
 /**
+ * Extract package name from EO source.
+ * @param {Array.<String>} lines - EO source lines
+ * @return {String} - Package name or empty string
+ */
+const extractPackage = function(lines) {
+  const src = lines.join('\n')
+  const match = src.match(/^\+package\s+(?<pkg>[^\s\n]+)/m)
+  return match ? match.groups.pkg : ''
+}
+
+/**
+ * Extract object name from EO source.
+ * @param {Array.<String>} lines - EO source lines
+ * @return {String} - Object name
+ */
+const extractObjectName = function(lines) {
+  const src = lines.join('\n')
+  const match = src.match(/^\[.*\]\s*>\s*(?<name>[^\s\n]+)/m)
+  return match ? match.groups.name : 'test'
+}
+
+/**
  * Transformations test pack.
  * @param {{home: String, sources: String, target: String, json: Object}} params - Pack params
  * @return {Promise<{skip: boolean, failures: array.<String>, xmir: String, json: Object}>}
@@ -85,12 +107,19 @@ const pack = async function(params) {
       res.skip = true
       resolve(res)
     })
-  } 
+  }
   const sources = path.resolve(params.home, params.sources)
   const target = path.resolve(params.home, params.target)
   fs.mkdirSync(sources, {recursive: true})
   fs.mkdirSync(target, {recursive: true})
-  fs.writeFileSync(path.resolve(sources, `test.eo`), `${params.json.eo.join('\n')}\n`)
+  const name = extractObjectName(params.json.eo)
+  const pkg = extractPackage(params.json.eo)
+  let srcDir = sources
+  if (pkg) {
+    srcDir = path.resolve(sources, pkg.replace(/\./g, path.sep))
+    fs.mkdirSync(srcDir, {recursive: true})
+  }
+  fs.writeFileSync(path.resolve(srcDir, `${name}.eo`), `${params.json.eo.join('\n')}\n`)
   await mvnw(['register', 'parse', 'lint'], params)
   const linted = JSON.parse(
     fs.readFileSync(path.resolve(target, 'eo-foreign.json')).toString()
