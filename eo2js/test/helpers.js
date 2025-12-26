@@ -68,26 +68,16 @@ const assertFilesExist = function(stdout, home, paths) {
  */
 const parser = new XMLParser({ignoreAttributes: false})
 
-/**
- * Extract package name from EO source.
- * @param {Array.<String>} lines - EO source lines
- * @return {String} - Package name or empty string
- */
-const extractPackage = function(lines) {
-  const src = lines.join('\n')
-  const match = src.match(/^\+package\s+(?<pkg>[^\s\n]+)/m)
-  return match ? match.groups.pkg : ''
+/** Extract package name from EO source. */
+const extractPackage = (lines) => {
+  const m = lines.join('\n').match(/^\+package\s+(?<pkg>[^\s\n]+)/m)
+  return m ? m.groups.pkg : ''
 }
 
-/**
- * Extract object name from EO source.
- * @param {Array.<String>} lines - EO source lines
- * @return {String} - Object name
- */
-const extractObjectName = function(lines) {
-  const src = lines.join('\n')
-  const match = src.match(/^\[.*\]\s*>\s*(?<name>[^\s\n]+)/m)
-  return match ? match.groups.name : 'test'
+/** Extract object name from EO source. */
+const extractObjectName = (lines) => {
+  const m = lines.join('\n').match(/^\[.*\]\s*>\s*(?<name>[^\s\n]+)/m)
+  return m ? m.groups.name : 'test'
 }
 
 /**
