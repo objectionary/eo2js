@@ -39,5 +39,5 @@ path = [
     "eo2js/test/mvnw/mvnw.cmd",
 ]
 precedence = "override"
-SPDX-FileCopyrightText = "Copyright (c) 2014-2025 The Apache Software Foundation"
+SPDX-FileCopyrightText = "Copyright (c) 2014-2026 The Apache Software Foundation"
 SPDX-License-Identifier = "Apache-2.0"
