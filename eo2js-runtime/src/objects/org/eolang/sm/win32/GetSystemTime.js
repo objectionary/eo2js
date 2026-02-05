@@ -2,27 +2,27 @@
 // SPDX-License-Identifier: MIT
 
 const data = require('../../../../../runtime/data')
+const makeReturn = require('./return')
 
 /**
  * GetSystemTime kernel32 function call.
  * Retrieves the current system date and time.
  * @param {Object} win - Win32 object
- * @param {Object} args - Arguments object
  * @return {Object} - Result object with system time
  */
-const GetSystemTime = function(win, args) {
+const GetSystemTime = function(win) {
   const now = new Date()
-  const result = {
-    year: now.getFullYear(),
-    month: now.getMonth() + 1,
-    dayOfWeek: now.getDay(),
-    day: now.getDate(),
-    hour: now.getHours(),
-    minute: now.getMinutes(),
-    second: now.getSeconds(),
-    milliseconds: now.getMilliseconds(),
-  }
-  return data.toObject(JSON.stringify(result))
+  const systemTime = win.take('system-time').copy().with({
+    year: data.toObject(now.getUTCFullYear()),
+    month: data.toObject(now.getUTCMonth() + 1),
+    day: data.toObject(now.getUTCDate()),
+    'day-of-week': data.toObject(now.getUTCDay()),
+    hour: data.toObject(now.getUTCHours()),
+    minute: data.toObject(now.getUTCMinutes()),
+    second: data.toObject(now.getUTCSeconds()),
+    milliseconds: data.toObject(now.getUTCMilliseconds()),
+  })
+  return makeReturn(win, true, systemTime)
 }
 
 module.exports = GetSystemTime

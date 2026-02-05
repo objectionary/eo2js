@@ -2,34 +2,44 @@
 // SPDX-License-Identifier: MIT
 
 const fs = require('fs')
-const data = require('../../../../../runtime/data')
+const dataized = require('../../../../../runtime/dataized')
+const {NUMBER, BYTES} = require('../../../../../runtime/types')
 const ErFailure = require('../../../../../runtime/error/ErFailure')
+const makeReturn = require('./return')
 
 /**
  * WriteFile kernel32 function call.
  * Writes data to the specified file.
  * @param {Object} win - Win32 object
- * @param {Object} args - Arguments object with 'at' and 'length' properties
- * @param {Function} getArg - Function to get argument by index
- * @param {number} length - Number of arguments
+ * @param {Object[]} params - Function parameters
  * @return {Object} - Result object
  */
-const WriteFile = function(win, args, getArg, length) {
-  if (length < 2) {
+const WriteFile = function(win, params) {
+  if (params.length < 3) {
     throw new ErFailure(
-      'WriteFile requires at least 2 arguments (file path and content)'
+      'WriteFile requires 3 arguments (handle, buffer, size)'
     )
   }
-  const filePath = getArg(0)
-  const content = getArg(1)
+  const handle = dataized(params[0], NUMBER)
+  const buffer = dataized(params[1], BYTES)
+  const size = dataized(params[2], NUMBER)
+  const length = Math.max(0, size)
+  const slice = buffer.slice(0, length)
+  let ok = true
+  let written
   try {
-    fs.writeFileSync(String(filePath), String(content), 'utf8')
-    return data.toObject(true)
+    let fd = handle
+    if (handle === -11) {
+      fd = process.stdout.fd
+    } else if (handle === -12) {
+      fd = process.stderr.fd
+    }
+    written = fs.writeSync(fd, Buffer.from(slice))
   } catch (e) {
-    throw new ErFailure(
-      `Failed to write file '${filePath}': ${e.message}`
-    )
+    ok = false
+    written = 0
   }
+  return makeReturn(win, ok, written)
 }
 
 module.exports = WriteFile

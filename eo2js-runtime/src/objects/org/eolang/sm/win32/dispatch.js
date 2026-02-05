@@ -1,11 +1,11 @@
 // SPDX-FileCopyrightText: Copyright (c) 2024 Objectionary.com
 // SPDX-License-Identifier: MIT
 
-const {RHO} = require('../../../../../runtime/attribute/specials');
-const {STRING, NUMBER} = require('../../../../../runtime/types');
-const dataized = require('../../../../../runtime/dataized');
-const ErFailure = require('../../../../../runtime/error/ErFailure');
-const data = require('../../../../../runtime/data');
+const {RHO} = require('../../../../../runtime/attribute/specials')
+const {STRING, NUMBER} = require('../../../../../runtime/types')
+const dataized = require('../../../../../runtime/dataized')
+const ErFailure = require('../../../../../runtime/error/ErFailure')
+const data = require('../../../../../runtime/data')
 
 const GetCurrentProcessId = require('./GetCurrentProcessId')
 const ReadFile = require('./ReadFile')
@@ -26,33 +26,32 @@ const WSACleanup = require('./WSACleanup')
 const WSAGetLastError = require('./WSAGetLastError')
 
 /**
+ * Convert tuple-like args to array of objects.
+ * @param {Object} args - Tuple-like arguments object
+ * @return {Object[]} - Array of argument objects
+ */
+const tupleToArray = function(args) {
+  const retriever = args.take('at')
+  const length = dataized(args.take('length'), NUMBER)
+  const params = []
+  for (let idx = 0; idx < length; idx += 1) {
+    params.push(
+      retriever.with({0: data.toObject(idx)})
+    )
+  }
+  return params
+}
+
+/**
  * Dispatch Win32 system calls.
  * @param {Object} self - win32$φ object
  * @return {*} - function result
  */
 const dispatch = function(self) {
-  const rho = self.take(RHO);
-  const functionName = dataized(rho.take('name'), STRING);
-  const args = rho.take('args');
-  const retriever = args.take('at');
-  const length = dataized(args.take('length'), NUMBER);
-
-  /**
-   * Get argument by index from args array.
-   * @param {number} index - Argument index
-   * @return {*} - Argument value
-   */
-  const getArg = function(index) {
-    if (index >= length) {
-      throw new ErFailure(
-        `Argument index ${index} is out of bounds (length: ${length})`
-      );
-    }
-    return dataized(
-      retriever.with({0: data.toObject(index)}),
-      STRING
-    );
-  };
+  const rho = self.take(RHO)
+  const functionName = dataized(rho.take('name'), STRING)
+  const args = rho.take('args')
+  const params = tupleToArray(args)
 
   const functions = {
     GetCurrentProcessId,
@@ -72,21 +71,16 @@ const dispatch = function(self) {
     WSAStartup,
     WSACleanup,
     WSAGetLastError,
-  };
+  }
 
   if (!Object.hasOwn(functions, functionName)) {
     throw new ErFailure(
       `Can't make win32 function call '${functionName}' because it's either not supported yet or does not exist`
-    );
+    )
   }
 
-  const func = functions[functionName];
-  if (functionName === 'GetCurrentProcessId') {
-    return func(rho);
-  } else if (functionName === 'GetSystemTime') {
-    return func(rho, args);
-  }
-  return func(rho, args, getArg, length);
-};
+  const func = functions[functionName]
+  return func(rho, params)
+}
 
 module.exports = dispatch

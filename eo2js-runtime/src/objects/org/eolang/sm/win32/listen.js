@@ -1,18 +1,16 @@
 // SPDX-FileCopyrightText: Copyright (c) 2024 Objectionary.com
 // SPDX-License-Identifier: MIT
 
-const ErFailure = require('../../../../../runtime/error/ErFailure')
+const makeReturn = require('./return')
 
 /**
  * listen WS2_32 or Kernel32 function call.
  * Requires native Win32 implementation.
  * @param {Object} win - Win32 object
- * @return {Object} - Throws error
+ * @return {Object} - Result object
  */
 const listen = function(win) {
-  throw new ErFailure(
-    'listen function requires native Win32 implementation'
-  )
+  return makeReturn(win, -1)
 }
 
 module.exports = listen

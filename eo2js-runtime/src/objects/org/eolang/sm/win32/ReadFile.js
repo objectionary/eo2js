@@ -2,33 +2,40 @@
 // SPDX-License-Identifier: MIT
 
 const fs = require('fs')
-const data = require('../../../../../runtime/data')
+const dataized = require('../../../../../runtime/dataized')
+const {NUMBER} = require('../../../../../runtime/types')
 const ErFailure = require('../../../../../runtime/error/ErFailure')
+const makeReturn = require('./return')
 
 /**
  * ReadFile kernel32 function call.
  * Reads data from the specified file.
  * @param {Object} win - Win32 object
- * @param {Object} args - Arguments object with 'at' and 'length' properties
- * @param {Function} getArg - Function to get argument by index
- * @param {number} length - Number of arguments
+ * @param {Object[]} params - Function parameters
  * @return {Object} - Result object with file content
  */
-const ReadFile = function(win, args, getArg, length) {
-  if (length < 1) {
+const ReadFile = function(win, params) {
+  if (params.length < 2) {
     throw new ErFailure(
-      'ReadFile requires at least 1 argument (file path)'
+      'ReadFile requires 2 arguments (handle, size)'
     )
   }
-  const filePath = getArg(0)
+  const handle = dataized(params[0], NUMBER)
+  const size = dataized(params[1], NUMBER)
+  const length = Math.max(0, size)
+  let ok = true
+  let bytesRead
+  let buffer = Buffer.alloc(length)
   try {
-    const content = fs.readFileSync(String(filePath), 'utf8')
-    return data.toObject(content)
+    const fd = handle === -10 ? process.stdin.fd : handle
+    bytesRead = fs.readSync(fd, buffer, 0, length, null)
   } catch (e) {
-    throw new ErFailure(
-      `Failed to read file '${filePath}': ${e.message}`
-    )
+    ok = false
+    bytesRead = 0
+    buffer = Buffer.alloc(0)
   }
+  const output = Array.from(buffer.slice(0, Math.max(0, bytesRead)))
+  return makeReturn(win, ok, output)
 }
 
 module.exports = ReadFile

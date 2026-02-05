@@ -1,32 +1,29 @@
 // SPDX-FileCopyrightText: Copyright (c) 2024 Objectionary.com
 // SPDX-License-Identifier: MIT
 
-const data = require('../../../../../runtime/data')
+const dataized = require('../../../../../runtime/dataized')
+const {STRING, NUMBER} = require('../../../../../runtime/types')
 const ErFailure = require('../../../../../runtime/error/ErFailure')
+const makeReturn = require('./return')
 
 /**
  * GetEnvironmentVariable kernel32 function call.
  * Retrieves the contents of the specified environment variable.
  * @param {Object} win - Win32 object
- * @param {Object} args - Arguments object with 'at' and 'length' properties
- * @param {Function} getArg - Function to get argument by index
- * @param {number} length - Number of arguments
+ * @param {Object[]} params - Function parameters
  * @return {Object} - Result object with environment variable value
  */
-const GetEnvironmentVariable = function(win, args, getArg, length) {
-  if (length < 1) {
+const GetEnvironmentVariable = function(win, params) {
+  if (params.length < 2) {
     throw new ErFailure(
-      'GetEnvironmentVariable requires 1 argument (variable name)'
+      'GetEnvironmentVariable requires 2 arguments (variable name, buffer size)'
     )
   }
-  const varName = getArg(0)
-  const value = process.env[String(varName)]
-  if (value === undefined) {
-    throw new ErFailure(
-      `Environment variable '${varName}' not found`
-    )
-  }
-  return data.toObject(value)
+  const varName = dataized(params[0], STRING)
+  const size = dataized(params[1], NUMBER)
+  const value = process.env[String(varName)] ?? ''
+  const output = size > 0 ? String(value).slice(0, size) : ''
+  return makeReturn(win, output.length, output)
 }
 
 module.exports = GetEnvironmentVariable

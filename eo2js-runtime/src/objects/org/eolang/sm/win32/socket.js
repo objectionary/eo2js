@@ -1,18 +1,16 @@
 // SPDX-FileCopyrightText: Copyright (c) 2024 Objectionary.com
 // SPDX-License-Identifier: MIT
 
-const ErFailure = require('../../../../../runtime/error/ErFailure')
+const makeReturn = require('./return')
 
 /**
  * socket WS2_32 function call.
  * Creates a socket (requires native Win32 implementation).
  * @param {Object} win - Win32 object
- * @return {Object} - Throws error
+ * @return {Object} - Result object
  */
 const socket = function(win) {
-  throw new ErFailure(
-    'Socket operations require native Win32 implementation'
-  )
+  return makeReturn(win, -1)
 }
 
 module.exports = socket
