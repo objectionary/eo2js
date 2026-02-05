@@ -20,6 +20,7 @@ const callWin32 = (fn, args = []) => fn({}, {}, (idx) => args[idx], args.length)
 describeOnWindows('win32 atoms', () => {
   it('should return positive process id', () => {
     const pid = dataized(callWin32(GetCurrentProcessId), NUMBER)
+    console.log(`win32 GetCurrentProcessId -> ${pid}`)
     assert.ok(pid > 0)
   })
 
@@ -28,17 +29,20 @@ describeOnWindows('win32 atoms', () => {
     const value = 'windows-ok'
     process.env[key] = value
     const envValue = dataized(callWin32(GetEnvironmentVariable, [key]), STRING)
+    console.log(`win32 GetEnvironmentVariable ${key} -> ${envValue}`)
     delete process.env[key]
     assert.equal(envValue, value)
   })
 
   it('should convert IPv4 to integer', () => {
     const number = dataized(callWin32(inet_addr, ['192.168.1.1']), NUMBER)
+    console.log(`win32 inet_addr 192.168.1.1 -> ${number}`)
     assert.equal(number, 3232235777)
   })
 
   it('should return current system time json', () => {
     const parsed = JSON.parse(dataized(callWin32(GetSystemTime), STRING))
+    console.log(`win32 GetSystemTime -> ${JSON.stringify(parsed)}`)
     assert.ok(parsed.year >= 2000)
     assert.ok(parsed.month >= 1 && parsed.month <= 12)
   })
@@ -46,6 +50,7 @@ describeOnWindows('win32 atoms', () => {
   it('should write file and return true', () => {
     const filepath = path.join(os.tmpdir(), 'eo2js-win32-test.txt')
     const ok = dataized(callWin32(WriteFile, [filepath, 'win32-file']), BOOL)
+    console.log(`win32 WriteFile ${filepath} -> ${ok}`)
     assert.equal(ok, true)
     assert.equal(fs.readFileSync(filepath, 'utf8'), 'win32-file')
     fs.rmSync(filepath, {force: true})
