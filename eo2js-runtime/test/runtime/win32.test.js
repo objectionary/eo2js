@@ -7,11 +7,11 @@ const os = require('os')
 const path = require('path')
 const dataized = require('../../temp/runtime/dataized')
 const {BOOL, STRING, NUMBER} = require('../../temp/runtime/types')
-const inet_addr = require('../../temp/objects/org/eolang/sys/win32/inet_addr')
-const GetCurrentProcessId = require('../../temp/objects/org/eolang/sys/win32/GetCurrentProcessId')
-const GetEnvironmentVariable = require('../../temp/objects/org/eolang/sys/win32/GetEnvironmentVariable')
-const GetSystemTime = require('../../temp/objects/org/eolang/sys/win32/GetSystemTime')
-const WriteFile = require('../../temp/objects/org/eolang/sys/win32/WriteFile')
+const inet_addr = require('../../temp/objects/org/eolang/sm/win32/inet_addr')
+const GetCurrentProcessId = require('../../temp/objects/org/eolang/sm/win32/GetCurrentProcessId')
+const GetEnvironmentVariable = require('../../temp/objects/org/eolang/sm/win32/GetEnvironmentVariable')
+const GetSystemTime = require('../../temp/objects/org/eolang/sm/win32/GetSystemTime')
+const WriteFile = require('../../temp/objects/org/eolang/sm/win32/WriteFile')
 
 const describeOnWindows = process.platform === 'win32' ? describe : describe.skip
 
