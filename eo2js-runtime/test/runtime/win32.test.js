@@ -74,10 +74,10 @@ describeOnWindows('win32 atoms', () => {
   })
 
   it('should convert IPv4 to integer', () => {
-    const result = callWin32(inet_addr, ['192.168.1.1'])
+    const result = callWin32(inet_addr, ['127.0.0.1'])
     const number = dataized(result.take('code'), NUMBER)
-    console.log(`win32 inet_addr 192.168.1.1 -> ${number}`)
-    assert.equal(number, 3232235777)
+    console.log(`win32 inet_addr 127.0.0.1 -> ${number}`)
+    assert.equal(number, 16777343)
   })
 
   it('should return current system time structure', () => {

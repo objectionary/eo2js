@@ -34,7 +34,7 @@ const inet_addr = function(win, params) {
       return makeReturn(win, -1)
     }
   }
-  const ipInt = (((octets[0] * 256) + octets[1]) * 256 + octets[2]) * 256 + octets[3]
+  const ipInt = (((octets[3] * 256) + octets[2]) * 256 + octets[1]) * 256 + octets[0]
   return makeReturn(win, ipInt)
 }
 
