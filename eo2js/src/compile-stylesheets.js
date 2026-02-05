@@ -23,7 +23,8 @@ const compile = function(source, dest) {
       [
         'node node_modules/xslt3/xslt3.js',
         `-xsl:${source}`,
-        `-export:${dest}`
+        `-export:${dest}`,
+        '-nogo'
       ].join(' ')
     ).toString()
   } catch (e) {
@@ -32,6 +33,7 @@ const compile = function(source, dest) {
       (e && e.message) ||
       String(e);
     console.error(`xslt3 failed for ${source} -> ${dest}: ${details}`);
+    throw new Error(`xslt3 failed for ${source} -> ${dest}: ${details}`, {cause: e})
   }
 }
 

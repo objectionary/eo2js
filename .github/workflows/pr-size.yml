@@ -2,18 +2,16 @@
 # SPDX-License-Identifier: MIT
 ---
 # yamllint disable rule:line-length
-name: markdown-lint
-'on':
-  push:
-    branches:
-      - master
-  pull_request:
-    branches:
-      - master
+name: pr-size
+'on': pull_request
 jobs:
-  markdown-lint:
-    timeout-minutes: 15
+  pr-size:
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v6
-      - uses: DavidAnson/markdownlint-cli2-action@v22.0.0
+        with:
+          fetch-depth: 0
+      - uses: maidsafe/pr_size_checker@v3
+        with:
+          target_branch: master
+          max_lines_changed: 500
