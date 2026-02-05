@@ -7,11 +7,8 @@ const ErFailure = require('../../../../runtime/error/ErFailure');
 const dispatch = require('./win32/dispatch')
 
 /**
- * Win32.φ.
+ * Win32.φ dispatcher for Win32 system function calls.
  * @return {Object} - Win32.φ object
- * @todo #3:30min Implement win32$φ atom. We need to implement the atom and make sure it
- *  works. For the details of implementation check the Java analogue on
- *  https://github.com/objectionary/eo/tree/master/eo-runtime/src/main/java/EOorg/EOeolang
  */
 const win32$φ = function() {
   const obj = object('win32$φ')
