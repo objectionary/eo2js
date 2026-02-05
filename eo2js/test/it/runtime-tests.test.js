@@ -27,7 +27,7 @@ const exclude = [
   'math/real-tests',
   'structs/list-tests',
   'sys/posix-tests',
-  ...(process.platform === 'win32' ? [] : ['sys/win32-tests']),
+  'sys/win32-tests',
   'txt/regex-tests',
   'txt/sprintf-tests',
   'txt/sscanf-tests',
